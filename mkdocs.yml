@@ -1,0 +1,91 @@
+site_name: Introducción a la Nube Pública
+site_author: Aitor Ventura
+
+theme:
+  name: material
+  language: es
+  custom_dir: overrides
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: amber
+      toggle:
+        icon: material/weather-night
+        name: Modo oscuro
+    - scheme: slate
+      primary: indigo
+      accent: amber
+      toggle:
+        icon: material/weather-sunny
+        name: Modo Claro
+  features:
+    - navigation.top
+    - navigation.tracking
+    - navigation.footer
+    - content.code.copy
+    - content.code.select
+
+nav:
+  - Inicio: index.md
+  - Tema 1 - Introducción a la nube:
+      - Tema 1 - Introducción: tema1/index.md
+      - Introducción a la nube: tema1/introduccion-a-la-nube.md
+      - Actividad 1.1: tema1/actividad_1_1.md
+  - Tema 2 - Facturación y economía de la nube:
+      - Tema 2 - Introducción: tema2/index.md
+      - Facturación y economía de la nube: tema2/facturacion-y-economia.md
+  - Tema 3 - Infraestructura global y servicios principales:
+      - Tema 3 - Introducción: tema3/index.md
+      - Infraestructura global y servicios principales: tema3/infraestructura-global.md
+  - Tema 4 - Seguridad en la nube:
+      - Tema 4 - Introducción: tema4/index.md
+      - Seguridad en la nube: tema4/seguridad-en-la-nube.md
+  - Tema 5 - Redes y entrega de contenido:
+      - Tema 5 - Introducción: tema5/index.md
+      - Redes y entrega de contenido: tema5/redes-y-entrega-de-contenido.md
+  - Tema 6 - Informática y escalado automático:
+      - Tema 6 - Introducción: tema6/index.md
+      - Informática y escalado automático: tema6/informatica-y-escalado-automatico.md
+  - Tema 7 - Almacenamiento en la nube:
+      - Tema 7 - Introducción: tema7/index.md
+      - Almacenamiento en la nube: tema7/almacenamiento.md
+  - Tema 8 - Bases de datos:
+      - Tema 8 - Introducción: tema8/index.md
+      - Bases de datos: tema8/bases-de-datos.md
+  - Tema 9 - Arquitectura y monitoreo:
+      - Tema 9 - Introducción: tema9/index.md
+      - Arquitectura y monitoreo: tema9/arquitectura-y-monitoreo.md
+
+markdown_extensions:
+  - md_in_html
+  - attr_list
+  - admonition             # (solo una vez)
+  - toc:
+      permalink: true
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.details
+  - pymdownx.inlinehilite
+  - pymdownx.highlight:    # usa este, NO 'codehilite'
+      anchor_linenums: true
+      linenums: true
+      auto_title: true
+      pygments_lang_class: true
+  - pymdownx.mark
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.superfences:  # habilita Mermaid como fence
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+extra_css:
+  - css/extra.css
+
+plugins:
+  - search
+  - mkdocs-pdf
