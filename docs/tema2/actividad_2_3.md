@@ -1,0 +1,110 @@
+# 🧪 Actividad 2.3: De instancia a plantilla
+
+!!! warning "Descarga la plantilla"
+    📄 [Plantilla 2.3 — De instancia a plantilla](plantillas/Actividad_2_3_INU_Plantilla.docx){target="_blank" rel="noopener"}
+
+## Contexto
+
+Hasta ahora has lanzado instancias sueltas, a mano, repitiendo los mismos parámetros cada vez. Hoy conviertes ese proceso manual en algo repetible: instalas el catálogo de Escaparate en una instancia, capturas el resultado como tu propia imagen, y empaquetas todo en una plantilla de lanzamiento que puedes usar tantas veces como haga falta.
+
+## Qué vas a practicar
+
+- Automatizar el despliegue del catálogo con user data, sin conectarte a mano a la instancia.
+- Crear tu propia imagen de máquina (AMI) a partir de una instancia ya configurada.
+- Construir una plantilla de lanzamiento parametrizada y lanzar varias instancias idénticas desde ella.
+- Comparar coste mensual entre familias de instancia para la misma carga.
+
+## Requisitos previos
+
+La instancia pública de la Actividad 2.2, con su servidor web funcionando. El apunte de esta sesión — «Máquinas virtuales» (maquinas-virtuales.md).
+
+---
+
+## Parte A — De instancia manual a imagen propia (guiada)
+
+### Paso 1 — Despliega el catálogo con user data, solo en los puertos necesarios
+
+Lanza una instancia nueva en tu subred pública, con un grupo de seguridad que abra **únicamente** el puerto 80 (y el 22 restringido a tu IP para poder revisar si algo falla), y con un script de user data que instale y arranque el servidor con el catálogo de Escaparate sin intervención tuya:
+
+```bash
+aws ec2 run-instances \
+  --image-id <ami-base> \
+  --instance-type t3.micro \
+  --subnet-id <subnet-publica-id> \
+  --security-group-ids <sg-minimo> \
+  --user-data file://instalar-catalogo.sh
+```
+
+![El catálogo de Escaparate funcionando en el navegador](img/actividad_2_3_paso1.png)
+
+**Comprueba**: que el catálogo responde en el puerto 80 sin que te hayas conectado nunca por SSH a instalarlo a mano, y que ningún otro puerto además del 80 y el 22 (restringido) está abierto.
+**Captura**: `img/actividad_2_3_paso1.png`, y el grupo de seguridad mostrando solo los puertos estrictamente necesarios.
+
+### Paso 2 — Crea tu propia imagen desde la consola
+
+Con la instancia del Paso 1 ya funcionando y estable, captúrala como AMI propia:
+
+1. En el panel de **Instancias**, selecciona (marca la casilla) tu instancia con el catálogo desplegado.
+2. Ve a **Acciones → Imagen y plantillas → Crear imagen**.
+3. Dale un nombre que la identifique como tuya, por ejemplo `escaparate-catalogo-<tu-identificador>`.
+4. Deja el resto de opciones por defecto y haz clic en **Crear imagen**.
+5. Ve al menú lateral, a **AMIs** (dentro de Imágenes), y espera a que el estado pase de `pending` a `available` — tarda unos minutos.
+
+![La AMI propia en estado available, con su nombre y tamaño](img/actividad_2_3_paso2.png)
+
+**Comprueba**: que la imagen aparece como disponible (`available`) al cabo de unos minutos, y que su tamaño y descripción tienen sentido.
+**Captura**: `img/actividad_2_3_paso2.png`.
+
+---
+
+## Parte B — Plantilla de lanzamiento y comparación de coste (reto)
+
+**Antes de construir nada, predice**: si empaquetas tu propia AMI en una plantilla de lanzamiento y arrancas una instancia desde ella, ¿cuánto crees que va a tardar en estar respondiendo, comparado con el tiempo que tardó la instancia de la Actividad 2.2 (que instalaba el servidor desde cero vía user data sobre una imagen genérica)? Escribe tu predicción y por qué crees eso.
+
+El reto: construye una plantilla de lanzamiento parametrizada con tu propia imagen, lánzale dos instancias idénticas desde ella y demuestra, cronometrando de verdad, si tu predicción se ha cumplido. No hay comandos dados — decide tú qué parámetros lleva la plantilla y cómo mides el tiempo de arranque de forma justa.
+
+Con eso hecho, compara el coste mensual estimado de mantener esta misma carga (una instancia sirviendo el catálogo, tráfico moderado) en tres familias distintas de instancia, usando la calculadora oficial de AWS, y justifica cuál elegirías para producción y cuál para clase.
+
+**Comprueba**: que las dos instancias lanzadas desde la plantilla responden con el catálogo de Escaparate sin ninguna configuración adicional, exactamente igual que la instancia original.
+**Captura**: el cronómetro real de arranque de las dos instancias, tu predicción escrita de antemano, y la tabla comparativa de coste mensual de las tres familias con su justificación.
+
+---
+
+## Verificación
+
+Para dar por válida la práctica se ejecutará:
+
+```bash
+aws ec2 describe-images --owners self
+aws ec2 describe-launch-templates --launch-template-names escaparate-lt-<tu-identificador>
+aws ec2 describe-instances --filters Name=tag:LaunchedFrom,Values=escaparate-lt-<tu-identificador>
+curl -I http://<ip-instancia-1>
+curl -I http://<ip-instancia-2>
+```
+
+Y debe observarse: tu AMI propia disponible, la plantilla de lanzamiento con los parámetros correctos, y las dos instancias lanzadas desde ella respondiendo `HTTP 200` con el catálogo de Escaparate.
+
+---
+
+## Criterios de evaluación
+
+**Parte A — hasta 7 puntos**
+
+| Apartado | Puntos |
+|---|---|
+| Catálogo desplegado automáticamente con user data, puertos mínimos | 3 |
+| Imagen propia creada a partir de la instancia | 3 |
+| Documentación en el repositorio | 1 |
+
+**Parte B — reto, hasta 3 puntos adicionales (máximo total: 10)**
+
+| Apartado | Puntos |
+|---|---|
+| Plantilla de lanzamiento funcionando, dos instancias idénticas lanzadas | 2 |
+| Comparación de tiempos y de coste entre tres familias, con predicción previa | 1 |
+
+---
+
+## ✅ Cierre
+
+Ya tienes una imagen propia y una plantilla parametrizada — puedes lanzar tantas copias idénticas del catálogo como necesites, sin repetir la instalación ni un solo parámetro a mano. Con esto se cierra el Tema 2: tienes la red, la seguridad y las instancias resueltas. En el Tema 3 vas a decidir dónde guardar los datos de verdad — objetos, ficheros compartidos y una base de datos gestionada— y a montar la primera arquitectura completa de tres capas.

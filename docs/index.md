@@ -1,17 +1,20 @@
-# 📚 Introducción a la Nube Pública
+# ☁️ Introducción a la Nube Pública
 
-Módulo de **Grado Medio y Grado Superior** (100 horas).
+Módulo optativo de **Formación Profesional** — se imparte sobre **AWS Academy Learner Lab**
 
-En este módulo aprendes a moverte por un proveedor de nube pública: entender qué pagas y por qué, moverte con soltura por su infraestructura global, levantar redes y servicios de cómputo, y elegir dónde y cómo guardar los datos de una aplicación.
+Montar un servidor ya no significa comprar una máquina. Significa pedirla, usarla el tiempo justo y devolverla — y pagar solo por eso. Este módulo va de saber pedir bien: qué servicio elegir, cómo conectarlo, cómo protegerlo, cómo hacer que aguante y, sobre todo, cuánto cuesta.
 
 ---
 
 ## 🎯 Qué vas a aprender
 
-- 💰 Fundamentos de la nube y cómo se factura lo que usas.
-- 🌍 Infraestructura global y seguridad: qué hay detrás y cómo protegerlo.
-- 🌐 Redes virtuales y servicios de cómputo, de una VM a una función serverless.
-- 🗄️ Almacenamiento, bases de datos y arquitecturas escalables.
+- 🧭 Moverte con soltura por la consola y la línea de comandos de un proveedor de nube real.
+- 🕸️ Diseñar una red virtual con subredes públicas y privadas, y diagnosticarla cuando no funciona.
+- 💾 Elegir entre almacenamiento de bloque, de objetos y compartido, y usar bases de datos gestionadas.
+- ⚖️ Montar una arquitectura que sobreviva a la caída de una máquina y que escale sola cuando llega tráfico.
+- 🔐 Dar permisos sin repartir contraseñas, y saber quién hizo qué y cuándo.
+- 💶 Estimar el coste de una arquitectura antes de construirla, y bajarlo sin perder disponibilidad.
+- 🤖 Declarar la infraestructura en código para levantarla y destruirla con un comando.
 
 ---
 
@@ -19,17 +22,29 @@ En este módulo aprendes a moverte por un proveedor de nube pública: entender q
 
 | Tema | Qué cubre | RA |
 |------|-----------|-----|
-| 🧩 [Tema 1 — Introducción a la nube](tema1/index.md) | Qué es la nube, ventajas frente a sistemas tradicionales y ecosistema de servicios | RA1 |
-| 🧩 [Tema 2 — Facturación y economía de la nube](tema2/index.md) | Precios, calculadora de costos y gestión de presupuestos | RA1 |
-| 🧩 [Tema 3 — Infraestructura global y servicios principales](tema3/index.md) | Regiones, zonas de disponibilidad y categorías de servicios | RA2 |
-| 🧩 [Tema 4 — Seguridad en la nube](tema4/index.md) | Responsabilidad compartida, IAM y protección de datos | RA2 |
-| 🧩 [Tema 5 — Redes y entrega de contenido](tema5/index.md) | Redes virtuales privadas, seguridad de red y CDN | RA3 |
-| 🧩 [Tema 6 — Informática y escalado automático](tema6/index.md) | VMs, funciones serverless, balanceo de carga y autoescalado | RA3 |
-| 🧩 [Tema 7 — Almacenamiento en la nube](tema7/index.md) | Disco, almacenamiento de objetos y selección de tecnologías | RA4 |
-| 🧩 [Tema 8 — Bases de datos](tema8/index.md) | Bases de datos relacionales, NoSQL y su gestión | RA4 |
-| 🧩 [Tema 9 — Arquitectura y monitoreo](tema9/index.md) | Well-Architected, monitorización y diseño de arquitecturas resilientes | RA4 |
+| 🧭 [Tema 1 — Introducción a la nube pública](tema1/index.md) | Modelos de servicio, infraestructura global, responsabilidad compartida, consola y CLI | RA1 · RA2 |
+| 🕸️ [Tema 2 — Redes virtuales y cómputo](tema2/index.md) | VPC, subredes, grupos de seguridad, instancias e imágenes propias | RA3 |
+| 💾 [Tema 3 — Almacenamiento, datos y primera arquitectura](tema3/index.md) | Bloque, objetos y ficheros compartidos, bases de datos gestionadas, arquitectura de tres capas | RA4 · RA3 |
+| ⚖️ [Tema 4 — Alta disponibilidad y entrega de contenido](tema4/index.md) | Balanceo, escalado automático, DNS gestionado, HTTPS y CDN | RA3 |
+| 🏛️ [Tema 5 — Gobierno de la nube](tema5/index.md) | Monitorización y diagnóstico, identidad y permisos, economía de la nube | RA2 · RA1 |
+| 🤖 [Tema 6 — Automatización y modelos de ejecución](tema6/index.md) | Infraestructura como código, serverless, contenedores gestionados | RA3 · RA4 |
+| 🏗️ [Tema 7 — Arquitectura bien diseñada](tema7/index.md) | Los seis pilares como lista de comprobación, auditoría y mejora | RA4 |
 
 ---
 
+## 🛍️ El proyecto: Escaparate
+
+Todas las actividades giran alrededor de la misma aplicación: **Escaparate**, un catálogo de productos con imágenes. Empieza como un sitio estático publicado el primer día y termina como una arquitectura de tres capas, balanceada, autoescalada, monitorizada y definida en código.
+
+Si además cursas **Despliegue de Aplicaciones Web**, es exactamente la misma aplicación: allí la despliegas a mano y aquí en su versión gestionada. Verás el mismo problema resuelto de dos maneras, y esa comparación es medio módulo.
+
+---
+
+!!! danger "Norma de aula: apagar antes de salir"
+    El crédito del laboratorio es limitado y compartido. Al final de **cada** sesión: parar instancias, borrar lo que no haga falta y revisar el gasto. Una instancia olvidada un fin de semana se come lo que necesitas en enero.
+
 !!! tip "Cómo navegar"
-    Haz clic en cualquier tema de arriba para empezar. Dentro de cada tema encontrarás los apuntes y las actividades en orden. Puedes usar las **flechas al pie de cada página** para avanzar o retroceder.
+    Haz clic en cualquier tema para empezar. Dentro de cada uno están los apuntes y las actividades en orden. Puedes usar las **flechas al pie de cada página** para avanzar o retroceder.
+
+!!! info "Actividades A y B"
+    Cada actividad tiene una parte **A**, guiada, que debe terminar todo el mundo, y una parte **B**, un reto que va más allá y suma en la calificación.

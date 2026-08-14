@@ -1,26 +1,40 @@
-# 🧩 Tema 5: Redes y Entrega de Contenido
+# 🏛️ Tema 5: Gobierno de la nube
 
-> **RA3**: Diseña y configura redes virtuales y servicios de cómputo en la nube, aplicando buenas prácticas de seguridad, estrategias de balanceo de carga, escalado automático y aprovechando tecnologías serverless, contenedores y máquinas virtuales según casos de uso específicos.
+> **RA2**: Aplica medidas básicas de seguridad como el modelo de responsabilidad compartida, gestión de accesos y protección de datos.
+
+> Con evidencia complementaria de **RA1** (costes) y **RA4** (monitorización).
 
 ---
 
 ## 🎯 Criterios de evaluación
 
-✅ Se ha realizado el diseño y configuración de redes virtuales privadas.  
-✅ Se han aplicado buenas prácticas de seguridad en redes y arquitecturas.  
-✅ Se ha participado activamente en la creación y configuración de una red funcional.
+✅ Se ha aplicado medidas de seguridad básicas mediante herramientas de gestión de acceso.
+
+✅ Se han realizado ejercicios sobre gestión de usuarios y políticas de seguridad.
+
+✅ Se han identificado los principios básicos de la facturación y costos en la nube.
+
+✅ Se ha hecho uso correcto de herramientas para estimar y gestionar presupuestos.
+
+✅ Se ha participado en actividades prácticas sobre gestión de costos.
+
+✅ Se ha hecho uso de herramientas de monitoreo y recomendaciones de optimización.
 
 ---
 
 ## 📘 Índice de contenidos
 
-1. [Redes y entrega de contenido](redes-y-entrega-de-contenido.md)
+1. [Monitorización y operación](monitorizacion-operacion.md)
+2. [Identidad y gestión de accesos](iam-aplicado.md)
+3. [Economía de la nube](economia-nube.md)
 
 **Actividades:**
 
-<!-- Añade aquí las actividades de este tema, p. ej. Actividad 5.1 -->
+- [Actividad 5.1 — Monitorización y diagnóstico con CloudWatch](actividad_5_1.md)
+- [Actividad 5.2 — Gestión de credenciales y políticas IAM](actividad_5_2.md)
+- [Actividad 5.3 — Cuánto cuesta lo que has construido](actividad_5_3.md)
 
 ---
 
-!!! info "¿Cómo avanzar por el contenido?"
-    Utiliza el índice o las flechas de navegación al final de cada página para desplazarte por los distintos apartados de este tema.
+!!! note "Cómo encaja este tema"
+    Tres sesiones sobre lo que separa a quien sabe montar cosas de quien sabe mantenerlas: ver qué pasa, decidir quién puede hacer qué, y saber cuánto cuesta todo.

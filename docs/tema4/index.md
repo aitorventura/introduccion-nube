@@ -1,26 +1,32 @@
-# 🧩 Tema 4: Seguridad en la Nube
+# ⚖️ Tema 4: Alta disponibilidad y entrega de contenido
 
-> **RA2**: Identifica los componentes clave de la infraestructura global de la nube, diferenciando servicios principales, regiones, zonas de disponibilidad y aplicando medidas básicas de seguridad como el modelo de responsabilidad compartida, gestión de accesos y protección de datos.
+> **RA3**: Diseña y configura redes virtuales y servicios de cómputo, aplicando estrategias de balanceo de carga y escalado automático.
 
 ---
 
 ## 🎯 Criterios de evaluación
 
-✅ Se ha comprendido el modelo de responsabilidad compartida en la nube.  
-✅ Se han aplicado medidas de seguridad básicas mediante herramientas de gestión de acceso.  
-✅ Se han realizado ejercicios sobre gestión de usuarios y políticas de seguridad.
+✅ Se ha llevado a cabo la configuración y gestión de balanceo de carga y escalado automático.
+
+✅ Se ha aplicado buenas prácticas de seguridad en redes y arquitecturas.
+
+✅ Se ha realizado el diseño y configuración de servicios de enrutamiento y distribución de contenido.
+
+✅ Se han desarrollado prácticas relacionadas con la optimización de recursos computacionales.
 
 ---
 
 ## 📘 Índice de contenidos
 
-1. [Seguridad en la nube](seguridad-en-la-nube.md)
+1. [Balanceo de carga y escalado automático](alta-disponibilidad-escalado.md)
+2. [DNS, HTTPS y distribución de contenido](dns-https-cdn.md)
 
 **Actividades:**
 
-<!-- Añade aquí las actividades de este tema, p. ej. Actividad 4.1 -->
+- [Actividad 4.1 — Balanceador de carga y Auto Scaling Group](actividad_4_1.md)
+- [Actividad 4.2 — Dominio propio y caché en el borde](actividad_4_2.md)
 
 ---
 
-!!! info "¿Cómo avanzar por el contenido?"
-    Utiliza el índice o las flechas de navegación al final de cada página para desplazarte por los distintos apartados de este tema.
+!!! note "Cómo encaja este tema"
+    Aquí es donde la nube empieza a justificar su precio: la arquitectura del tema anterior deja de caerse cuando muere una máquina y crece sola cuando llega tráfico.

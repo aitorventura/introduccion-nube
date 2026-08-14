@@ -1,25 +1,28 @@
-# 🧩 Tema 7: Almacenamiento en la Nube
+# 🏗️ Tema 7: Arquitectura bien diseñada
 
-> **RA4**: Gestiona servicios de almacenamiento y bases de datos en la nube, seleccionando tecnologías adecuadas para casos específicos, y diseña arquitecturas escalables y resilientes utilizando herramientas de monitoreo y optimización para mejorar el rendimiento.
+> **RA4**: Diseña arquitecturas escalables y resilientes utilizando herramientas de monitoreo y optimización para mejorar el rendimiento.
 
 ---
 
 ## 🎯 Criterios de evaluación
 
-✅ Se ha realizado la diferenciación entre tecnologías de almacenamiento en la nube.  
-✅ Se ha trabajado en la resolución de problemas prácticos sobre almacenamiento *(criterio compartido con el tema de Bases de datos)*.
+✅ Se ha diseñado arquitecturas escalables y resilientes basadas en las mejores prácticas.
+
+✅ Se ha hecho uso de herramientas de monitoreo y recomendaciones de optimización.
+
+✅ Se ha participado en actividades que simulen el análisis y mejora de arquitecturas existentes.
 
 ---
 
 ## 📘 Índice de contenidos
 
-1. [Almacenamiento en la nube](almacenamiento.md)
+1. [Well-Architected: los seis pilares](well-architected.md)
 
 **Actividades:**
 
-<!-- Añade aquí las actividades de este tema, p. ej. Actividad 7.1 -->
+- [Actividad 7.1 — Auditoría y mejora](actividad_7_1.md)
 
 ---
 
-!!! info "¿Cómo avanzar por el contenido?"
-    Utiliza el índice o las flechas de navegación al final de cada página para desplazarte por los distintos apartados de este tema.
+!!! note "Cómo encaja este tema"
+    El cierre. Una sesión para mirar hacia atrás con criterio: coger una arquitectura, pasarle una lista de comprobación profesional y decir qué está mal y cuánto costaría arreglarlo.

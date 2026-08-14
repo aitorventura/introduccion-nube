@@ -1,5 +1,5 @@
 site_name: Introducción a la Nube Pública
-site_author: Aitor Ventura
+site_author: Alejandro Roig y Aitor Ventura
 
 theme:
   name: material
@@ -27,34 +27,70 @@ theme:
 
 nav:
   - Inicio: index.md
-  - Tema 1 - Introducción a la nube:
+  - Tema 1 - Introducción a la nube pública:
       - Tema 1 - Introducción: tema1/index.md
-      - Introducción a la nube: tema1/introduccion-a-la-nube.md
-      - Actividad 1.1: tema1/actividad_1_1.md
-  - Tema 2 - Facturación y economía de la nube:
+      - Primer contacto profesional con AWS:
+          - Primer contacto profesional con AWS: tema1/primer-contacto-aws.md
+          - Actividad 1.1 - Tu primer despliegue en la nube: tema1/actividad_1_1.md
+  - Tema 2 - Redes virtuales y servicios de cómputo:
       - Tema 2 - Introducción: tema2/index.md
-      - Facturación y economía de la nube: tema2/facturacion-y-economia.md
-  - Tema 3 - Infraestructura global y servicios principales:
+      - Diseño de la red virtual:
+          - Diseño de la red virtual: tema2/vpc-diseno.md
+          - Actividad 2.1 - Tu propia VPC en dos zonas: tema2/actividad_2_1.md
+      - Seguridad de red:
+          - Seguridad de red: tema2/seguridad-red.md
+          - Actividad 2.2 - Diagnóstico de fallos de red por capas: tema2/actividad_2_2.md
+      - Máquinas virtuales:
+          - Máquinas virtuales: tema2/maquinas-virtuales.md
+          - Actividad 2.3 - De instancia a plantilla: tema2/actividad_2_3.md
+  - Tema 3 - Almacenamiento, datos y primera arquitectura:
       - Tema 3 - Introducción: tema3/index.md
-      - Infraestructura global y servicios principales: tema3/infraestructura-global.md
-  - Tema 4 - Seguridad en la nube:
+      - Servicios de almacenamiento:
+          - Servicios de almacenamiento: tema3/almacenamiento.md
+          - Actividad 3.1 - S3, EBS y EFS - tres soluciones de almacenamiento: tema3/actividad_3_1.md
+      - Bases de datos gestionadas:
+          - Bases de datos gestionadas: tema3/bases-datos-gestionadas.md
+          - Actividad 3.2 - Migración a base de datos gestionada con RDS: tema3/actividad_3_2.md
+      - Primera arquitectura completa:
+          - Primera arquitectura completa: tema3/arquitectura-completa.md
+          - Actividad 3.3 - Escaparate en tres capas: tema3/actividad_3_3.md
+  - Tema 4 - Alta disponibilidad y entrega de contenido:
       - Tema 4 - Introducción: tema4/index.md
-      - Seguridad en la nube: tema4/seguridad-en-la-nube.md
-  - Tema 5 - Redes y entrega de contenido:
+      - Balanceo de carga y escalado automático:
+          - Balanceo de carga y escalado automático: tema4/alta-disponibilidad-escalado.md
+          - Actividad 4.1 - Balanceador de carga y Auto Scaling Group: tema4/actividad_4_1.md
+      - DNS, HTTPS y distribución de contenido:
+          - DNS, HTTPS y distribución de contenido: tema4/dns-https-cdn.md
+          - Actividad 4.2 - Dominio propio y caché en el borde: tema4/actividad_4_2.md
+  - Tema 5 - Gobierno de la nube:
       - Tema 5 - Introducción: tema5/index.md
-      - Redes y entrega de contenido: tema5/redes-y-entrega-de-contenido.md
-  - Tema 6 - Informática y escalado automático:
+      - Monitorización y operación:
+          - Monitorización y operación: tema5/monitorizacion-operacion.md
+          - Actividad 5.1 - Monitorización y diagnóstico con CloudWatch: tema5/actividad_5_1.md
+      - Identidad y gestión de accesos:
+          - Identidad y gestión de accesos: tema5/iam-aplicado.md
+          - Actividad 5.2 - Gestión de credenciales y políticas IAM: tema5/actividad_5_2.md
+      - Economía de la nube:
+          - Economía de la nube: tema5/economia-nube.md
+          - Actividad 5.3 - Cuánto cuesta lo que has construido: tema5/actividad_5_3.md
+  - Tema 6 - Automatización y modelos de ejecución:
       - Tema 6 - Introducción: tema6/index.md
-      - Informática y escalado automático: tema6/informatica-y-escalado-automatico.md
-  - Tema 7 - Almacenamiento en la nube:
+      - Infraestructura como código:
+          - Infraestructura como código: tema6/infraestructura-como-codigo.md
+          - Actividad 6.1 - Destruir y reconstruir: tema6/actividad_6_1.md
+      - Serverless:
+          - Serverless: tema6/serverless.md
+          - Actividad 6.2 - Una función por cada imagen: tema6/actividad_6_2.md
+      - Contenedores gestionados:
+          - Contenedores gestionados: tema6/contenedores-gestionados.md
+          - Actividad 6.3 - Tu imagen, sin servidores: tema6/actividad_6_3.md
+  - Tema 7 - Arquitectura bien diseñada:
       - Tema 7 - Introducción: tema7/index.md
-      - Almacenamiento en la nube: tema7/almacenamiento.md
-  - Tema 8 - Bases de datos:
-      - Tema 8 - Introducción: tema8/index.md
-      - Bases de datos: tema8/bases-de-datos.md
-  - Tema 9 - Arquitectura y monitoreo:
-      - Tema 9 - Introducción: tema9/index.md
-      - Arquitectura y monitoreo: tema9/arquitectura-y-monitoreo.md
+      - Well-Architected - los seis pilares:
+          - Well-Architected - los seis pilares: tema7/well-architected.md
+          - Actividad 7.1 - Auditoría y mejora: tema7/actividad_7_1.md
+  - Currículo: curriculum.md
+  - Cierre del módulo: cierre.md
 
 markdown_extensions:
   - md_in_html
