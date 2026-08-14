@@ -1,26 +1,36 @@
-# 🧩 Tema 6: Informática y Escalado Automático
+# 🤖 Tema 6: Automatización y modelos de ejecución
 
-> **RA3**: Diseña y configura redes virtuales y servicios de cómputo en la nube, aplicando buenas prácticas de seguridad, estrategias de balanceo de carga, escalado automático y aprovechando tecnologías serverless, contenedores y máquinas virtuales según casos de uso específicos.
+> **RA3**: Selecciona servicios de computación adecuados según casos de uso, aprovechando tecnologías serverless, contenedores y máquinas virtuales.
+
+> Con evidencia complementaria de **RA4** (arquitecturas reproducibles).
 
 ---
 
 ## 🎯 Criterios de evaluación
 
-✅ Se ha realizado la selección de servicios de computación adecuados según casos de uso.  
-✅ Se ha llevado a cabo la configuración y gestión de balanceo de carga y escalado automático.  
+✅ Se ha realizado el diseño y configuración de redes virtuales privadas mediante código.
+
+✅ Se ha realizado la selección de servicios de computación adecuados según casos de uso.
+
 ✅ Se han desarrollado prácticas relacionadas con la optimización de recursos computacionales.
+
+✅ Se ha diseñado arquitecturas escalables y resilientes basadas en las mejores prácticas.
 
 ---
 
 ## 📘 Índice de contenidos
 
-1. [Informática y escalado automático](informatica-y-escalado-automatico.md)
+1. [Infraestructura como código](infraestructura-como-codigo.md)
+2. [Serverless](serverless.md)
+3. [Contenedores gestionados](contenedores-gestionados.md)
 
 **Actividades:**
 
-<!-- Añade aquí las actividades de este tema, p. ej. Actividad 6.1 -->
+- [Actividad 6.1 — Destruir y reconstruir](actividad_6_1.md)
+- [Actividad 6.2 — Una función por cada imagen](actividad_6_2.md)
+- [Actividad 6.3 — Tu imagen, sin servidores](actividad_6_3.md)
 
 ---
 
-!!! info "¿Cómo avanzar por el contenido?"
-    Utiliza el índice o las flechas de navegación al final de cada página para desplazarte por los distintos apartados de este tema.
+!!! note "Cómo encaja este tema"
+    En la primera sesión descubres que ese comando que llevas ejecutando desde septiembre para recuperar tu entorno era, en realidad, infraestructura como código. A partir de ahí lo escribes tú.

@@ -1,8 +1,6 @@
-# Plantilla base — sitio MkDocs Material para un módulo
+# Introducción a la Nube Pública — Apuntes y actividades
 
-Esta plantilla contiene todo lo imprescindible para arrancar un nuevo módulo con la misma
-base técnica y visual (índigo/teal, MkDocs Material) que el proyecto original. La idea es
-que a partir de aquí solo tengas que ir añadiendo temas y contenido, sin tocar la configuración.
+Sitio de apuntes y actividades del módulo optativo **Introducción a la Nube Pública**, construido con [MkDocs Material](https://squidfunk.github.io/mkdocs-material/). Se imparte sobre **AWS Academy Learner Lab**. Teoría y actividades giran en torno a un proyecto compartido, **Escaparate** (catálogo de productos), el mismo que se trabaja en Despliegue de Aplicaciones Web — allí desplegado a mano, aquí en su versión gestionada.
 
 ## Puesta en marcha
 
@@ -11,14 +9,17 @@ pip install -r requirements.txt
 mkdocs serve
 ```
 
-Abre `http://127.0.0.1:8000` y verás la portada de ejemplo.
+Abre la URL que te indique la terminal (por defecto `http://127.0.0.1:8000`).
 
-1. Cambia `site_name` en `mkdocs.yml` por el nombre real del módulo.
-2. Sustituye `docs/curriculum.md` por el currículo oficial (ver instrucciones dentro del fichero).
-3. Edita `docs/index.md` con la portada real.
-4. Renombra/edita `docs/tema1/` con el contenido del primer tema, y añade `tema2/`, `tema3/`... a
-   medida que avances, replicando siempre la misma estructura de carpetas.
-5. Cambia el nombre y el año en `overrides/partials/copyright.html`.
+## Temario
+
+- **Tema 1 — Introducción a la nube pública**: modelos de servicio, infraestructura global, responsabilidad compartida, consola y CLI.
+- **Tema 2 — Redes virtuales y cómputo**: diseño de la VPC, seguridad de red, instancias e imágenes propias.
+- **Tema 3 — Almacenamiento, datos y primera arquitectura**: bloque/objetos/ficheros compartidos, bases de datos gestionadas, arquitectura de tres capas.
+- **Tema 4 — Alta disponibilidad y entrega de contenido**: balanceo y escalado automático, DNS gestionado, HTTPS y CDN.
+- **Tema 5 — Gobierno de la nube**: monitorización y diagnóstico, identidad y permisos, economía de la nube.
+- **Tema 6 — Automatización y modelos de ejecución**: infraestructura como código, serverless, contenedores gestionados.
+- **Tema 7 — Arquitectura bien diseñada**: los seis pilares, auditoría y propuesta de mejora.
 
 ## Qué incluye
 
@@ -28,13 +29,14 @@ requirements.txt         — mkdocs + mkdocs-material + mkdocs-pdf
 .gitignore               — excluye soluciones del profesor y la carpeta site/
 overrides/partials/      — pie de página con licencia CC BY-NC-SA
 docs/
-  index.md               — portada, con placeholders
-  curriculum.md           — plantilla del currículo (RA + criterios + contenidos básicos)
+  index.md               — portada del módulo
+  curriculum.md           — currículo oficial (RA + criterios + contenidos básicos)
+  cierre.md               — cierre del módulo
   css/extra.css           — estilos: pestañas coloreadas (.tabs-colored), footer, marco de imágenes
-  tema1/
+  temaN/
     index.md              — índice de tema (RA, criterios, contenidos, actividades)
-    ejemplo-apartado.md    — plantilla de página de teoría
-    actividad_1_1.md       — plantilla de actividad
+    *.md                   — un fichero por apartado de teoría
+    actividad_N_M.md       — un fichero por actividad
     plantillas/            — aquí van los .docx que descargan los alumnos
     img/                   — capturas e imágenes de este tema
     diapositivas/          — PDF (y opcionalmente PPTX) de las diapositivas de cada apartado

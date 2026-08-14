@@ -1,26 +1,36 @@
-# 🧩 Tema 2: Facturación y Economía de la Nube
+# 🕸️ Tema 2: Redes virtuales y servicios de cómputo
 
-> **RA1**: Comprende los fundamentos de la computación en la nube, sus ventajas frente a sistemas tradicionales, el marco de adopción, los principios de migración y los aspectos clave de facturación, como estimación y optimización de costos.
+> **RA3**: Diseña y configura redes virtuales y servicios de cómputo en la nube, aplicando buenas prácticas de seguridad.
 
 ---
 
 ## 🎯 Criterios de evaluación
 
-✅ Se han identificado los principios básicos de la facturación y costos en la nube.  
-✅ Se ha hecho uso correcto de herramientas para estimar y gestionar presupuestos.  
-✅ Se ha participado en actividades prácticas sobre gestión de costos.
+✅ Se ha realizado el diseño y configuración de redes virtuales privadas.
+
+✅ Se ha aplicado buenas prácticas de seguridad en redes y arquitecturas.
+
+✅ Se ha participado activamente en la creación y configuración de una red funcional.
+
+✅ Se ha realizado la selección de servicios de computación adecuados según casos de uso.
+
+✅ Se han desarrollado prácticas relacionadas con la optimización de recursos computacionales.
 
 ---
 
 ## 📘 Índice de contenidos
 
-1. [Facturación y economía de la nube](facturacion-y-economia.md)
+1. [Diseño de la red virtual](vpc-diseno.md)
+2. [Seguridad de red](seguridad-red.md)
+3. [Máquinas virtuales](maquinas-virtuales.md)
 
 **Actividades:**
 
-<!-- Añade aquí las actividades de este tema, p. ej. Actividad 2.1 -->
+- [Actividad 2.1 — Tu propia VPC en dos zonas](actividad_2_1.md)
+- [Actividad 2.2 — Diagnóstico de fallos de red por capas](actividad_2_2.md)
+- [Actividad 2.3 — De instancia a plantilla](actividad_2_3.md)
 
 ---
 
-!!! info "¿Cómo avanzar por el contenido?"
-    Utiliza el índice o las flechas de navegación al final de cada página para desplazarte por los distintos apartados de este tema.
+!!! note "Cómo encaja este tema"
+    Es el tema donde más gente se atasca, y también el que más rendimiento da: diagnosticar por qué una máquina no responde es la habilidad que más vas a usar en una empresa.
