@@ -5,7 +5,7 @@
 
 ## Contexto
 
-Cada vez que se sube una imagen de producto a Escaparate, alguien tiene que generar su miniatura y registrar sus metadatos. Hoy esa tarea deja de depender de tu instancia: una función se dispara sola cuando llega la imagen, hace su trabajo, y desaparece.
+En una carrera popular, cada participante sube la foto de su dorsal, y alguien tiene que generar su miniatura y registrar sus metadatos. Hoy esa tarea deja de depender de una instancia tuya: una función se dispara sola cuando llega la imagen, hace su trabajo, y desaparece.
 
 ## Qué vas a practicar
 
@@ -15,53 +15,66 @@ Cada vez que se sube una imagen de producto a Escaparate, alguien tiene que gene
 
 ## Requisitos previos
 
-Un bucket de imágenes de producto (el de la Actividad 3.1, o uno nuevo). El apunte de esta sesión — «Serverless» (serverless.md).
+Un bucket de S3 nuevo, creado por ti en la Parte A de esta misma actividad. El código base de la función, en `recursos/tema6/actividad_6_2/lambda_function.py` (con su `requirements.txt` y su `README.md` de empaquetado). El apunte de esta sesión — «Serverless» (serverless.md).
 
 ---
 
 ## Parte A — Función disparada por evento (guiada)
 
-### Paso 1 — Crea la función desde la consola
+### Paso 1 — Crea el bucket de fotos de dorsal
+
+1. Busca "S3" en el buscador de servicios → **Crear bucket**.
+2. Dale un nombre único a nivel global, por ejemplo `carrera-dorsales-<tu-identificador>`.
+3. Deja el resto de opciones por defecto (bloqueo de acceso público activado) y créalo.
+
+![Bucket de fotos de dorsal creado, vacío](img/actividad_6_2_paso1.png)
+
+**Comprueba**: que el bucket aparece vacío y accesible desde tu cuenta.
+**Captura**: `img/actividad_6_2_paso1.png`.
+
+### Paso 2 — Crea la función desde la consola
 
 1. Busca "Lambda" en el buscador de servicios → **Crear función**.
 2. Elige **Crear desde cero**.
-3. Dale un nombre (por ejemplo `escaparate-miniaturas-<tu-identificador>`).
-4. Elige el entorno de ejecución que te indique el profesor (por ejemplo Python o Node.js).
+3. Dale un nombre (por ejemplo `carrera-miniaturas-<tu-identificador>`).
+4. Elige el entorno de ejecución **Python** (es el que usa el código que te entrega el profesor).
 5. En **Permisos de ejecución**, usa el rol existente que te ofrezca el asistente (no puedes crear uno nuevo) y confirma que incluye acceso a S3.
 6. Crea la función.
 
-![Función Lambda creada, con su configuración inicial visible](img/actividad_6_2_paso1_a.png)
+![Función Lambda creada, con su configuración inicial visible](img/actividad_6_2_paso2_a.png)
 
 **Comprueba**: que la función aparece con estado activo en el panel de Lambda.
-**Captura**: `img/actividad_6_2_paso1_a.png`.
+**Captura**: `img/actividad_6_2_paso2_a.png`.
 
-### Paso 2 — Escribe el código y configura el disparador de S3
+### Paso 3 — Sube el código y configura el disparador de S3
 
-1. En el editor de código integrado de la consola, escribe la función que recibe el evento de S3, genera una miniatura de la imagen y guarda sus metadatos (tamaño, formato, fecha) — el profesor te da la base del código a completar.
-2. Guarda y despliega los cambios.
+El profesor te entrega el código ya escrito en `recursos/tema6/actividad_6_2/lambda_function.py`: recibe el evento de S3, genera una miniatura real con Pillow (redimensionada a 200x200 manteniendo la proporción) bajo el prefijo `miniaturas/`, y registra un objeto JSON con los metadatos (tamaño original, formato, fecha de subida) bajo el prefijo `metadatos/`, todo en el mismo bucket.
+
+1. Pillow no viene incluida en el entorno de ejecución de Lambda por defecto — sigue las instrucciones de `recursos/tema6/actividad_6_2/README.md` para empaquetar el código junto con sus dependencias en un `.zip`.
+2. Sube ese `.zip` como código de la función (**Cargar desde → archivo .zip**), en vez de escribirlo en el editor integrado.
 3. Ve a la pestaña **Configuración → Disparadores → Añadir disparador**.
-4. Selecciona **S3**, elige tu bucket de imágenes, y como tipo de evento **Todos los eventos de creación de objetos**.
+4. Selecciona **S3**, elige tu bucket de fotos de dorsal, y como tipo de evento **Todos los eventos de creación de objetos**.
 5. Guarda el disparador.
 
-![Disparador de S3 configurado sobre la función](img/actividad_6_2_paso2_a.png)
+![Disparador de S3 configurado sobre la función](img/actividad_6_2_paso3_a.png)
 
-6. Sube una imagen nueva a tu bucket (por CLI o por consola) y comprueba que se genera la miniatura sin que tú hayas ejecutado nada más.
+6. Sube una foto de dorsal nueva a tu bucket (por CLI o por consola) y comprueba que se genera la miniatura sin que tú hayas ejecutado nada más.
 
-![Miniatura generada automáticamente tras subir la imagen original](img/actividad_6_2_paso2_b.png)
+![Miniatura generada automáticamente tras subir la foto original](img/actividad_6_2_paso3_b.png)
 
-**Comprueba**: que la miniatura aparece en el bucket unos segundos después de subir la imagen original, sin intervención tuya, y que los metadatos quedan registrados en algún sitio consultable (un fichero, una tabla, según lo que hayas implementado).
-**Captura**: `img/actividad_6_2_paso2_a.png` y `img/actividad_6_2_paso2_b.png`.
+**Comprueba**: que la miniatura aparece en el bucket unos segundos después de subir la foto original, sin intervención tuya, y que el objeto de metadatos aparece bajo `metadatos/` con los datos correctos.
+**Captura**: `img/actividad_6_2_paso3_a.png` y `img/actividad_6_2_paso3_b.png`.
 
 !!! question "Reflexiona"
-    Si subieras cien imágenes a la vez, ¿qué pasaría con tu función? Compáralo con lo que le pasaría a una única instancia si tuviera que procesar cien peticiones simultáneas de generación de miniaturas.
+    Si se subieran cien fotos de dorsal a la vez (por ejemplo, al final de la carrera), ¿qué pasaría con tu función? Compáralo con lo que le pasaría a una única instancia si tuviera que procesar cien peticiones simultáneas de generación de miniaturas.
 
 ---
 
 ## Parte B — Mini API y comparación real (reto)
 
-Monta una mini API con una pasarela delante de una función que resuelva una operación sencilla del catálogo (por ejemplo, devolver el detalle de un producto). No hay procedimiento dado — decide tú cómo conectas la pasarela con la función y cómo la pruebas.
+Monta una mini API con una pasarela delante de una función que resuelva una operación sencilla (por ejemplo, devolver los metadatos de un dorsal concreto). No hay procedimiento dado — decide tú cómo conectas la pasarela con la función y cómo la pruebas.
 
-Con la API funcionando, mide la latencia real de esa operación servida por tu función, y compárala con la latencia de la misma operación servida por tu instancia de aplicación ya desplegada. Repite la medición varias veces para distinguir el efecto del arranque en frío de una invocación ya "caliente".
+Con la API funcionando, mide la latencia real de esa operación servida por tu función, y compárala con la latencia de la misma operación servida por una instancia con un servidor sencillo desplegado por ti. Repite la medición varias veces para distinguir el efecto del arranque en frío de una invocación ya "caliente".
 
 Después, estima el coste mensual de ambas opciones para dos volúmenes de tráfico distintos: uno bajo (pocas peticiones al día) y uno alto (miles de peticiones por minuto de forma sostenida), y decide, con esos números delante, en qué casos elegirías la función y en cuáles la instancia.
 
@@ -75,8 +88,8 @@ Después, estima el coste mensual de ambas opciones para dos volúmenes de tráf
 Para dar por válida la práctica se ejecutará:
 
 ```bash
-aws lambda get-function --function-name escaparate-miniaturas-<tu-identificador>
-aws s3 ls s3://<tu-bucket-imagenes>/miniaturas/
+aws lambda get-function --function-name carrera-miniaturas-<tu-identificador>
+aws s3 ls s3://carrera-dorsales-<tu-identificador>/miniaturas/
 ```
 
 Y debe observarse: la función activa con su disparador de S3 configurado, al menos una miniatura generada automáticamente, y la comparación de latencia y coste documentada con datos reales.
@@ -105,4 +118,4 @@ Y debe observarse: la función activa con su disparador de S3 configurado, al me
 
 ## ✅ Cierre
 
-Ya tienes procesamiento de imágenes que se dispara solo, sin ningún servidor que administres, y sabes con datos propios cuándo compensa serverless y cuándo no. La próxima sesión ves la tercera forma de ejecutar la misma aplicación: contenedores, sin servidor que gestionar pero sin el modelo de eventos de hoy.
+Ya tienes procesamiento de imágenes que se dispara solo, sin ningún servidor que administres, y sabes con datos propios cuándo compensa serverless y cuándo no. La próxima sesión ves la tercera forma de ejecutar una aplicación: contenedores, sin servidor que gestionar pero sin el modelo de eventos de hoy.

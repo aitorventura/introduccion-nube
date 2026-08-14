@@ -53,7 +53,7 @@ nav:
           - Actividad 3.2 - Migración a base de datos gestionada con RDS: tema3/actividad_3_2.md
       - Primera arquitectura completa:
           - Primera arquitectura completa: tema3/arquitectura-completa.md
-          - Actividad 3.3 - Escaparate en tres capas: tema3/actividad_3_3.md
+          - Actividad 3.3 - Arquitectura de tres capas - front, aplicación y base de datos: tema3/actividad_3_3.md
   - Tema 4 - Alta disponibilidad y entrega de contenido:
       - Tema 4 - Introducción: tema4/index.md
       - Balanceo de carga y escalado automático:

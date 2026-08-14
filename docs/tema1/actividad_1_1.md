@@ -5,7 +5,7 @@
 
 ## Contexto
 
-Escaparate necesita, antes que cualquier otra cosa, un sitio donde vivir. Hoy no vas a tocar la aplicación completa —eso empieza más adelante—, solo su parte más simple: el front estático (HTML, CSS y JavaScript, con un `config.js` de una sola línea) que el resto del curso irá conectando a servicios cada vez más completos. Tu tarea de hoy es publicarlo en internet, con una dirección propia, usando AWS por primera vez.
+**El Manillar**, un taller de bicicletas de barrio, necesita antes que cualquier otra cosa un sitio donde vivir en internet. Hoy trabajas con su parte más simple: un front estático (HTML, CSS y JavaScript, con un `config.js` de una sola línea) que publicas tal cual, sin backend detrás todavía. Tu tarea de hoy es publicarlo en internet, con una dirección propia, usando AWS por primera vez.
 
 ## Qué vas a practicar
 
@@ -16,11 +16,11 @@ Escaparate necesita, antes que cualquier otra cosa, un sitio donde vivir. Hoy no
 
 ## Requisitos previos
 
-Ninguno específico de INU — es la primera sesión del módulo. Necesitas: acceso confirmado a tu AWS Academy Learner Lab, y los ficheros estáticos del front de Escaparate (te los entrega el profesor; no los programas tú). Repasa antes la sección "⚙️ Modelo de responsabilidad compartida" del apunte de hoy — la vas a necesitar en la Parte B.
+Ninguno específico de INU — es la primera sesión del módulo. Necesitas: acceso confirmado a tu AWS Academy Learner Lab, y los ficheros estáticos del front de El Manillar, ya preparados en `recursos/tema1/actividad_1_1/front/` (`index.html`, `style.css`, `script.js`, `config.js`) — el profesor te los entrega, no los programas tú. Repasa antes la sección "⚙️ Modelo de responsabilidad compartida" del apunte de hoy — la vas a necesitar en la Parte B.
 
 ---
 
-## Parte A — Publicar el front de Escaparate (guiada)
+## Parte A — Publicar el front de El Manillar (guiada)
 
 ### Paso 1 — Comprueba tu identidad y compara consola y CLI
 
@@ -56,7 +56,7 @@ Y por consola: en el buscador de servicios de la parte superior, escribe "S3" y 
 Esta es la primera vez que tocas S3, así que hazlo desde la consola, paso a paso, sin saltarte ninguna pantalla:
 
 1. Dentro del servicio S3, haz clic en **Crear bucket**.
-2. Ponle un nombre único (los nombres de bucket son globales en todo AWS, no solo en tu cuenta) — por ejemplo `escaparate-front-<tu-identificador>`.
+2. Ponle un nombre único (los nombres de bucket son globales en todo AWS, no solo en tu cuenta) — por ejemplo `el-manillar-front-<tu-identificador>`.
 3. Deja la región que te indique el Learner Lab.
 4. Baja hasta el bloque **Configuración de bloqueo de acceso público a este bucket**. Por defecto viene todo marcado (bloqueado). **Desmarca la casilla superior** ("Bloquear todo el acceso público") y confirma la advertencia que te muestra AWS, escribiendo lo que te pida en el cuadro de confirmación.
 5. Haz clic en **Crear bucket**.
@@ -85,14 +85,14 @@ Esta es la primera vez que tocas S3, así que hazlo desde la consola, paso a pas
 Ahora que el bucket ya existe y está configurado, sube el contenido del front que te ha entregado el profesor por CLI — esta parte sí conviene automatizarla, porque la vas a repetir cada vez que cambie algo del front:
 
 ```bash
-aws s3 cp ./front-escaparate/ s3://<tu-bucket>/ --recursive
+aws s3 cp recursos/tema1/actividad_1_1/front/ s3://<tu-bucket>/ --recursive
 ```
 
 Obtén la URL pública del sitio: en la consola, dentro de tu bucket → pestaña **Propiedades** → baja hasta **Alojamiento de sitio web estático**, donde aparece la URL del *endpoint*. Ábrela en el navegador, en una ventana de incógnito para comprobar que no depende de tu sesión iniciada.
 
-![El front de Escaparate cargando desde la URL pública del bucket](img/actividad_1_1_paso3.png)
+![El front de El Manillar cargando desde la URL pública del bucket](img/actividad_1_1_paso3.png)
 
-**Comprueba**: que la URL carga el front de Escaparate sin haber iniciado sesión en AWS. Es normal que el catálogo aparezca vacío o con error de conexión — el backend todavía no existe, eso llega en sesiones posteriores.
+**Comprueba**: que la URL carga el front de El Manillar sin haber iniciado sesión en AWS. Es normal que el aviso de estado del taller diga "todavía no hay backend conectado" — no hay ningún backend detrás en esta actividad, la página es puramente estática.
 **Captura**: `img/actividad_1_1_paso3.png` (front cargando en el navegador) y la salida del comando `aws s3 cp` mostrando los ficheros subidos.
 
 ### Paso 4 — Localiza dónde se controla el gasto de tu laboratorio
@@ -152,7 +152,7 @@ Y debe observarse: el bucket con los ficheros del front, y una respuesta `HTTP 2
 | Apartado | Puntos |
 |---|---|
 | Recorrido por consola y CLI documentado (mismas operaciones, ambos caminos) | 1 |
-| Front de Escaparate publicado y accesible desde internet | 2 |
+| Front de El Manillar publicado y accesible desde internet | 2 |
 | Control del gasto del laboratorio identificado y documentado | 2 |
 | Reflexión sobre responsabilidad compartida razonada | 1 |
 | Documentación en el repositorio | 1 |
@@ -168,4 +168,4 @@ Y debe observarse: el bucket con los ficheros del front, y una respuesta `HTTP 2
 
 ## ✅ Cierre
 
-Ya tienes algo tuyo publicado en internet, con una dirección propia, y sabes distinguir qué parte de lo que acabas de montar depende de AWS y qué parte depende de ti. Es el primer ladrillo de Escaparate — a partir de la próxima sesión empiezas a construir la red privada donde va a vivir el resto de la aplicación.
+Ya tienes algo tuyo publicado en internet, con una dirección propia, y sabes distinguir qué parte de lo que acabas de montar depende de AWS y qué parte depende de ti. La próxima sesión cambias de escenario y empiezas a diseñar redes virtuales desde cero.

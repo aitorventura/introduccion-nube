@@ -4,7 +4,7 @@
 
 ---
 
-Ya usaste S3 en la primera sesión, sin detenerte a pensar en qué tipo de almacenamiento era ni por qué encajaba con un front estático. Hoy tocas las tres familias completas y aprendes a elegir entre ellas según lo que de verdad necesites guardar — porque Escaparate, a partir de esta sesión, empieza a tener piezas que no encajan en S3: el disco de una instancia, y una carpeta de imágenes que varias instancias necesitan ver a la vez.
+Ya usaste S3 en la primera sesión, sin detenerte a pensar en qué tipo de almacenamiento era ni por qué encajaba con un front estático. Hoy tocas las tres familias completas y aprendes a elegir entre ellas según lo que de verdad necesites guardar — porque a partir de esta sesión empiezas a tener necesidades de almacenamiento que ya no encajan solo en S3: el disco de una instancia, y una carpeta de ficheros que varias instancias necesitan ver a la vez.
 
 ---
 
@@ -12,14 +12,14 @@ Ya usaste S3 en la primera sesión, sin detenerte a pensar en qué tipo de almac
 
 No existe "el almacenamiento en la nube" en singular — existen tres familias distintas, cada una pensada para un patrón de acceso diferente. Una de ellas se accede "por **HTTP**" (*HyperText Transfer Protocol*): el mismo protocolo que usa tu navegador para pedir cualquier página web, con sus operaciones típicas de leer y escribir un recurso a través de una URL — no hace falta tener el disco "conectado" a nada, cualquier cliente que hable HTTP puede pedir el objeto.
 
-| Familia | Cómo se accede | Para qué encaja | Ejemplo en Escaparate |
+| Familia | Cómo se accede | Para qué encaja | Ejemplo típico |
 |---|---|---|---|
 | **Bloque** (EBS) | Como un disco duro, conectado a una única instancia | Sistema operativo, ficheros de la aplicación en ejecución | El disco raíz de tu instancia |
-| **Objetos** (S3) | Por HTTP, sin límite práctico de instancias que lo lean a la vez | Contenido web, copias de seguridad, datos masivos | El front estático (ya lo usaste en S1) |
-| **Archivos compartidos** (EFS) | Como una carpeta de red, montable por varias instancias simultáneamente | Datos que varias máquinas necesitan ver y escribir a la vez | Las imágenes de producto, si tienes varias instancias sirviendo el catálogo |
+| **Objetos** (S3) | Por HTTP, sin límite práctico de instancias que lo lean a la vez | Contenido web, copias de seguridad, datos masivos | Un sitio estático publicado en un bucket |
+| **Archivos compartidos** (EFS) | Como una carpeta de red, montable por varias instancias simultáneamente | Datos que varias máquinas necesitan ver y escribir a la vez | Ficheros que varias instancias de una misma aplicación necesitan ver y escribir a la vez |
 
 !!! example "El mismo fichero, tres respuestas distintas a "¿dónde lo guardo?""
-    Imagina la foto de un producto del catálogo. Si solo la sirve una instancia, podría vivir en su disco (bloque) — pero si esa instancia se cae, la foto se va con ella. Si la publicas como parte del front estático, S3 (objetos) es perfecto. Si tienes varias instancias sirviendo el catálogo a la vez y todas necesitan ver la misma foto recién subida, ni el disco de una sola instancia ni S3 puro resuelven bien ese "verla todas a la vez, en tiempo real" — ahí es donde entra EFS.
+    Imagina una foto que forma parte del contenido de tu aplicación. Si solo la sirve una instancia, podría vivir en su disco (bloque) — pero si esa instancia se cae, la foto se va con ella. Si la publicas como parte de un sitio estático, S3 (objetos) es perfecto. Si tienes varias instancias sirviendo la misma aplicación a la vez y todas necesitan ver la misma foto recién subida, ni el disco de una sola instancia ni S3 puro resuelven bien ese "verla todas a la vez, en tiempo real" — ahí es donde entra EFS.
 
 ---
 
@@ -80,7 +80,7 @@ flowchart TD
     Q1 -->|Cualquier cliente por HTTP| S3["🗄️ Objetos (S3)"]
 ```
 
-Vas a aplicar exactamente este criterio en la Actividad 3.1: tres necesidades distintas de Escaparate, cada una resuelta con la familia que le corresponde — no la misma familia para todo por comodidad.
+Vas a aplicar exactamente este criterio en la Actividad 3.1: tres necesidades de almacenamiento distintas, cada una resuelta con la familia que le corresponde — no la misma familia para todo por comodidad.
 
 ---
 

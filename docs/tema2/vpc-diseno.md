@@ -4,7 +4,7 @@
 
 ---
 
-La sesión pasada publicaste el front de Escaparate en S3 y quedó accesible para cualquiera, sin que tuvieras que pensar en redes para nada — S3 ya trae su propia conectividad incluida. Eso se acaba hoy. A partir de ahora vas a alojar piezas que **no** deben ser accesibles para cualquiera: la base de datos, y más adelante la propia aplicación por dentro. Antes de lanzar ninguna máquina necesitas construir el terreno donde va a vivir todo eso — tu propia red privada dentro de AWS, con zonas que sí hablan con internet y zonas que no. Hoy la diseñas en papel y la levantas en consola; en la Actividad 2.1 la construyes tú mismo, de dos zonas, siguiendo tu propio diseño.
+La sesión pasada publicaste un front estático en S3 y quedó accesible para cualquiera, sin que tuvieras que pensar en redes para nada — S3 ya trae su propia conectividad incluida. Eso se acaba hoy. A partir de ahora vas a alojar piezas que **no** deben ser accesibles para cualquiera: la base de datos, y más adelante la propia aplicación por dentro. Antes de lanzar ninguna máquina necesitas construir el terreno donde va a vivir todo eso — tu propia red privada dentro de AWS, con zonas que sí hablan con internet y zonas que no. Hoy la diseñas en papel y la levantas en consola; en la Actividad 2.1 la construyes tú mismo, de dos zonas, siguiendo tu propio diseño.
 
 ---
 
@@ -78,7 +78,7 @@ Lo que convierte a una subred en pública es una combinación de dos piezas: una
 
 Recupera un momento el modelo de responsabilidad compartida de la sesión pasada: la configuración de acceso a tus datos es responsabilidad tuya, no de AWS. Poner la base de datos en una subred privada es la decisión de diseño que traduce ese principio en una regla concreta de red: **si algo no necesita que internet lo alcance directamente, no le des un camino para que internet lo alcance.**
 
-La aplicación entera de Escaparate, cuando esté completa, va a seguir este mismo patrón de capas:
+Cualquier aplicación web con esta arquitectura va a seguir este mismo patrón de capas:
 
 ```mermaid
 flowchart LR

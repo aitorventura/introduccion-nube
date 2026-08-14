@@ -5,30 +5,33 @@
 
 ## Contexto
 
-Escaparate tiene ahora mismo tres necesidades de almacenamiento distintas, y cada una pide una familia diferente: proteger el front que ya publicaste en S1, ampliar el disco de una instancia que se ha quedado corta, y compartir las imágenes de producto entre varias instancias a la vez. Hoy resuelves las tres, cada una con la herramienta que le corresponde.
+La plataforma de gestión de un festival de música tiene ahora mismo tres necesidades de almacenamiento distintas, y cada una pide una familia diferente: guardar las fotos que suben los asistentes durante el evento, ampliar el disco de una instancia cuyo espacio de logs se ha quedado corto, y compartir esas mismas fotos entre las dos instancias que sirven contenido durante el festival. Hoy resuelves las tres, cada una con la herramienta que le corresponde.
 
 ## Qué vas a practicar
 
-- Activar versionado y una regla de ciclo de vida sobre un bucket S3 ya existente.
+- Crear un bucket S3 y activar versionado y una regla de ciclo de vida sobre él.
 - Ampliar el volumen de disco de una instancia en marcha.
 - Crear un sistema de archivos compartido (EFS) y montarlo desde dos instancias distintas.
 - Elegir familia y clase de almacenamiento razonando por coste según el patrón de acceso.
 
 ## Requisitos previos
 
-El bucket del front de Escaparate de la Actividad 1.1. Al menos una instancia en marcha (puedes reutilizar la de la Actividad 2.2 o 2.3). El apunte de esta sesión — «Servicios de almacenamiento» (almacenamiento.md).
+No necesitas ningún proyecto previo: hoy creas desde cero, en el Paso 1, el bucket y las instancias sobre los que vas a trabajar. Si ya tienes alguna instancia mínima en marcha de una sesión anterior, puedes reutilizarla — no es obligatorio, el Paso 1 también te indica cómo lanzar una nueva. El apunte de esta sesión — «Servicios de almacenamiento» (almacenamiento.md).
+
+!!! info "Recurso de apoyo"
+    En `recursos/tema3/actividad_3_1/generar_fotos_ejemplo.sh` tienes un script que genera 5-6 ficheros de ejemplo con extensión `.jpg` (contenido aleatorio, no fotos reales) para que tengas algo que subir a S3 y a EFS sin tener que buscar imágenes por tu cuenta.
 
 ---
 
 ## Parte A — Resuelve las tres necesidades de almacenamiento (guiada)
 
-### Paso 1 — Protege el front con versionado y ciclo de vida, desde la consola
+### Paso 1 — Prepara el escenario: bucket nuevo e instancias del festival
 
-1. Entra en el bucket del front de la Actividad 1.1 → pestaña **Propiedades**.
-2. Busca **Versionado del bucket** → **Editar** → **Habilitar** → **Guardar cambios**.
+1. Busca "S3" en el buscador de servicios → **Crear bucket**. Dale un nombre único (por ejemplo `festival-fotos-<tu-identificador>`) y dejalo con la configuración por defecto (bloqueo de acceso público activado — este bucket no necesita ser público).
 
-![Versionado habilitado en las propiedades del bucket](img/actividad_3_1_paso1_a.png)
+![Bucket S3 creado para las fotos del festival](img/actividad_3_1_paso1_a.png)
 
+2. Entra en el bucket recién creado → pestaña **Propiedades** → busca **Versionado del bucket** → **Editar** → **Habilitar** → **Guardar cambios**.
 3. En el menú lateral del bucket, entra en **Administración** → **Reglas de ciclo de vida** → **Crear regla de ciclo de vida**.
 4. Dale un nombre a la regla, y en su ámbito elige aplicarla a todos los objetos del bucket.
 5. En las acciones, marca **Mover versiones no actuales a otra clase de almacenamiento**, elige la clase de acceso infrecuente, y define tras cuántos días se aplica (por ejemplo, 30).
@@ -36,8 +39,10 @@ El bucket del front de Escaparate de la Actividad 1.1. Al menos una instancia en
 
 ![Regla de ciclo de vida configurada, moviendo versiones antiguas a acceso infrecuente](img/actividad_3_1_paso1_b.png)
 
-7. Sube una versión nueva de algún fichero del front (por ejemplo, cambia una línea de `index.html` y vuelve a subirlo con `aws s3 cp`).
-8. En el bucket, activa el interruptor **Mostrar versiones** para comprobar que la versión anterior sigue existiendo, no se ha sobrescrito de verdad.
+7. Lanza (o reutiliza, si ya tienes) dos instancias mínimas — Amazon Linux, el tipo más pequeño disponible. No hace falta que sirvan ninguna aplicación web: para esta actividad son solo el punto desde el que vas a operar sobre el almacenamiento.
+8. Desde una de las dos instancias (o desde tu propio equipo con la CLI configurada), descarga o copia el script `generar_fotos_ejemplo.sh` de `recursos/tema3/actividad_3_1/`, ejecútalo, y sube las fotos generadas al bucket con `aws s3 cp`.
+9. Cambia el contenido de una de las fotos (por ejemplo, regenerándola) y vuelve a subirla con el mismo nombre.
+10. En el bucket, activa el interruptor **Mostrar versiones** para comprobar que la versión anterior sigue existiendo, no se ha sobrescrito de verdad.
 
 ![Listado de versiones del fichero, mostrando al menos dos](img/actividad_3_1_paso1_c.png)
 
@@ -46,7 +51,7 @@ El bucket del front de Escaparate de la Actividad 1.1. Al menos una instancia en
 
 ### Paso 2 — Amplía el disco de una instancia por CLI
 
-Una instancia se ha quedado corta de espacio. Amplía el tamaño de su volumen EBS por CLI, sin tocar la consola:
+El disco de logs de una de las dos instancias del festival se ha quedado corto de espacio. Amplía el tamaño de su volumen EBS por CLI, sin tocar la consola:
 
 ```bash
 aws ec2 modify-volume --volume-id <volume-id> --size <nuevo-tamaño-gb>
@@ -55,7 +60,7 @@ aws ec2 modify-volume --volume-id <volume-id> --size <nuevo-tamaño-gb>
 **Comprueba**: que `aws ec2 describe-volumes-modifications --volume-id <volume-id>` muestra el cambio en estado `optimizing` o `completed`.
 **Captura**: la salida de `describe-volumes-modifications`.
 
-### Paso 3 — Comparte las imágenes del catálogo con EFS
+### Paso 3 — Comparte las fotos entre las dos instancias con EFS
 
 1. Busca "EFS" en el buscador de servicios → **Crear sistema de archivos**.
 2. En **Personalizar**, elige tu VPC.
@@ -66,16 +71,16 @@ aws ec2 modify-volume --volume-id <volume-id> --size <nuevo-tamaño-gb>
 ![Sistema de archivos EFS creado, con sus dos puntos de montaje](img/actividad_3_1_paso3_a.png)
 
 6. Desde cada una de las dos instancias, instala el cliente NFS si hace falta y monta el sistema de archivos usando el punto de montaje de su propia zona (la consola te da el comando de montaje exacto en la pestaña **Adjuntar** del sistema de archivos).
-7. Desde la primera instancia, sube una imagen de producto al directorio montado.
-8. Desde la segunda instancia, comprueba que la imagen ya está ahí, sin haberla copiado tú a mano.
+7. Desde la primera instancia, copia una de las fotos generadas al directorio montado.
+8. Desde la segunda instancia, comprueba que la foto ya está ahí, sin haberla copiado tú a mano.
 
-![El mismo fichero visible desde las dos instancias tras montar el EFS](img/actividad_3_1_paso3_b.png)
+![La misma foto visible desde las dos instancias tras montar el EFS](img/actividad_3_1_paso3_b.png)
 
-**Comprueba**: que la imagen subida desde la primera instancia aparece inmediatamente visible desde la segunda, sin ningún paso de sincronización manual.
+**Comprueba**: que la foto subida desde la primera instancia aparece inmediatamente visible desde la segunda, sin ningún paso de sincronización manual.
 **Captura**: `img/actividad_3_1_paso3_a.png` y `img/actividad_3_1_paso3_b.png`.
 
 !!! question "Reflexiona"
-    Has resuelto la misma pregunta —"¿dónde guardo esto?"— de tres formas distintas en la misma sesión. Si mañana necesitaras guardar los informes de ventas mensuales de Escaparate, que solo lee un proceso una vez al mes, ¿cuál de las tres familias elegirías y por qué esa y no las otras dos?
+    Has resuelto la misma pregunta —"¿dónde guardo esto?"— de tres formas distintas en la misma sesión. Si mañana necesitaras guardar las grabaciones completas de los conciertos del festival, un archivo pesado que casi nadie va a volver a consultar salvo que haya una reclamación puntual, ¿cuál de las tres familias elegirías y por qué esa y no las otras dos?
 
 ---
 
@@ -83,14 +88,14 @@ aws ec2 modify-volume --volume-id <volume-id> --size <nuevo-tamaño-gb>
 
 Tres retos, cada uno más exigente que su equivalente de la Parte A. No hay comandos dados para ninguno — solo el objetivo.
 
-**Recupera lo irrecuperable**: borra "por accidente" un objeto del bucket versionado del Paso 1, y recupéralo sin perder ni una versión. Documenta cómo lo has hecho.
+**Recupera lo irrecuperable**: borra "por accidente" una foto del bucket versionado del Paso 1, y recupérala sin perder ni una versión. Documenta cómo lo has hecho.
 
 **Amplía en caliente de verdad**: en la Parte A ampliaste el tamaño del volumen desde el lado de AWS, pero el sistema de ficheros de dentro de la instancia todavía no lo sabe — el disco del sistema operativo sigue viendo el tamaño antiguo hasta que tú se lo dices. Consíguelo **sin reiniciar la instancia ni cortar el servicio**, y demuestra con un comando dentro de la instancia que el nuevo espacio ya está disponible para escribir.
 
-**Decide por coste, no por costumbre**: para tres casos de uso (los informes mensuales de la reflexión anterior, el propio front de Escaparate, y una copia de seguridad diaria de la base de datos que verás en la próxima sesión), elige la familia y la clase de almacenamiento más adecuada, calculando el coste estimado por GB almacenado y por operación de lectura/escritura con la calculadora oficial de AWS. Justifica cada elección — la respuesta "S3 estándar para todo" no vale como justificación.
+**Decide por coste, no por costumbre**: para tres casos de uso del festival (las fotos de asistentes ya archivadas tras el evento, que casi nadie vuelve a consultar; el listado de control de acceso, leído constantemente durante las horas del evento; y una copia de seguridad diaria de la base de datos de reservas), elige la familia y la clase de almacenamiento más adecuada, calculando el coste estimado por GB almacenado y por operación de lectura/escritura con la calculadora oficial de AWS. Justifica cada elección — la respuesta "S3 estándar para todo" no vale como justificación.
 
-**Comprueba**: que el objeto recuperado tiene exactamente el mismo contenido que antes de borrarlo, y que el nuevo espacio de disco es utilizable de verdad (por ejemplo, escribiendo un fichero de prueba que supere el tamaño original).
-**Captura**: el objeto recuperado y su historial de versiones; el comando dentro de la instancia mostrando el nuevo tamaño disponible; la tabla de coste por caso de uso con su justificación.
+**Comprueba**: que la foto recuperada tiene exactamente el mismo contenido que antes de borrarla, y que el nuevo espacio de disco es utilizable de verdad (por ejemplo, escribiendo un fichero de prueba que supere el tamaño original).
+**Captura**: la foto recuperada y su historial de versiones; el comando dentro de la instancia mostrando el nuevo tamaño disponible; la tabla de coste por caso de uso con su justificación.
 
 ---
 
@@ -114,7 +119,7 @@ Y debe observarse: el bucket con versionado activo y regla de ciclo de vida conf
 
 | Apartado | Puntos |
 |---|---|
-| Versionado y ciclo de vida activos sobre el bucket del front | 2 |
+| Bucket creado con versionado y ciclo de vida activos | 2 |
 | Disco ampliado por CLI, cambio verificado | 1 |
 | EFS creado y montado desde dos instancias, con fichero compartido visible | 3 |
 | Documentación en el repositorio | 1 |
@@ -130,4 +135,4 @@ Y debe observarse: el bucket con versionado activo y regla de ciclo de vida conf
 
 ## ✅ Cierre
 
-Ya sabes elegir familia de almacenamiento según el patrón de acceso, no por costumbre, y sabes que ampliar un disco en AWS es solo la mitad del trabajo — la otra mitad vive dentro del sistema operativo. La próxima sesión dejas de guardar datos sueltos: montas una base de datos relacional gestionada, y conectas el catálogo a ella sin escribir ni una sola credencial en el código.
+Ya sabes elegir familia de almacenamiento según el patrón de acceso, no por costumbre, y sabes que ampliar un disco en AWS es solo la mitad del trabajo — la otra mitad vive dentro del sistema operativo. La próxima sesión dejas de guardar datos sueltos: montas una base de datos relacional gestionada, y conectas una aplicación a ella sin escribir ni una sola credencial en el código.

@@ -4,13 +4,13 @@
 
 ---
 
-Escaparate ya se repone solo si una instancia falla y escala si sube el tráfico, pero sigue viviendo detrás de una URL genérica de AWS, larga y sin HTTPS propio — nada que le pondrías a un cliente real. Hoy le das una dirección con nombre propio, un certificado que garantiza la conexión cifrada, y una red que acerca el contenido estático al visitante en vez de servirlo siempre desde la misma región. Con esto se cierra el segundo punto único de fallo de tu lista: depender de una única forma de entrar al sistema, sin nombre, sin cifrado y sin acercamiento al usuario.
+Una aplicación con balanceador y escalado automático ya se repone sola si una instancia falla y escala si sube el tráfico, pero puede seguir viviendo detrás de una URL genérica de AWS, larga y sin HTTPS propio — nada que le pondrías a un cliente real. Hoy le das una dirección con nombre propio, un certificado que garantiza la conexión cifrada, y una red que acerca el contenido estático al visitante en vez de servirlo siempre desde la misma región. Con esto se cierra otro punto único de fallo habitual: depender de una única forma de entrar al sistema, sin nombre, sin cifrado y sin acercamiento al usuario.
 
 ---
 
 ## 🧭 DNS gestionado: zonas y registros
 
-Cuando escribes `escaparate.tudominio.com` en el navegador, tu ordenador no sabe hablar con un nombre — necesita una dirección IP. El **DNS** (*Domain Name System*) es el sistema que hace esa traducción: una especie de agenda de contactos gigante y repartida por todo internet, donde cada nombre de dominio tiene asociada la dirección real a la que hay que conectarse. Sin DNS, tendrías que memorizar y escribir directamente la dirección IP de cada sitio que quisieras visitar.
+Cuando escribes `miapp.tudominio.com` en el navegador, tu ordenador no sabe hablar con un nombre — necesita una dirección IP. El **DNS** (*Domain Name System*) es el sistema que hace esa traducción: una especie de agenda de contactos gigante y repartida por todo internet, donde cada nombre de dominio tiene asociada la dirección real a la que hay que conectarse. Sin DNS, tendrías que memorizar y escribir directamente la dirección IP de cada sitio que quisieras visitar.
 
 Un servicio de DNS gestionado —como **Route 53**— te permite alojar tu propia **zona** (el conjunto de registros DNS de un dominio) sin tener que montar y mantener tú un servidor de nombres. Dentro de esa zona defines **registros**: entradas que traducen un nombre legible en algo que un ordenador puede usar para conectar.
 
@@ -87,7 +87,7 @@ Vas a medir esta diferencia de tiempos de verdad en la Actividad 4.2 — caché 
 
 ## 📊 Qué contenido merece CDN y cuál no
 
-No todo el contenido de Escaparate se beneficia igual de una CDN. La regla es sencilla: cuanto más estático y menos personal sea un contenido, más sentido tiene cachearlo cerca del usuario.
+No todo el contenido de una aplicación se beneficia igual de una CDN. La regla es sencilla: cuanto más estático y menos personal sea un contenido, más sentido tiene cachearlo cerca del usuario.
 
 | Contenido | ¿Merece CDN? | Por qué |
 |---|---|---|

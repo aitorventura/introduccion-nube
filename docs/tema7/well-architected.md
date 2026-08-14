@@ -4,7 +4,7 @@
 
 ---
 
-Dieciséis sesiones construyendo Escaparate, capa a capa, decisión a decisión — cada una con su propia lógica en el momento de tomarla. Hoy das un paso atrás y miras el conjunto con un marco de referencia real, el mismo que usa cualquier equipo de arquitectura en una empresa para revisar si una infraestructura está bien construida, no solo si funciona. No vas a añadir ningún servicio nuevo: vas a auditar todo lo que ya existe.
+Dieciséis sesiones tomando decisiones de arquitectura, cada una con su propia lógica en el momento de tomarla: qué subred, qué tipo de instancia, cómo protegerla, cómo hacerla resistir un fallo. Hoy das un paso atrás y miras cualquier arquitectura con un marco de referencia real, el mismo que usa cualquier equipo de arquitectura en una empresa para revisar si un sistema está bien construido, no solo si funciona. No vas a añadir ningún servicio nuevo: vas a auditar una arquitectura ya desplegada.
 
 ---
 
@@ -12,17 +12,17 @@ Dieciséis sesiones construyendo Escaparate, capa a capa, decisión a decisión 
 
 El marco **Well-Architected** de AWS organiza las buenas prácticas de arquitectura en seis pilares, y cada uno responde a una pregunta distinta sobre tu sistema:
 
-| Pilar | Pregunta que responde | Ejemplo ya construido en Escaparate |
+| Pilar | Pregunta que responde | Ejemplo de lo que revisa |
 |---|---|---|
-| Excelencia operativa | ¿Puedes operar y mejorar el sistema con confianza? | Los paneles y alarmas del Tema 5 |
-| Seguridad | ¿Están protegidos los datos y los sistemas? | La subred privada de la base de datos, las políticas de mínimo privilegio |
-| Fiabilidad | ¿Se recupera el sistema de fallos sin intervención? | El grupo de escalado automático del Tema 4 |
-| Eficiencia del rendimiento | ¿Usas los recursos adecuados para la carga real? | La elección de familia de instancia del Tema 2 |
-| Optimización de costes | ¿Gastas lo que necesitas, ni más ni menos? | Las clases de almacenamiento y modelos de compra del Tema 5 |
-| Sostenibilidad | ¿Minimizas el impacto ambiental del sistema? | El propio escalado automático, que apaga capacidad que no hace falta |
+| Excelencia operativa | ¿Puedes operar y mejorar el sistema con confianza? | Paneles y alarmas que avisan antes de que se note el fallo (Tema 5) |
+| Seguridad | ¿Están protegidos los datos y los sistemas? | Subredes privadas para los datos, políticas de mínimo privilegio (Temas 2 y 5) |
+| Fiabilidad | ¿Se recupera el sistema de fallos sin intervención? | Un grupo de escalado automático que repone lo que se cae (Tema 4) |
+| Eficiencia del rendimiento | ¿Usas los recursos adecuados para la carga real? | La familia y el tamaño de instancia elegidos para la carga real (Tema 2) |
+| Optimización de costes | ¿Gastas lo que necesitas, ni más ni menos? | Clases de almacenamiento y modelos de compra ajustados al uso (Tema 5) |
+| Sostenibilidad | ¿Minimizas el impacto ambiental del sistema? | Capacidad que se apaga sola cuando no hace falta (Tema 4) |
 
-!!! tip "No es una lista nueva de conceptos — es una forma de mirar los que ya tienes"
-    Fíjate en la columna de la derecha: cada pilar ya tiene ejemplos concretos en lo que has construido este módulo. El marco no te pide aprender nada nuevo hoy — te pide mirar tu propia arquitectura con esas seis preguntas encima, una a una, sin saltarte ninguna.
+!!! tip "No es una lista nueva de conceptos — es una forma de mirar cualquier arquitectura"
+    Fíjate en la columna de la derecha: cada pilar corresponde a algo que ya has practicado en sesiones anteriores, aunque nunca lo hayas visto reunido bajo estas seis preguntas. El marco no te pide aprender nada nuevo hoy — te pide mirar una arquitectura con esas seis preguntas encima, una a una, sin saltarte ninguna.
 
 ---
 
@@ -36,7 +36,7 @@ Dos métricas del pilar de fiabilidad que conviene distinguir bien, porque respo
 | **RPO** (*Recovery Point Objective*) | ¿Cuántos datos recientes puedes permitirte perder? | "No podemos perder más de 5 minutos de pedidos" |
 
 !!! example "El mismo incidente, dos preguntas distintas"
-    Si la base de datos de Escaparate falla a las 10:00 y la conmutación por error de Multi-AZ (Tema 3) te devuelve el servicio a las 10:02, tu RTO real ha sido de dos minutos. Si la réplica a la que has conmutado tenía los datos hasta las 9:59, tu RPO real ha sido de un minuto — ninguna de las dos cifras te la da la otra, y las dos importan a la hora de decidir qué mecanismo de recuperación necesitas.
+    Si la base de datos de una aplicación falla a las 10:00 y la conmutación por error de Multi-AZ (Tema 3) devuelve el servicio a las 10:02, el RTO real ha sido de dos minutos. Si la réplica a la que se ha conmutado tenía los datos hasta las 9:59, el RPO real ha sido de un minuto — ninguna de las dos cifras te la da la otra, y las dos importan a la hora de decidir qué mecanismo de recuperación necesitas.
 
 Cuanto más exigentes sean tu RTO y tu RPO, más inversión en redundancia necesitas — no son objetivos abstractos, son la vara de medir con la que decides si tu arquitectura actual es suficiente o se queda corta.
 
@@ -54,7 +54,7 @@ flowchart TD
 ```
 
 !!! warning "Una recomendación puede ser técnicamente correcta y prácticamente errónea"
-    Si una instancia muestra CPU baja durante el curso porque solo se usa en horario de clase, una recomendación automática de "reducir tamaño" podría no tener en cuenta que necesitas ese margen para los picos de las actividades de escalado del Tema 4. Interpretar una recomendación significa contrastarla con lo que tú sabes del sistema, no aplicarla automáticamente porque lo dice una herramienta.
+    Si una instancia muestra CPU baja durante el curso porque solo se usa en horario de clase, una recomendación automática de "reducir tamaño" podría no tener en cuenta que hace falta ese margen para los picos de tráfico en producción. Interpretar una recomendación significa contrastarla con lo que tú sabes del sistema, no aplicarla automáticamente porque lo dice una herramienta.
 
 ---
 

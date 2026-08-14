@@ -4,7 +4,7 @@
 
 ---
 
-Ya has ejecutado Escaparate como instancia y como función. Hoy lo ejecutas como **contenedor** —una imagen que empaqueta la aplicación con exactamente lo que necesita para correr, igual en cualquier sitio—, pero sin montar tú ningún servidor que lo aloje: un servicio gestionado se encarga de dónde vive ese contenedor, de mantenerlo en marcha, y de sustituirlo si falla. El profesor te entrega la imagen ya construida — este módulo no cubre cómo se construye un contenedor desde cero, solo cómo se ejecuta de forma gestionada.
+Ya has visto cómo ejecutar una aplicación como instancia (Tema 2) y como función serverless (la sesión pasada). Hoy la ejecutas como **contenedor** —una imagen que empaqueta la aplicación con exactamente lo que necesita para correr, igual en cualquier sitio—, pero sin montar tú ningún servidor que la aloje: un servicio gestionado se encarga de dónde vive ese contenedor, de mantenerlo en marcha, y de sustituirlo si falla. El profesor te entrega el código fuente y su `Dockerfile` ya listos — este módulo no cubre cómo se construye un contenedor desde cero, solo cómo se construye a partir de una receta dada y se ejecuta de forma gestionada.
 
 ---
 
@@ -64,13 +64,13 @@ sequenceDiagram
 ```
 
 !!! tip "Por qué esto no es solo una comodidad más"
-    Actualizar reemplazando tareas nuevas antes de retirar las antiguas es lo que te va a permitir, en la Actividad 6.3, pasar de la versión 1 a la versión 2 de Escaparate sin que ningún usuario note un corte de servicio — el mismo principio de alta disponibilidad del Tema 4, aplicado ahora al propio proceso de desplegar una versión nueva.
+    Actualizar reemplazando tareas nuevas antes de retirar las antiguas es lo que te va a permitir, en la Actividad 6.3, pasar de la versión 1 a la versión 2 de tu aplicación sin que ningún usuario note un corte de servicio — el mismo principio de alta disponibilidad del Tema 4, aplicado ahora al propio proceso de desplegar una versión nueva.
 
 ---
 
 ## ⚙️ Comparación de las tres formas de ejecutar la misma aplicación
 
-Has ejecutado Escaparate como instancia (Tema 2), como función (la sesión pasada) y hoy como contenedor gestionado. Ninguna sustituye del todo a las otras — cada una resuelve mejor un tipo de carga distinto.
+Has visto tres formas de ejecutar una aplicación a lo largo de este módulo: como instancia (Tema 2), como función (la sesión pasada) y hoy como contenedor gestionado. Ninguna sustituye del todo a las otras — cada una resuelve mejor un tipo de carga distinto.
 
 | | Instancia | Contenedor gestionado | Función |
 |---|---|---|---|

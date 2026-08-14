@@ -32,7 +32,7 @@ Una política IAM es un documento en el mismo formato JSON que ya viste en la se
 {
   "Effect": "Allow",
   "Action": "s3:GetObject",
-  "Resource": "arn:aws:s3:::escaparate-front-*/*",
+  "Resource": "arn:aws:s3:::inventario-*/*",
   "Condition": {
     "IpAddress": { "aws:SourceIp": "203.0.113.0/24" }
   }
@@ -43,11 +43,11 @@ Una política IAM es un documento en el mismo formato JSON que ya viste en la se
 |---|---|---|
 | `Effect` | ¿Permite o deniega? | `Allow` |
 | `Action` | ¿Qué operación? | `s3:GetObject` (leer un objeto) |
-| `Resource` | ¿Sobre qué recurso concreto? | Los objetos de los buckets que empiecen por `escaparate-front-` |
+| `Resource` | ¿Sobre qué recurso concreto? | Los objetos de los buckets que empiecen por `inventario-` |
 | `Condition` | ¿Bajo qué circunstancia adicional? | Solo si la petición viene de un rango de IP concreto |
 
 !!! example "Leer una política, frase por frase"
-    Este ejemplo completo se lee así: "Permite la acción de leer un objeto, sobre cualquier objeto dentro de un bucket cuyo nombre empiece por `escaparate-front-`, pero solo si la petición viene de esa red concreta." Cuatro campos, una frase — cuando te enfrentes a una política más larga en la Actividad 5.2, sigue leyéndola exactamente así, campo a campo.
+    Este ejemplo completo se lee así: "Permite la acción de leer un objeto, sobre cualquier objeto dentro de un bucket cuyo nombre empiece por `inventario-`, pero solo si la petición viene de esa red concreta." Cuatro campos, una frase — cuando te enfrentes a una política más larga en la Actividad 5.2, sigue leyéndola exactamente así, campo a campo.
 
 Leer una política te dice qué *debería* permitir sobre el papel, pero con varias líneas y comodines de por medio es fácil equivocarse. El **simulador de políticas de IAM** te deja elegir una política, una acción y un recurso concretos, y te responde directamente "permitido" o "denegado" — sin ejecutar nada de verdad contra tu cuenta. Es la forma de comprobar si tu lectura de una política era correcta antes de fiarte de ella.
 

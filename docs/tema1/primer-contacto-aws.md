@@ -4,7 +4,7 @@
 
 ---
 
-Llevas años usando la nube sin pensarlo: cada vez que abres el correo, ves una serie o guardas una foto en el móvil, hay máquinas de otra empresa haciendo el trabajo por ti. Lo que cambia hoy es el punto de vista — hasta ahora has sido cliente de la nube; a partir de esta sesión eres tú quien la pone en marcha para otra persona. Vas a moverte por AWS por primera vez, entender qué tipo de servicio estás usando en cada momento, y terminar la sesión con algo tuyo publicado en internet, con dirección propia y accesible para cualquiera. Todo el módulo gira alrededor de la misma aplicación, **Escaparate** (un catálogo de productos con imágenes): hoy solo te llevas su parte más sencilla, el front estático, pero es el primer ladrillo de la arquitectura completa que vas a construir sesión a sesión.
+Llevas años usando la nube sin pensarlo: cada vez que abres el correo, ves una serie o guardas una foto en el móvil, hay máquinas de otra empresa haciendo el trabajo por ti. Lo que cambia hoy es el punto de vista — hasta ahora has sido cliente de la nube; a partir de esta sesión eres tú quien la pone en marcha para otra persona. Vas a moverte por AWS por primera vez, entender qué tipo de servicio estás usando en cada momento, y terminar la sesión con algo tuyo publicado en internet, con dirección propia y accesible para cualquiera: el sitio estático de un taller de bicicletas de barrio, una página informativa sencilla (HTML, CSS y JavaScript) que vas a alojar directamente en AWS.
 
 ---
 
@@ -60,7 +60,7 @@ AWS ofrece varios cientos de servicios, y la consola puede resultar abrumadora l
 !!! tip "No hace falta memorizar el catálogo entero"
     Con este mapa te basta por ahora: cuando en las próximas sesiones aparezca un servicio nuevo, ubícalo primero en una de estas seis categorías — te va a costar menos entender qué hace si ya sabes para qué familia de problema existe.
 
-Piensa en él como el catálogo de un supermercado grande: no necesitas conocer cada producto de memoria, necesitas saber en qué pasillo buscar cuando te haga falta uno. Hoy vas a usar concretamente dos: **S3** (almacenamiento de objetos) para publicar el front de Escaparate, e **IAM** de forma indirecta, porque el rol que ya tienes asignado en el Learner Lab es justamente lo que decide qué puedes y qué no puedes hacer en el resto de servicios.
+Piensa en él como el catálogo de un supermercado grande: no necesitas conocer cada producto de memoria, necesitas saber en qué pasillo buscar cuando te haga falta uno. Hoy vas a usar concretamente dos: **S3** (almacenamiento de objetos) para publicar el front del taller de bicicletas, e **IAM** de forma indirecta, porque el rol que ya tienes asignado en el Learner Lab es justamente lo que decide qué puedes y qué no puedes hacer en el resto de servicios.
 
 En S3, cada fichero que subes es un **objeto**, y los objetos se agrupan dentro de un **bucket** — un contenedor con un nombre único en todo AWS (no solo en tu cuenta), algo así como una carpeta de primer nivel a la que luego le das forma: puede quedar privada, o —como vas a hacer hoy— servir contenido web público.
 
@@ -72,7 +72,7 @@ AWS no es "un centro de datos en algún sitio" — es una infraestructura repart
 
 - **Región**: una zona geográfica grande y completamente independiente de las demás (por ejemplo, *Norte de Virginia* o *Irlanda*). Cada región tiene su propio conjunto completo de servicios, y por defecto los datos de una región no salen de ella. Vas a trabajar siempre en la misma región durante todo el curso, la que indique el Learner Lab.
 - **Zona de disponibilidad** (*Availability Zone*, AZ): dentro de una región hay varias zonas de disponibilidad — en la práctica, varios centros de datos físicamente separados entre sí (con su propia electricidad, refrigeración y conexión de red), pero conectados por fibra de muy baja latencia. Si una zona entera se cae por un fallo eléctrico o una catástrofe local, las demás siguen funcionando. Esta idea es la base de todo lo que vas a construir en el Tema 4 sobre alta disponibilidad: repartir tu aplicación entre dos zonas en vez de dejarla en una sola.
-- **Ubicación de borde** (*Edge Location*): puntos mucho más numerosos y repartidos, pensados no para ejecutar tu aplicación entera, sino para acercar contenido al usuario final — una copia en caché cerca de donde vive, para que no tenga que viajar hasta la región. Los volverás a ver en el Tema 4, cuando publiques Escaparate detrás de una CDN.
+- **Ubicación de borde** (*Edge Location*): puntos mucho más numerosos y repartidos, pensados no para ejecutar tu aplicación entera, sino para acercar contenido al usuario final — una copia en caché cerca de donde vive, para que no tenga que viajar hasta la región. Los volverás a ver en el Tema 4, cuando publiques una aplicación detrás de una CDN.
 
 ```mermaid
 flowchart TD
@@ -162,7 +162,7 @@ El entorno donde vas a trabajar todo el curso no es una cuenta de AWS normal —
 !!! danger "Apagar antes de salir no es opcional"
     Un recurso que dejas encendido "sin querer" el jueves no espera a la semana que viene para seguir consumiendo crédito — sigue gastando de fondo todo ese tiempo. El ritual de apagado de los últimos cinco minutos de cada sesión es la norma más importante del módulo, y lo vas a repetir después de cada actividad práctica.
 
-Con esto ya tienes el terreno de juego: sabes qué tipo de servicios existen, cómo se organizan geográficamente, quién responde de qué, cómo hablarle a AWS de dos formas distintas y qué límites tiene tu laboratorio. En la Actividad 1.1 vas a aterrizar todo esto: recorrer consola y CLI en paralelo, publicar el front de Escaparate en S3 con una dirección propia accesible desde internet, y montar tu primer presupuesto con alerta.
+Con esto ya tienes el terreno de juego: sabes qué tipo de servicios existen, cómo se organizan geográficamente, quién responde de qué, cómo hablarle a AWS de dos formas distintas y qué límites tiene tu laboratorio. En la Actividad 1.1 vas a aterrizar todo esto: recorrer consola y CLI en paralelo, publicar el front de un taller de bicicletas de barrio en S3 con una dirección propia accesible desde internet, y montar tu primer presupuesto con alerta.
 
 ---
 

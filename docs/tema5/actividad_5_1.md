@@ -5,57 +5,71 @@
 
 ## Contexto
 
-Escaparate lleva varias semanas creciendo en piezas, y hasta ahora has comprobado que cada una funciona mirándola directamente. Hoy montas el panel que te avisa cuando algo falla sin que tengas que estar mirando, y después diagnosticas una incidencia real usando solo lo que ese panel te cuenta — sin conectarte a ninguna instancia a mirar por dentro.
+El servidor de Entradas —una aplicación de venta de entradas para conciertos— va a estar en marcha sin que nadie lo mire constantemente. Si algo falla a las tres de la madrugada, cuando se abre la venta de un concierto muy esperado, nadie está delante de una pantalla viéndolo en directo. Hoy montas el panel que te avisa cuando algo falla sin que tengas que estar mirando, y después diagnosticas una incidencia real usando solo lo que ese panel te cuenta — sin conectarte a ninguna instancia a mirar por dentro.
 
 ## Qué vas a practicar
 
-- Construir un panel con la arquitectura completa del curso.
+- Desplegar un recurso mínimo y construir un panel de CloudWatch sobre él.
 - Diseñar tres alarmas que de verdad importen, no veinte que generen ruido.
 - Diagnosticar una incidencia real usando solo métricas y registros, sin acceso directo al servidor.
 
 ## Requisitos previos
 
-La arquitectura completa de las Actividades 3.3 y 4.1. El apunte de esta sesión — «Monitorización y operación» (monitorizacion-operacion.md).
+Acceso a tu Learner Lab. Los ficheros de la aplicación de Entradas, ya preparados en `recursos/tema5/actividad_5_1/` (`app.py`, `requirements.txt`, `arranque-entradas.sh`) — el profesor te los entrega, no los programas tú. Si ya tienes una instancia en marcha de otra actividad (por ejemplo la Actividad 4.1) puedes reutilizarla para esta sesión, pero no es obligatorio. El apunte de esta sesión — «Monitorización y operación» (monitorizacion-operacion.md).
 
 ---
 
 ## Parte A — Panel y tres alarmas (guiada)
 
-### Paso 1 — Construye el panel desde la consola
+### Paso 1 — Lanza la instancia de Entradas desde la consola
 
-1. Busca "CloudWatch" en el buscador de servicios → menú lateral **Panel de control** → **Crear panel**.
-2. Dale un nombre (por ejemplo `escaparate-panel-<tu-identificador>`).
-3. Añade un widget de línea → elige la métrica **CPUUtilization** de tu grupo de escalado automático (namespace `AWS/EC2` o `AWS/AutoScaling`).
-4. Añade un segundo widget → métricas `RequestCount` y `HTTPCode_Target_5XX_Count` de tu balanceador de carga.
-5. Añade un tercer widget → métrica `DatabaseConnections` de tu instancia RDS.
-6. Guarda el panel.
+1. Busca "EC2" en el buscador de servicios → **Instancias** → **Lanzar instancia**.
+2. Dale un nombre, por ejemplo `entradas-<tu-identificador>`.
+3. Elige una AMI de Amazon Linux 2023, y el tipo `t3.micro`.
+4. En **Configuración de red**, elige tu subred pública, con **Asignar IP pública automáticamente** en **Habilitar**, y un grupo de seguridad con el puerto 80 abierto y el 22 restringido a tu IP.
+5. Despliega **Detalles avanzados**, baja hasta **Datos de usuario**, y pega ahí el contenido completo de `arranque-entradas.sh` — el script vive en `recursos/tema5/actividad_5_1/arranque-entradas.sh`.
+6. Lanza la instancia.
 
-![Panel de CloudWatch con los tres widgets mostrando actividad real](img/actividad_5_1_paso1.png)
+![Entradas respondiendo en el navegador, con el catálogo de conciertos](img/actividad_5_1_paso1.png)
 
-**Comprueba**: que el panel muestra datos reales de las últimas horas para cada widget, no gráficas vacías.
+**Comprueba**: que la IP pública de la instancia responde en el puerto 80 con el catálogo de conciertos de Entradas, al cabo de un par de minutos.
 **Captura**: `img/actividad_5_1_paso1.png`.
 
-### Paso 2 — Crea dos alarmas por CLI
+### Paso 2 — Construye el panel desde la consola
 
-Crea por CLI una alarma de CPU sostenida (por ejemplo, por encima del 80 % durante 5 minutos) sobre tu grupo de escalado automático, y otra de errores 5xx del balanceador por encima de un umbral razonable:
+1. Busca "CloudWatch" en el buscador de servicios → menú lateral **Panel de control** → **Crear panel**.
+2. Dale un nombre (por ejemplo `entradas-panel-<tu-identificador>`).
+3. Añade un widget de línea → elige la métrica **CPUUtilization** de tu instancia (namespace `AWS/EC2`).
+4. Añade un segundo widget → métrica **StatusCheckFailed** de la misma instancia.
+5. Añade un tercer widget → métrica **NetworkIn** o **NetworkOut** de la misma instancia.
+6. Guarda el panel.
+
+![Panel de CloudWatch con los tres widgets mostrando actividad real](img/actividad_5_1_paso2.png)
+
+**Comprueba**: que el panel muestra datos reales de las últimas horas para cada widget, no gráficas vacías.
+**Captura**: `img/actividad_5_1_paso2.png`.
+
+### Paso 3 — Crea dos alarmas por CLI
+
+Crea por CLI una alarma de CPU sostenida (por ejemplo, por encima del 80 % durante 5 minutos) sobre tu instancia, y otra sobre el estado de la comprobación de salud de la instancia:
 
 ```bash
 aws cloudwatch put-metric-alarm \
-  --alarm-name escaparate-cpu-alta-<tu-identificador> \
+  --alarm-name entradas-cpu-alta-<tu-identificador> \
   --metric-name CPUUtilization --namespace AWS/EC2 \
   --statistic Average --period 300 --threshold 80 \
   --comparison-operator GreaterThanThreshold --evaluation-periods 1 \
-  --dimensions Name=AutoScalingGroupName,Value=escaparate-asg-<tu-identificador>
+  --dimensions Name=InstanceId,Value=<instance-id>
 ```
 
 Comprueba el resultado en consola: CloudWatch → **Alarmas**.
 
-![Las dos alarmas listadas con su estado y su umbral configurado](img/actividad_5_1_paso2.png)
+![Las dos alarmas listadas con su estado y su umbral configurado](img/actividad_5_1_paso3.png)
 
 **Comprueba**: que ambas alarmas aparecen en estado `OK` (o `ALARM` si de verdad hay carga en ese momento), no en estado de datos insuficientes.
-**Captura**: `img/actividad_5_1_paso2.png`.
+**Captura**: `img/actividad_5_1_paso3.png`.
 
-### Paso 3 — Localiza dónde controlar el gasto acumulado
+### Paso 4 — Localiza dónde controlar el gasto acumulado
 
 !!! warning "Comprueba esto antes de la sesión"
     Igual que en la sesión 1, una alarma de gasto acumulado con CloudWatch/Budgets no está garantizada en todos los Learner Lab.
@@ -64,10 +78,10 @@ Si tu laboratorio lo permite: busca "Billing and Cost Management" → **Budgets*
 
 Si no te deja: entra en el panel de tu Learner Lab (fuera de la consola de AWS) y documenta con precisión dónde consultas el gasto acumulado, y qué umbral usarías como referencia para saber que te estás acercando al límite.
 
-![Alarma de gasto acumulado, o panel de crédito del Learner Lab](img/actividad_5_1_paso3.png)
+![Alarma de gasto acumulado, o panel de crédito del Learner Lab](img/actividad_5_1_paso4.png)
 
 **Comprueba**: que sabes decir, sin dudar, qué vas a mirar para saber si te estás acercando al límite de crédito del laboratorio.
-**Captura**: `img/actividad_5_1_paso3.png`.
+**Captura**: `img/actividad_5_1_paso4.png`.
 
 !!! question "Reflexiona"
     De las tres alarmas, ¿cuál te habría avisado antes de un problema real y cuál solo te lo habría confirmado después de que ya hubiera pasado? No todas las alarmas son igual de útiles como aviso temprano.
@@ -76,11 +90,11 @@ Si no te deja: entra en el panel de tu Learner Lab (fuera de la consola de AWS) 
 
 ## Parte B — Diagnóstico sin acceso directo al servidor (reto)
 
-El profesor va a introducir una incidencia real sobre tu arquitectura —puede ser una capa caída, una comprobación de salud mal configurada, o un fallo de permisos— sin decirte cuál de las tres es. No te conectes a ninguna instancia por SSH a mirar por dentro: diagnostica **solo** con las métricas y los registros que ya tienes disponibles en el panel y en CloudWatch Logs.
+El profesor va a introducir una incidencia real sobre tu instancia de Entradas —puede ser el proceso de la aplicación caído, una comprobación de salud mal configurada, o un fallo de permisos— sin decirte cuál de las tres es. No te conectes a la instancia por SSH a mirar por dentro: diagnostica **solo** con las métricas y los registros que ya tienes disponibles en el panel y en CloudWatch Logs.
 
 Documenta tu proceso completo, no solo la conclusión: qué has mirado primero y por qué, qué descartaste y por qué, y qué evidencia concreta te ha llevado a identificar la causa real. Corrige la incidencia, y **crea la alarma que la habría detectado antes** de que tú tuvieras que ponerte a buscar — si esa alarma hubiera existido desde el principio, ¿te habría avisado antes de que un usuario notara el problema?
 
-**Comprueba**: que, tras tu corrección, la arquitectura vuelve a comportarse con normalidad, y que la alarma nueva se dispara si reproduces el mismo fallo.
+**Comprueba**: que, tras tu corrección, la aplicación vuelve a comportarse con normalidad, y que la alarma nueva se dispara si reproduces el mismo fallo.
 **Captura**: tu proceso de diagnóstico documentado paso a paso, la corrección aplicada, y la alarma nueva configurada.
 
 ---
@@ -90,11 +104,11 @@ Documenta tu proceso completo, no solo la conclusión: qué has mirado primero y
 Para dar por válida la práctica se ejecutará:
 
 ```bash
-aws cloudwatch describe-alarms --alarm-name-prefix escaparate
+aws cloudwatch describe-alarms --alarm-name-prefix entradas
 aws cloudwatch get-dashboard --dashboard-name <tu-panel>
 ```
 
-Y debe observarse: al menos tres alarmas configuradas con umbrales razonables, el panel con las cuatro métricas de arquitectura, y la documentación del proceso de diagnóstico con la causa real identificada y corregida.
+Y debe observarse: al menos tres alarmas configuradas con umbrales razonables, el panel con las métricas de la instancia, y la documentación del proceso de diagnóstico con la causa real identificada y corregida.
 
 ---
 
@@ -104,8 +118,9 @@ Y debe observarse: al menos tres alarmas configuradas con umbrales razonables, e
 
 | Apartado | Puntos |
 |---|---|
-| Panel con las métricas de las tres capas de la arquitectura | 2 |
-| Alarmas de CPU y errores 5xx configuradas y funcionando | 2 |
+| Instancia de Entradas desplegada, con la aplicación funcionando | 1 |
+| Panel con las tres métricas de la instancia | 1 |
+| Alarmas de CPU y de comprobación de salud configuradas y funcionando | 2 |
 | Gasto acumulado localizado o alarmado, según lo permita el Lab | 2 |
 | Documentación en el repositorio | 1 |
 
@@ -120,4 +135,4 @@ Y debe observarse: al menos tres alarmas configuradas con umbrales razonables, e
 
 ## ✅ Cierre
 
-Ya sabes diagnosticar sin mirar por dentro de una instancia — la habilidad que de verdad importa cuando la arquitectura escala sola y las instancias van y vienen. La próxima sesión te toca la otra mitad de la gobernanza: quién puede tocar qué, y cómo verificarlo antes de que sea un problema.
+Ya sabes diagnosticar sin mirar por dentro de una instancia — la habilidad que de verdad importa cuando una arquitectura escala sola y las instancias van y vienen. La próxima sesión te toca la otra mitad de la gobernanza: quién puede tocar qué, y cómo verificarlo antes de que sea un problema.

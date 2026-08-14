@@ -4,7 +4,7 @@
 
 ---
 
-Llevas doce sesiones construyendo Escaparate, y once rituales de cierre apagando lo que no hacía falta y anotando el recurso más caro. Hoy conviertes esa costumbre en algo con nombre y con números: cómo se factura de verdad cada pieza que has usado, qué modelos de compra existen más allá de pagar sobre la marcha, y cómo se estima el coste de una arquitectura completa antes de construirla — no después, cuando ya es tarde para decidir distinto.
+Llevas varias sesiones apagando en cada cierre lo que no hacía falta y anotando el recurso más caro del día. Hoy conviertes esa costumbre en algo con nombre y con números: cómo se factura de verdad cada pieza que has usado, qué modelos de compra existen más allá de pagar sobre la marcha, y cómo se estima el coste de una arquitectura completa antes de construirla — no después, cuando ya es tarde para decidir distinto.
 
 ---
 
@@ -16,7 +16,7 @@ Cada servicio de AWS se factura con su propia unidad, y confundirlas lleva a est
 |---|---|---|
 | Cómputo (EC2) | Por segundo de instancia en marcha | Cada instancia lanzada desde el Tema 2 |
 | Almacenamiento (S3, EBS) | Por GB-mes almacenado | El front, las imágenes, los discos de tus instancias |
-| Transferencia de salida | Por GB que sale hacia internet | Cada visita al catálogo desde fuera de AWS |
+| Transferencia de salida | Por GB que sale hacia internet | Cada visita a tu aplicación desde fuera de AWS |
 | Peticiones | Por número de operaciones (lecturas, escrituras) | Cada `GetObject` a S3, cada consulta a RDS |
 
 !!! warning "La transferencia de salida es la que más sorprende"
@@ -57,14 +57,14 @@ flowchart LR
     D["Spot<br/>barato, interrumpible"]
 ```
 
-!!! example "Escaparate y sus modelos de compra"
-    La instancia de aplicación de Escaparate, en producción, es candidata a un plan de ahorro — sabes que va a estar encendida de forma más o menos constante. Una tarea de procesamiento por lotes que generase miniaturas de todas las imágenes del catálogo de una vez, en cambio, encajaría bien en instancias Spot: si se interrumpe, se puede relanzar sin que nadie note nada.
+!!! example "Un mismo sistema, dos modelos de compra distintos"
+    La instancia de una aplicación en producción, encendida de forma más o menos constante, es candidata a un plan de ahorro. Una tarea de procesamiento por lotes que generase miniaturas de un lote de imágenes de una vez, en cambio, encajaría bien en instancias Spot: si se interrumpe, se puede relanzar sin que nadie note nada.
 
 ---
 
 ## ⚙️ Las 6 R de la migración
 
-Cuando una aplicación que ya existe (no una nueva, como Escaparate) se lleva a la nube, hay seis estrategias distintas, y no siempre la más ambiciosa es la mejor opción:
+Cuando una aplicación que ya existe (no una nueva, construida ya pensando en la nube) se lleva a la nube, hay seis estrategias distintas, y no siempre la más ambiciosa es la mejor opción:
 
 | Estrategia | Qué implica | Esfuerzo |
 |---|---|---|
@@ -92,7 +92,7 @@ flowchart TD
     A --> E["Elegir modelo de compra<br/>según predictibilidad"]
 ```
 
-El **etiquetado** (*tagging*) —poner etiquetas como `proyecto: escaparate` o `entorno: pruebas` a cada recurso— no ahorra dinero por sí solo, pero es lo que hace posible saber *qué* está costando *qué*, y sin esa visibilidad ninguna de las otras palancas se puede aplicar con criterio.
+El **etiquetado** (*tagging*) —poner etiquetas como `proyecto: miapp` o `entorno: pruebas` a cada recurso— no ahorra dinero por sí solo, pero es lo que hace posible saber *qué* está costando *qué*, y sin esa visibilidad ninguna de las otras palancas se puede aplicar con criterio.
 
 ---
 

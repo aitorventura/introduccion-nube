@@ -32,11 +32,9 @@ Montar un servidor ya no significa comprar una máquina. Significa pedirla, usar
 
 ---
 
-## 🛍️ El proyecto: Escaparate
+## 🧪 Las actividades
 
-Todas las actividades giran alrededor de la misma aplicación: **Escaparate**, un catálogo de productos con imágenes. Empieza como un sitio estático publicado el primer día y termina como una arquitectura de tres capas, balanceada, autoescalada, monitorizada y definida en código.
-
-Si además cursas **Despliegue de Aplicaciones Web**, es exactamente la misma aplicación: allí la despliegas a mano y aquí en su versión gestionada. Verás el mismo problema resuelto de dos maneras, y esa comparación es medio módulo.
+Cada actividad es independiente: tiene su propio escenario y, cuando hace falta, su propio recurso para desplegar (una aplicación mínima, una base de datos, una imagen de contenedor...). No vas construyendo una única aplicación a lo largo del curso — cada sesión te enfrenta a un caso distinto, para que aprendas a aplicar cada servicio por sí mismo y no solo a repetir un mismo proyecto.
 
 ---
 

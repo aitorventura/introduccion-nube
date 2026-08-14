@@ -28,7 +28,7 @@
 
 - [Actividad 3.1 — S3, EBS y EFS: tres soluciones de almacenamiento](actividad_3_1.md)
 - [Actividad 3.2 — Migración a base de datos gestionada con RDS](actividad_3_2.md)
-- [Actividad 3.3 — Escaparate en tres capas](actividad_3_3.md)
+- [Actividad 3.3 — Arquitectura de tres capas: front, aplicación y base de datos](actividad_3_3.md)
 
 ---
 
