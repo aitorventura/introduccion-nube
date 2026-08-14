@@ -4,7 +4,7 @@
 
 ---
 
-En la lista de puntos únicos de fallo que documentaste la sesión pasada, el primero de todos era casi con certeza el mismo: toda la aplicación depende de una única instancia. Si esa instancia se cae, se cae Escaparate entero. Hoy resuelves justo ese punto — no añadiendo "una instancia más por si acaso", sino un mecanismo que reparte el tráfico entre varias copias y que repone automáticamente la que falle, sin que tú tengas que estar mirando la pantalla.
+Cualquier aplicación desplegada sobre una única instancia tiene el mismo punto único de fallo: si esa instancia se cae, se cae la aplicación entera. Hoy resuelves justo ese punto — no añadiendo "una instancia más por si acaso", sino un mecanismo que reparte el tráfico entre varias copias y que repone automáticamente la que falle, sin que tú tengas que estar mirando la pantalla.
 
 ---
 
@@ -24,7 +24,7 @@ El balanceador necesita saber en qué puerto y protocolo escucha, y a qué grupo
 Las instancias detrás del balanceador se organizan en un **grupo de destino** (*Target Group*), y el balanceador no manda tráfico a ciegas — antes comprueba periódicamente, mediante una **comprobación de salud** (*Health Check*, una petición HTTP a una ruta concreta que debe responder correctamente), si cada instancia está realmente en condiciones de atender peticiones.
 
 !!! example "Por qué la comprobación de salud importa más de lo que parece"
-    Imagina una instancia que sigue "encendida" pero cuya aplicación se ha quedado colgada — responde al ping de red, pero no sirve el catálogo. Sin comprobación de salud, el balanceador seguiría mandándole tráfico igualmente, y una parte de tus usuarios vería errores sin que nada en el estado de la instancia lo delatara. Con la comprobación activa, el balanceador la retira del grupo de destino en cuanto deja de responder correctamente, y solo la vuelve a incluir cuando se recupera.
+    Imagina una instancia que sigue "encendida" pero cuya aplicación se ha quedado colgada — responde al ping de red, pero no sirve ninguna página. Sin comprobación de salud, el balanceador seguiría mandándole tráfico igualmente, y una parte de tus usuarios vería errores sin que nada en el estado de la instancia lo delatara. Con la comprobación activa, el balanceador la retira del grupo de destino en cuanto deja de responder correctamente, y solo la vuelve a incluir cuando se recupera.
 
 ---
 
@@ -58,7 +58,7 @@ flowchart LR
     Min["Mínima: 2"] --> Deseada["Deseada: 2"] --> Max["Máxima: 5"]
 ```
 
-Fíjate en algo importante: el grupo de escalado automático es exactamente lo que necesitaba la plantilla de lanzamiento que construiste en el Tema 2 — sin ella, el ASG no sabría con qué imagen, tipo y configuración lanzar una instancia nueva cuando le hiciera falta reponer una.
+Fíjate en algo importante: el grupo de escalado automático necesita una plantilla de lanzamiento como la que viste en el Tema 2 — sin ella, el ASG no sabría con qué imagen, tipo y configuración lanzar una instancia nueva cuando le hiciera falta reponer una.
 
 ---
 
@@ -91,7 +91,7 @@ Vas a medir esto de primera mano en la Actividad 4.1: vas a generar carga real, 
 
     - Un balanceador de carga reparte tráfico entre instancias de un grupo de destino, comprobando su salud antes de mandarles peticiones; un listener define en qué puerto/protocolo escucha y a qué grupo de destino reenvía.
     - Escalado vertical (instancia más grande) tiene límite y suele cortar servicio; escalado horizontal (más instancias) es la base de la alta disponibilidad.
-    - Un grupo de escalado automático se define con capacidad mínima, deseada y máxima, y usa la plantilla de lanzamiento del Tema 2 para saber cómo lanzar instancias nuevas.
+    - Un grupo de escalado automático se define con capacidad mínima, deseada y máxima, y usa una plantilla de lanzamiento (como la del Tema 2) para saber cómo lanzar instancias nuevas.
     - Las políticas de escalado reaccionan a una métrica (típicamente CPU); el periodo de calentamiento evita que el ASG escale en espiral mientras una instancia nueva todavía está arrancando.
     - La elasticidad se refleja directamente en la factura: se paga por la capacidad real en marcha, no por una capacidad fija reservada de antemano.
 

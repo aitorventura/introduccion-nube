@@ -4,7 +4,7 @@
 
 ---
 
-Cada pieza de Escaparate que has construido hasta ahora ha salido de clics en la consola o de comandos sueltos por CLI — funciona, pero no queda ningún documento que describa "así tiene que ser esta infraestructura", solo el resultado de haberla montado una vez. Si mañana tuvieras que reconstruirla exactamente igual, tendrías que recordar cada paso de memoria. Hoy cambias esa forma de trabajar: describes la infraestructura en ficheros de texto, y dejas que una herramienta se encargue de crearla, modificarla o destruirla exactamente como el texto dice — ni un clic más.
+Cada pieza de infraestructura que has construido hasta ahora ha salido de clics en la consola o de comandos sueltos por CLI — funciona, pero no queda ningún documento que describa "así tiene que ser esta infraestructura", solo el resultado de haberla montado una vez. Si mañana tuvieras que reconstruirla exactamente igual, tendrías que recordar cada paso de memoria. Hoy cambias esa forma de trabajar: describes la infraestructura en ficheros de texto, y dejas que una herramienta se encargue de crearla, modificarla o destruirla exactamente como el texto dice — ni un clic más.
 
 ---
 
@@ -45,7 +45,7 @@ El **plan** es el paso que marca la diferencia frente a hacerlo a mano: antes de
 
 Un fichero de Terraform se construye con unas pocas piezas que se repiten en cualquier infraestructura que declares:
 
-| Pieza | Qué es | Ejemplo en Escaparate |
+| Pieza | Qué es | Ejemplo típico |
 |---|---|---|
 | Recurso | Una pieza concreta de infraestructura | Una subred, una instancia, un bucket |
 | Variable | Un valor que parametriza el código, sin tocarlo | El rango CIDR, el tipo de instancia |

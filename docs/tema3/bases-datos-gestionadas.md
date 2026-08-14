@@ -4,7 +4,7 @@
 
 ---
 
-Hasta ahora, cualquier dato de Escaparate ha vivido en ficheros: el front en S3, las imágenes en EFS. Hoy llega la primera pieza que necesita algo más estructurado — la base de datos del catálogo, con sus productos, precios y stock. Una **base de datos relacional** guarda esa información en tablas con filas y columnas, relacionadas entre sí (un producto pertenece a una categoría, aparece en varios pedidos...), y un **motor de base de datos** (como PostgreSQL) es el programa que la gestiona: guarda los datos en disco, responde a las consultas y se asegura de que nada se corrompa aunque varias peticiones lleguen a la vez.
+Hasta ahora, los datos con los que has trabajado en este módulo han vivido en ficheros: un front en S3, unas imágenes en EFS. Hoy llega la primera pieza que necesita algo más estructurado — una base de datos de verdad, con sus filas y sus relaciones. Una **base de datos relacional** guarda esa información en tablas con filas y columnas, relacionadas entre sí (un libro pertenece a una categoría, aparece en varios préstamos...), y un **motor de base de datos** (como PostgreSQL) es el programa que la gestiona: guarda los datos en disco, responde a las consultas y se asegura de que nada se corrompa aunque varias peticiones lleguen a la vez.
 
 Ese motor podrías instalarlo tú mismo dentro de una instancia, exactamente igual que instalarías cualquier otro programa. Hoy vas a ver la alternativa: contratarlo como servicio gestionado, y entender exactamente qué te ahorra y qué renuncias a cambio.
 
@@ -31,9 +31,9 @@ Ninguna opción es "la buena" en abstracto — es la misma decisión de la escal
 
 ## 🧩 Subred privada y grupos de seguridad de datos
 
-La base de datos de Escaparate va, sin excepción, en subred privada — lo estableciste como regla en el Tema 2, y hoy la aplicas de verdad. RDS, además, no se conecta a cualquiera que se lo pida: necesita su propio grupo de seguridad, con una única regla de entrada — el puerto de la base de datos (5432 para PostgreSQL), y **solo** desde el grupo de seguridad de la instancia de la aplicación, nunca desde `0.0.0.0/0`.
+La base de datos de tu aplicación va, sin excepción, en subred privada — lo estableciste como regla en el Tema 2, y hoy la aplicas de verdad. RDS, además, no se conecta a cualquiera que se lo pida: necesita su propio grupo de seguridad, con una única regla de entrada — el puerto de la base de datos (5432 para PostgreSQL), y **solo** desde el grupo de seguridad de la instancia de la aplicación, nunca desde `0.0.0.0/0`.
 
-Para conectarte, tu aplicación necesita saber a qué dirección dirigirse: AWS te da un **endpoint**, un nombre de dirección único que apunta a tu base de datos (por ejemplo `escaparate-db.abc123.us-east-1.rds.amazonaws.com`) y que sustituye a la dirección IP de siempre — cómodo porque, si AWS mueve la base de datos por dentro tras una conmutación por error, ese nombre sigue apuntando al sitio correcto sin que tú tengas que actualizar nada.
+Para conectarte, tu aplicación necesita saber a qué dirección dirigirse: AWS te da un **endpoint**, un nombre de dirección único que apunta a tu base de datos (por ejemplo `biblioteca-db.abc123.us-east-1.rds.amazonaws.com`) y que sustituye a la dirección IP de siempre — cómodo porque, si AWS mueve la base de datos por dentro tras una conmutación por error, ese nombre sigue apuntando al sitio correcto sin que tú tengas que actualizar nada.
 
 ```mermaid
 flowchart LR
@@ -91,11 +91,11 @@ Vas a provocar una conmutación por error de verdad en la Actividad 3.2, y a med
 
 ## ⚙️ Relacional frente a NoSQL: el patrón de acceso como criterio
 
-RDS es un motor **relacional**: los datos viven en tablas con relaciones fijas entre ellas, y encajan de maravilla cuando la estructura de los datos es estable y las consultas cruzan varias tablas —exactamente el caso del catálogo de Escaparate, con productos, categorías y pedidos relacionados entre sí. Pero no es la única familia de base de datos que existe en la nube.
+RDS es un motor **relacional**: los datos viven en tablas con relaciones fijas entre ellas, y encajan de maravilla cuando la estructura de los datos es estable y las consultas cruzan varias tablas —por ejemplo, el catálogo de una tienda, con productos, categorías y pedidos relacionados entre sí. Pero no es la única familia de base de datos que existe en la nube.
 
 | Modelo | Cómo se estructura | Cuándo encaja |
 |---|---|---|
-| Relacional (RDS) | Tablas con relaciones fijas, consultas complejas entre ellas | Datos estructurados con relaciones claras — el catálogo de Escaparate |
+| Relacional (RDS) | Tablas con relaciones fijas, consultas complejas entre ellas | Datos estructurados con relaciones claras — un catálogo con categorías y pedidos |
 | Clave-valor | Un identificador, un valor asociado, sin estructura interna fija | Sesiones de usuario, carritos de compra temporales |
 | Documental | Documentos con estructura flexible, puede variar de uno a otro | Catálogos con atributos muy distintos entre productos |
 

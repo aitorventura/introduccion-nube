@@ -8,18 +8,18 @@
 
 ## Contexto
 
-El catálogo de Escaparate sigue viviendo detrás de la URL genérica del balanceador. Hoy le pones un nombre propio con HTTPS de verdad, y separas del origen el contenido estático y las imágenes de producto detrás de una CDN, acercándolos al visitante.
+Encuestas en Vivo sigue viviendo detrás de la URL genérica del balanceador de la Actividad 4.1. Hoy le pones un nombre propio con HTTPS de verdad, y separas del origen el contenido estático del evento —el programa y las imágenes de patrocinadores— detrás de una CDN, acercándolos a cada asistente.
 
 ## Qué vas a practicar
 
-- Publicar el catálogo bajo un dominio o subdominio propio, con un certificado gestionado.
+- Publicar la aplicación bajo un dominio o subdominio propio, con un certificado gestionado.
 - Configurar HTTPS en el borde, sobre el balanceador de la sesión anterior.
 - Distribuir contenido estático y de imágenes por una CDN, y medir la diferencia real entre caché fría y caliente.
 - Calcular el ahorro económico de servir contenido desde el borde en vez de siempre desde el origen.
 
 ## Requisitos previos
 
-El subdominio delegado por el profesor. El balanceador de carga y el grupo de escalado de la Actividad 4.1. El apunte de esta sesión — «DNS, HTTPS y distribución de contenido» (dns-https-cdn.md).
+El subdominio delegado por el profesor. El balanceador de carga y el grupo de escalado de la Actividad 4.1, en marcha. Los ficheros estáticos de ejemplo del evento, ya preparados en `recursos/tema4/actividad_4_1/estaticos/` (`index.html` y las imágenes de programa y patrocinadores) — el profesor te los entrega, no los programas tú. El apunte de esta sesión — «DNS, HTTPS y distribución de contenido» (dns-https-cdn.md).
 
 ---
 
@@ -28,7 +28,7 @@ El subdominio delegado por el profesor. El balanceador de carga y el grupo de es
 ### Paso 1 — Solicita el certificado desde la consola
 
 1. Busca "Certificate Manager" en el buscador de servicios → **Solicitar un certificado** → **Solicitar un certificado público**.
-2. Escribe tu subdominio completo (por ejemplo `escaparate-<tu-identificador>.tudominio.es`).
+2. Escribe tu subdominio completo (por ejemplo `encuestas-<tu-identificador>.tudominio.es`).
 3. Método de validación: **Validación DNS**.
 4. Solicita el certificado.
 5. Entra en el certificado recién creado: para su dominio, verás un botón **Crear registro en Route 53** (si tu zona ya está en Route 53) o el CNAME exacto que tienes que añadir a mano.
@@ -61,9 +61,9 @@ Después, crea el registro `Alias` de tu subdominio apuntando al balanceador des
 
 Abre `https://<tu-subdominio>` en el navegador.
 
-![El catálogo cargando por HTTPS sobre el subdominio propio, con el candado de conexión segura](img/actividad_4_2_paso2_b.png)
+![Encuestas en Vivo cargando por HTTPS sobre el subdominio propio, con el candado de conexión segura](img/actividad_4_2_paso2_b.png)
 
-**Comprueba**: que `https://<tu-subdominio>` carga el catálogo con el candado de conexión segura, sin ningún aviso de certificado no válido.
+**Comprueba**: que `https://<tu-subdominio>` carga la aplicación con el candado de conexión segura, sin ningún aviso de certificado no válido.
 **Captura**: `img/actividad_4_2_paso2_a.png` y `img/actividad_4_2_paso2_b.png`.
 
 !!! question "Reflexiona"
@@ -73,7 +73,7 @@ Abre `https://<tu-subdominio>` en el navegador.
 
 ## Parte B — CDN de verdad, con medidas reales (reto)
 
-Configura una distribución CDN delante del contenido estático del front y de las imágenes de producto. No hay procedimiento dado para lo que viene a continuación — decide tú cómo medir y cómo demostrar cada comportamiento:
+Sube el contenido de `recursos/tema4/actividad_4_1/estaticos/` (la página del programa y las imágenes de patrocinadores) a un bucket S3 que sirva de origen, y configura una distribución CDN delante de ese contenido. No hay procedimiento dado para lo que viene a continuación — decide tú cómo medir y cómo demostrar cada comportamiento:
 
 **Mide la diferencia real entre caché fría y caliente**: la primera petición a un recurso tras crear la distribución, y una petición inmediatamente posterior al mismo recurso. Demuestra la diferencia de tiempos con datos, no con una estimación.
 
@@ -98,7 +98,7 @@ aws cloudfront get-distribution --id <distribution-id>
 aws acm describe-certificate --certificate-arn <certificado-arn>
 ```
 
-Y debe observarse: `HTTPS 200` sobre tu propio subdominio, con certificado válido y emitido, y la distribución CDN activa sirviendo el contenido estático y las imágenes.
+Y debe observarse: `HTTPS 200` sobre tu propio subdominio, con certificado válido y emitido, y la distribución CDN activa sirviendo el contenido estático del evento y las imágenes.
 
 ---
 
@@ -123,4 +123,4 @@ Y debe observarse: `HTTPS 200` sobre tu propio subdominio, con certificado váli
 
 ## ✅ Cierre
 
-Escaparate ya tiene nombre propio, conexión cifrada de extremo a extremo hasta el borde, y contenido servido cerca de cada visitante en vez de siempre desde la misma región. Con esto se cierra el Tema 4. En el Tema 5 dejas de construir infraestructura nueva por un rato: te toca vigilar lo que ya tienes, controlar quién puede tocarlo, y entender cuánto está costando de verdad.
+Encuestas en Vivo ya tiene nombre propio, conexión cifrada de extremo a extremo hasta el borde, y contenido servido cerca de cada asistente en vez de siempre desde la misma región. Con esto se cierra el Tema 4. En el Tema 5 dejas de construir infraestructura nueva por un rato: te toca vigilar lo que ya tienes, controlar quién puede tocarlo, y entender cuánto está costando de verdad.

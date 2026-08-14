@@ -12,7 +12,7 @@ En las dos sesiones anteriores has lanzado instancias sueltas, una a una, cada v
 
 Cuando lanzas una instancia EC2 eliges un **tipo**, con un nombre como `t3.micro` o `m5.large`. Ese nombre no es arbitrario: la letra inicial indica la **familia** (para qué está optimizada), y el número final indica el **tamaño** (cuánta CPU y memoria trae).
 
-| Familia | Optimizada para | Ejemplo de uso en Escaparate |
+| Familia | Optimizada para | Ejemplo de uso típico |
 |---|---|---|
 | `t` (general, ráfaga) | Cargas variables, con picos ocasionales | Instancia de la aplicación en desarrollo o pruebas |
 | `m` (general, equilibrada) | CPU y memoria en proporción estándar | Instancia de la aplicación en producción |
@@ -20,7 +20,7 @@ Cuando lanzas una instancia EC2 eliges un **tipo**, con un nombre como `t3.micro
 | `r` (memoria) | Mucha memoria, poca CPU relativa | Bases de datos en memoria, no lo usarás en este módulo |
 
 !!! example "Elegir tamaño no es "cuanto más grande, mejor""
-    Una `t3.micro` cuesta una fracción de lo que cuesta una `m5.large`, y para servir el front estático de Escaparate durante una clase de treinta alumnos es más que suficiente. Sobredimensionar una instancia es tirar presupuesto del laboratorio a la basura sin ninguna mejora perceptible — vas a comparar el coste real de tres familias en la Actividad 2.3.
+    Una `t3.micro` cuesta una fracción de lo que cuesta una `m5.large`, y para servir el front estático de una aplicación web durante una clase de treinta alumnos es más que suficiente. Sobredimensionar una instancia es tirar presupuesto del laboratorio a la basura sin ninguna mejora perceptible — vas a comparar el coste real de tres familias en la Actividad 2.3.
 
 El propio nombre `t3.micro` te dice ya el 80 % de lo que necesitas: familia de uso general con ráfagas, tamaño mínimo. No hace falta memorizar el catálogo entero — elige la familia según qué exige la carga, y el tamaño según cuánto tráfico esperas de verdad.
 
@@ -37,7 +37,7 @@ flowchart LR
     C --> D["Lanzas N instancias idénticas<br/>desde tu AMI"]
 ```
 
-Esa es exactamente la secuencia que vas a seguir en la Actividad 2.3: arrancar de una imagen pública, instalar lo necesario para servir el catálogo de Escaparate, y capturar el resultado como tu propia imagen — para no tener que repetir la instalación la próxima vez que necesites otra instancia igual.
+Esa es exactamente la secuencia que vas a seguir en la Actividad 2.3: arrancar de una imagen pública, instalar lo necesario para servir una pequeña aplicación web, y capturar el resultado como tu propia imagen — para no tener que repetir la instalación la próxima vez que necesites otra instancia igual.
 
 ---
 
@@ -74,7 +74,7 @@ flowchart TD
 ```
 
 !!! tip "Por qué esto es la base de todo lo que viene después"
-    Una plantilla de lanzamiento parametrizada es exactamente lo que va a usar el grupo de escalado automático del Tema 4 para decidir "necesito una instancia más, ¿con qué características la lanzo?" — sin plantilla, no hay escalado automático posible. Lo que hoy parece solo una comodidad para no repetir parámetros a mano es, en dos sesiones, el mecanismo que sostiene la alta disponibilidad de Escaparate.
+    Una plantilla de lanzamiento parametrizada es exactamente lo que va a usar el grupo de escalado automático del Tema 4 para decidir "necesito una instancia más, ¿con qué características la lanzo?" — sin plantilla, no hay escalado automático posible. Lo que hoy parece solo una comodidad para no repetir parámetros a mano es, en dos sesiones, el mecanismo que sostiene la alta disponibilidad de cualquier aplicación en producción.
 
 ---
 

@@ -4,7 +4,7 @@
 
 ---
 
-Con la arquitectura del Tema 4 ya en marcha, tienes varias instancias, un balanceador y una base de datos funcionando sin que tú los mires constantemente — y ese es exactamente el problema de hoy. Si algo falla a las tres de la madrugada, nadie está delante de una pantalla viéndolo en directo. Necesitas que el propio sistema te avise, y necesitas saber diagnosticar una incidencia sin la comodidad de conectarte por SSH a mirar qué pasa por dentro — porque en una arquitectura gestionada, esa comodidad cada vez existe menos.
+Cualquier servidor en producción tiene el mismo problema de fondo: nadie lo va a estar mirando constantemente. Si algo falla a las tres de la madrugada, nadie está delante de una pantalla viéndolo en directo. Necesitas que el propio sistema te avise, y necesitas saber diagnosticar una incidencia sin la comodidad de conectarte por SSH a mirar qué pasa por dentro — porque en una arquitectura gestionada, esa comodidad cada vez existe menos.
 
 ---
 
@@ -12,7 +12,7 @@ Con la arquitectura del Tema 4 ya en marcha, tienes varias instancias, un balanc
 
 AWS te da cinco tipos de señal distintos para saber qué está pasando en tu arquitectura, y cada uno responde a una pregunta diferente:
 
-| Señal | Responde a | Ejemplo en Escaparate |
+| Señal | Responde a | Ejemplo |
 |---|---|---|
 | **Métricas** | ¿Cuánto? (un número que cambia con el tiempo) | CPU media de las instancias, peticiones por segundo del balanceador |
 | **Registros** (*logs*) | ¿Qué ha pasado exactamente, con detalle? | El mensaje de error concreto de una petición fallida |
@@ -42,7 +42,7 @@ Vas a diseñar exactamente tres alarmas útiles en la Actividad 5.1, no veinte �
 
 ## 🔧 Capa a capa de la arquitectura
 
-Cada capa de Escaparate necesita un tipo de señal distinto, porque cada una falla de forma distinta. Un detalle que vas a usar mucho a partir de aquí: cada respuesta HTTP lleva un **código de estado** de tres cifras, y la primera cifra agrupa el tipo de resultado — los que empiezan por 2 significan éxito, los que empiezan por 4 son error del cliente (por ejemplo, pedir algo que no existe), y los que empiezan por 5 —los **errores 5xx**— son error del propio servidor, la señal de que algo se ha roto por dentro.
+Cada capa de una arquitectura necesita un tipo de señal distinto, porque cada una falla de forma distinta. Un detalle que vas a usar mucho a partir de aquí: cada respuesta HTTP lleva un **código de estado** de tres cifras, y la primera cifra agrupa el tipo de resultado — los que empiezan por 2 significan éxito, los que empiezan por 4 son error del cliente (por ejemplo, pedir algo que no existe), y los que empiezan por 5 —los **errores 5xx**— son error del propio servidor, la señal de que algo se ha roto por dentro.
 
 ```mermaid
 flowchart LR

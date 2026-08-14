@@ -5,7 +5,7 @@
 
 ## Contexto
 
-Escaparate necesita un lugar donde vivir el resto de sus piezas —empezando por la base de datos, que llega en el Tema 3—, y ese lugar no puede ser una única subred pública abierta a todo el mundo. Hoy diseñas y construyes tu propia red virtual, repartida en dos zonas de disponibilidad, con subredes públicas y privadas bien diferenciadas.
+Vas a diseñar la red que alojará una aplicación de reserva de pistas deportivas municipales — es solo el escenario de ambientación de la sesión, no hace falta que construyas esa aplicación. Ese lugar no puede ser una única subred pública abierta a todo el mundo. Hoy diseñas y construyes tu propia red virtual, repartida en dos zonas de disponibilidad, con subredes públicas y privadas bien diferenciadas.
 
 ## Qué vas a practicar
 
@@ -15,7 +15,7 @@ Escaparate necesita un lugar donde vivir el resto de sus piezas —empezando por
 
 ## Requisitos previos
 
-El apunte de esta sesión — «Diseño de la red virtual» (vpc-diseno.md). No necesitas nada de sesiones anteriores más allá del front publicado en S1, que hoy no vas a tocar.
+El apunte de esta sesión — «Diseño de la red virtual» (vpc-diseno.md). No necesitas nada de sesiones anteriores: hoy construyes la red desde cero.
 
 ---
 
@@ -36,7 +36,7 @@ Es tu primera VPC, así que constrúyela desde la consola, paso a paso:
 2. Haz clic en **Crear VPC**.
 3. Elige la opción **Solo VPC** (no el asistente "VPC y más", para controlar tú cada pieza).
 4. En **Bloque de dirección IPv4**, escribe `10.0.0.0/16`.
-5. Dale un nombre reconocible (por ejemplo `escaparate-vpc-<tu-identificador>`) y crea la VPC.
+5. Dale un nombre reconocible (por ejemplo `pistas-vpc-<tu-identificador>`) y crea la VPC.
 
 ![VPC creada con el rango 10.0.0.0/16](img/actividad_2_1_paso2_a.png)
 

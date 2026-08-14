@@ -10,7 +10,7 @@ Tienes ya todas las piezas sueltas: red con capas públicas y privadas, instanci
 
 ## 🧭 Arquitectura de tres capas en la nube
 
-Ya viste el patrón de capas aplicado a la red en el Tema 2 (borde, aplicación, datos). Hoy ese patrón deja de ser solo una regla de grupos de seguridad y se convierte en la arquitectura completa de Escaparate: cada capa es un servicio real, con una responsabilidad concreta y ninguna otra.
+Ya viste el patrón de capas aplicado a la red en el Tema 2 (borde, aplicación, datos). Hoy ese patrón deja de ser solo una regla de grupos de seguridad y se convierte en una arquitectura completa: cada capa es un servicio real, con una responsabilidad concreta y ninguna otra.
 
 ```mermaid
 flowchart LR
@@ -106,4 +106,4 @@ Un **punto único de fallo** (*Single Point of Failure*, SPOF) es cualquier piez
     - Las capas dependen unas de otras en un orden concreto — si una referencia se queda apuntando al sitio viejo tras un cambio, la capa que depende de ella falla aunque la otra esté sana.
     - Un punto único de fallo es cualquier pieza cuya caída tumba el sistema entero — identificarlos hoy es el primer paso para resolverlos en las próximas sesiones.
 
-Con esto ya tienes las piezas para la Actividad 3.3 — Escaparate en tres capas.
+Con esto ya tienes las piezas para la Actividad 3.3 — Arquitectura de tres capas: front, aplicación y base de datos.

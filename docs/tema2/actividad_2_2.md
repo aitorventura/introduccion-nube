@@ -5,7 +5,7 @@
 
 ## Contexto
 
-Sobre la VPC que construiste la sesión pasada vas a levantar hoy una instancia pública con un servidor web y una instancia privada solo alcanzable desde ella — el primer boceto de la arquitectura en capas de Escaparate. Y luego, sin previo aviso, esa misma red va a dejar de funcionar: cuatro averías reales, preparadas de antemano, que tienes que diagnosticar contrarreloj.
+Sobre la VPC que construiste la sesión pasada vas a levantar hoy una instancia pública con un servidor web y una instancia privada solo alcanzable desde ella — el servidor de un tablón de anuncios municipal. Y luego, sin previo aviso, esa misma red va a dejar de funcionar: cuatro averías reales, preparadas de antemano, que tienes que diagnosticar contrarreloj.
 
 ## Qué vas a practicar
 
@@ -25,16 +25,16 @@ La VPC de dos zonas de la Actividad 2.1, con sus subredes públicas y privadas y
 ### Paso 1 — Lanza la instancia pública desde la consola
 
 1. Busca "EC2" en el buscador de servicios → **Instancias** → **Lanzar instancia**.
-2. Dale un nombre (por ejemplo `escaparate-publica-<tu-identificador>`).
+2. Dale un nombre (por ejemplo `tablon-publica-<tu-identificador>`).
 3. Elige la imagen (AMI) que te indique el profesor, y el tipo `t3.micro`.
 4. En **Configuración de red**, elige tu VPC y tu subred pública, y asegúrate de que **Asignar IP pública automáticamente** está en **Habilitar**.
 5. En el propio asistente, crea un grupo de seguridad nuevo con solo dos reglas: puerto 80 abierto a `0.0.0.0/0`, y puerto 22 restringido a tu propia IP (usa la opción "Mi IP" del desplegable de origen).
-6. Despliega **Detalles avanzados**, baja hasta el campo **Datos de usuario** (*user data*), y pega ahí el contenido completo de `arranque-servidor.sh`.
+6. Despliega **Detalles avanzados**, baja hasta el campo **Datos de usuario** (*user data*), y pega ahí el contenido completo de `arranque-servidor.sh` — el script vive en `recursos/tema2/actividad_2_2/arranque-servidor.sh` (fuera del sitio publicado; es un recurso que el profesor prepara y entrega antes de la sesión, como ya se ha hecho con otros scripts del módulo).
 7. Haz clic en **Lanzar instancia**.
 
 ![Asistente de lanzamiento con el grupo de seguridad y el campo de user data rellenados](img/actividad_2_2_paso1_a.png)
 
-El script `arranque-servidor.sh` instala y arranca un servidor web mínimo al primer arranque de la instancia — sin intervención tuya. Espera un par de minutos y prueba la IP pública de la instancia en el navegador.
+El script `arranque-servidor.sh` instala y arranca, al primer arranque de la instancia, un servidor web mínimo con la página del tablón de anuncios — sin intervención tuya. Espera un par de minutos y prueba la IP pública de la instancia en el navegador.
 
 ![El servidor web respondiendo en el navegador, sin haberte conectado por SSH](img/actividad_2_2_paso1_b.png)
 
