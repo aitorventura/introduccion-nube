@@ -2636,11 +2636,7 @@
 </tr>
 <tr>
 <td>EFS creado y montado desde dos instancias, con fichero compartido visible</td>
-<td>3</td>
-</tr>
-<tr>
-<td>Documentación en el repositorio</td>
-<td>1</td>
+<td>4</td>
 </tr>
 </tbody>
 </table>
@@ -2665,7 +2661,11 @@
 </table>
 <hr>
 <h2 id="cierre">✅ Cierre<a class="headerlink" href="#cierre" title="Permanent link">¶</a></h2>
-<p>Ya sabes elegir familia de almacenamiento según el patrón de acceso, no por costumbre, y sabes que ampliar un disco en AWS es solo la mitad del trabajo — la otra mitad vive dentro del sistema operativo. La próxima sesión dejas de guardar datos sueltos: montas una base de datos relacional gestionada, y conectas una aplicación a ella sin escribir ni una sola credencial en el código.</p></div>
+<p>Ya sabes elegir familia de almacenamiento según el patrón de acceso, no por costumbre, y sabes que ampliar un disco en AWS es solo la mitad del trabajo — la otra mitad vive dentro del sistema operativo. La próxima sesión dejas de guardar datos sueltos: montas una base de datos relacional gestionada, y conectas una aplicación a ella sin escribir ni una sola credencial en el código.</p>
+<div class="admonition danger">
+<p class="admonition-title">Antes de salir: borra las instancias y el sistema de archivos EFS</p>
+<p>Termina las dos instancias del festival, y borra el sistema de archivos EFS — factura por GB almacenado cada mes mientras exista, y no le sirve a ninguna actividad posterior. El bucket de fotos puedes dejarlo o vaciarlo y borrarlo, su coste es prácticamente nulo. <strong>No borres la VPC ni las subredes del Tema 2.</strong></p>
+</div></div>
 
 
 

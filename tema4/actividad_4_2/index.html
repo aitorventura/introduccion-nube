@@ -2595,11 +2595,7 @@
 <tbody>
 <tr>
 <td>Certificado emitido y HTTPS funcionando sobre subdominio propio</td>
-<td>6</td>
-</tr>
-<tr>
-<td>Documentación en el repositorio</td>
-<td>1</td>
+<td>7</td>
 </tr>
 </tbody>
 </table>
@@ -2628,7 +2624,11 @@
 </table>
 <hr>
 <h2 id="cierre">✅ Cierre<a class="headerlink" href="#cierre" title="Permanent link">¶</a></h2>
-<p>Encuestas en Vivo ya tiene nombre propio, conexión cifrada de extremo a extremo hasta el borde, y contenido servido cerca de cada asistente en vez de siempre desde la misma región. Con esto se cierra el Tema 4. En el Tema 5 dejas de construir infraestructura nueva por un rato: te toca vigilar lo que ya tienes, controlar quién puede tocarlo, y entender cuánto está costando de verdad.</p></div>
+<p>Encuestas en Vivo ya tiene nombre propio, conexión cifrada de extremo a extremo hasta el borde, y contenido servido cerca de cada asistente en vez de siempre desde la misma región. Con esto se cierra el Tema 4. En el Tema 5 dejas de construir infraestructura nueva por un rato: te toca vigilar lo que ya tienes, controlar quién puede tocarlo, y entender cuánto está costando de verdad.</p>
+<div class="admonition danger">
+<p class="admonition-title">Antes de salir: borra el balanceador, el grupo de escalado y la CDN</p>
+<p>Con esto se cierra el Tema 4, y es el momento de más coste acumulado de todo el módulo si no lo apagas: el balanceador de carga factura por hora, y el grupo de escalado mantiene entre 2 y 4 instancias EC2 encendidas a la vez. Borra primero el grupo de Auto Scaling (termina sus instancias automáticamente), después el grupo de destino y el balanceador. Si has hecho la Parte B, deshabilita y borra también la distribución de CloudFront (tarda varios minutos en desactivarse antes de dejarse borrar) y el bucket de contenido estático. Nada de esto le sirve a ninguna actividad posterior.</p>
+</div></div>
 
 
 

@@ -2616,14 +2616,10 @@
 </tr>
 <tr>
 <td>Aplicado correctamente, con plan revisado antes de cada cambio</td>
-<td>3</td>
+<td>4</td>
 </tr>
 <tr>
 <td>Subred añadida por código, sin tocar recursos existentes</td>
-<td>1</td>
-</tr>
-<tr>
-<td>Documentación en el repositorio</td>
 <td>1</td>
 </tr>
 </tbody>
@@ -2649,7 +2645,11 @@
 </table>
 <hr>
 <h2 id="cierre">✅ Cierre<a class="headerlink" href="#cierre" title="Permanent link">¶</a></h2>
-<p>Ya sabes leer, modificar y reconstruir infraestructura completa desde código, con un plan que revisas antes de aplicar cualquier cambio — y has medido con tus propios números cuánto se gana en tiempo y en trazabilidad frente a montarlo a mano. La próxima sesión subes un peldaño más en la escalera de responsabilidad: dejas de gestionar instancias del todo, y ejecutas código sin ningún servidor que tú administres.</p></div>
+<p>Ya sabes leer, modificar y reconstruir infraestructura completa desde código, con un plan que revisas antes de aplicar cualquier cambio — y has medido con tus propios números cuánto se gana en tiempo y en trazabilidad frente a montarlo a mano. La próxima sesión subes un peldaño más en la escalera de responsabilidad: dejas de gestionar instancias del todo, y ejecutas código sin ningún servidor que tú administres.</p>
+<div class="admonition danger">
+<p class="admonition-title">Antes de salir: destruye toda la infraestructura con Terraform</p>
+<p>Es la limpieza más fácil de todo el módulo, porque ya la tienes automatizada: ejecuta <code>terraform destroy</code> en cada entorno que hayas desplegado (el módulo original del Paso 2, y si has hecho la Parte B, también <code>dev</code> y <code>prod</code>) — confirma cuando te lo pida, igual que hiciste con <code>apply</code>. No dejes ninguno a medias: recuerda que la propia actividad te pedía comprobar que no queda ningún recurso huérfano tras destruir y reconstruir.</p>
+</div></div>
 
 
 

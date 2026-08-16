@@ -2458,7 +2458,7 @@
 <div><p><a id="vpc-diseno"></a></p>
 <h1 id="1-diseno-de-la-red-virtual">🧩 1. Diseño de la red virtual<a class="headerlink" href="#1-diseno-de-la-red-virtual" title="Permanent link">¶</a></h1>
 <hr>
-<p>La sesión pasada publicaste un front estático en S3 y quedó accesible para cualquiera, sin que tuvieras que pensar en redes para nada — S3 ya trae su propia conectividad incluida. Eso se acaba hoy. A partir de ahora vas a alojar piezas que <strong>no</strong> deben ser accesibles para cualquiera: la base de datos, y más adelante la propia aplicación por dentro. Antes de lanzar ninguna máquina necesitas construir el terreno donde va a vivir todo eso — tu propia red privada dentro de AWS, con zonas que sí hablan con internet y zonas que no. Hoy la diseñas en papel y la levantas en consola; en la Actividad 2.1 la construyes tú mismo, de dos zonas, siguiendo tu propio diseño.</p>
+<p>El front que publicaste la sesión pasada no necesitó ni una decisión de red: S3 ya viene con su propia conectividad puesta. Eso ha sido la excepción, no la norma. Casi todo lo demás que vas a construir en este módulo va a vivir dentro de un espacio con reglas propias, con partes abiertas a internet y partes que no lo están nunca. Hoy diseñas ese espacio: primero en papel, después en consola, repartido en dos zonas de disponibilidad. En la Actividad 2.1 lo construyes tú mismo, siguiendo tu propio diseño.</p>
 <hr>
 <h2 id="red-virtual-privada">🧭 Red virtual privada<a class="headerlink" href="#red-virtual-privada" title="Permanent link">¶</a></h2>
 <p>Una <strong>VPC</strong> (<em>Virtual Private Cloud</em>) es tu propio trozo de red dentro de AWS, aislado del resto de clientes por defecto. Piensa en ella como en la parcela de un polígono industrial: dentro puedes levantar los edificios que quieras y decidir tú las calles internas, pero nadie de fuera entra sin que tú abras una puerta expresamente.</p>
@@ -2500,23 +2500,26 @@
 <p class="admonition-title">De la VPC a la subred, con números reales</p>
 <p>Si tu VPC es <code>10.0.0.0/16</code>, tienes 65.536 direcciones para repartir. Si divides ese rango en subredes <code>/24</code>, obtienes 256 subredes de 256 direcciones cada una: <code>10.0.0.0/24</code>, <code>10.0.1.0/24</code>, <code>10.0.2.0/24</code>... Con solo dos o tres de esas subredes ya te sobra espacio para todo lo que vas a construir en el módulo.</p>
 </div>
-<p>No necesitas usar las 256 subredes posibles — con cuatro o seis te sobra para todo el curso. Lo importante es que el reparto quede documentado: en la Actividad 2.1 vas a diseñar sobre papel qué subred es cuál <em>antes</em> de crear nada en consola, exactamente igual que un plano se dibuja antes de levantar la primera pared.</p>
+<p>No necesitas usar las 256 subredes posibles — con cuatro o seis te sobra para todo el curso. Mientras cada subred use un rango distinto —incrementando el tercer octeto, como en el ejemplo de arriba— no se solapan entre sí; el error típico es repetir sin darte cuenta el mismo rango en dos subredes. Lo importante es que el reparto quede documentado: en la Actividad 2.1 vas a diseñar sobre papel qué subred es cuál <em>antes</em> de crear nada en consola, exactamente igual que un plano se dibuja antes de levantar la primera pared.</p>
 <hr>
 <h2 id="subredes-publicas-y-privadas">🔧 Subredes públicas y privadas<a class="headerlink" href="#subredes-publicas-y-privadas" title="Permanent link">¶</a></h2>
-<p>Dentro de la VPC no todas las subredes tienen el mismo papel. La diferencia entre una <strong>subred pública</strong> y una <strong>subred privada</strong> no está en ningún atributo especial que actives al crearla — está en si tiene o no un camino de salida directo a internet, algo que defines con la tabla de rutas de la siguiente sección.</p>
+<p>Dentro de la VPC no todas las subredes tienen el mismo papel. Piensa en un edificio de oficinas: la recepción tiene puerta directa a la calle, cualquiera entra sin pedir permiso; la sala de servidores está en el sótano, y solo se llega a ella pasando antes por dentro del edificio. Una <strong>subred pública</strong> y una <strong>subred privada</strong> son exactamente eso — la diferencia no es ningún interruptor especial que actives al crearlas, es simplemente si tienen puerta a internet o no. Esa "puerta" se define con la tabla de rutas, que ves en la siguiente sección.</p>
 <pre class="mermaid"><code>flowchart TB
     subgraph VPC["🏗️ VPC 10.0.0.0/16"]
         subgraph Pub["🌐 Subred pública"]
-            EC2["Instancia con IP pública"]
+            EC2["Recurso con IP pública"]
         end
         subgraph Priv["🔒 Subred privada"]
             DB["Base de datos"]
         end
     end
     Internet(("🌍 Internet")) &lt;--&gt; Pub
-    Pub --&gt; Priv
+    Pub &lt;--&gt; Priv
     Internet -.-&gt;|❌| Priv</code></pre>
-<p>Fíjate en la flecha tachada del diagrama: internet nunca llega directamente a la subred privada. Solo lo que ya está dentro de la VPC —como la instancia de la subred pública— puede alcanzarla. Esa asimetría es intencionada, y es la razón de ser de todo lo que viene a continuación.</p>
+<p>Fíjate en la flecha tachada del diagrama: internet nunca llega directamente a la subred privada. Solo lo que ya está dentro de la VPC —como el recurso de la subred pública— puede alcanzarla. Esa asimetría es intencionada, y es la razón de ser de todo lo que viene a continuación.</p>
+<p>El diagrama de arriba solo dibuja una subred de cada tipo para no complicarlo, pero en la Actividad 2.1 vas a repartir pública y privada en <strong>dos zonas de disponibilidad</strong> distintas, no en una sola — el mismo patrón, repetido dos veces:</p>
+<p><img alt="VPC con subredes públicas y privadas en dos zonas de disponibilidad" src="../img/diagrama_vpc_dos_zonas.png"></p>
+<p>Es la misma redundancia que viste en el Tema 1: si una zona entera se cae por un fallo eléctrico o de red, la otra sigue funcionando. Diseñar la VPC pensando en dos zonas desde el primer día sale mucho más barato que añadir la segunda más adelante, cuando ya tengas media aplicación construida encima de la primera.</p>
 <hr>
 <h2 id="tabla-de-rutas-y-pasarela-de-internet">⚙️ Tabla de rutas y pasarela de internet<a class="headerlink" href="#tabla-de-rutas-y-pasarela-de-internet" title="Permanent link">¶</a></h2>
 <p>Lo que convierte a una subred en pública es una combinación de dos piezas: una <strong>pasarela de internet</strong> (<em>Internet Gateway</em>, IGW) conectada a la VPC, y una entrada en la <strong>tabla de rutas</strong> de esa subred que dice "todo el tráfico que no sea interno, mándalo por la pasarela". Esa entrada se escribe como <code>0.0.0.0/0</code> — el CIDR más amplio que existe, que en una tabla de rutas significa "cualquier dirección de internet, sin excepción".</p>
@@ -2548,8 +2551,9 @@
 </table>
 <div class="admonition warning">
 <p class="admonition-title">El error más común de la sesión de hoy</p>
-<p>Una subred no es pública "porque tú la llamaste así" — lo es porque su tabla de rutas apunta a la pasarela. Es habitual crear una instancia, asignarle una IP pública y esperar que funcione, y que no responda porque la subred donde vive sigue apuntando a ninguna parte. Vas a diagnosticar justo este fallo en la Actividad 2.2 de la próxima sesión.</p>
+<p>Una subred no es pública "porque tú la llamaste así" — lo es porque su tabla de rutas apunta a la pasarela. Es habitual crear un recurso, asignarle una IP pública y esperar que funcione, y que no responda porque la subred donde vive sigue apuntando a ninguna parte. Vas a diagnosticar justo este fallo en la Actividad 2.2 de la próxima sesión.</p>
 </div>
+<p>La ruta no es la única pieza que decide si algo responde o no, aunque hoy sea la única que vas a tocar. La próxima sesión añades una capa más —los <strong>grupos de seguridad</strong>, una especie de portero que decide quién entra aunque la puerta (la ruta) esté abierta— capaz de bloquear tráfico incluso con la tabla de rutas perfecta. Todavía no los necesitas para la actividad de hoy, pero ya puedes intuir que "no me llega tráfico" tiene más de una causa posible: la ruta, o quién tiene permiso para pasar por ella.</p>
 <hr>
 <h2 id="por-que-la-base-de-datos-nunca-vive-en-una-subred-publica">📊 Por qué la base de datos nunca vive en una subred pública<a class="headerlink" href="#por-que-la-base-de-datos-nunca-vive-en-una-subred-publica" title="Permanent link">¶</a></h2>
 <p>Recupera un momento el modelo de responsabilidad compartida de la sesión pasada: la configuración de acceso a tus datos es responsabilidad tuya, no de AWS. Poner la base de datos en una subred privada es la decisión de diseño que traduce ese principio en una regla concreta de red: <strong>si algo no necesita que internet lo alcance directamente, no le des un camino para que internet lo alcance.</strong></p>

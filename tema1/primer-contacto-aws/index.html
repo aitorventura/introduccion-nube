@@ -2634,11 +2634,7 @@
 <li><strong>Zona de disponibilidad</strong> (<em>Availability Zone</em>, AZ): dentro de una región hay varias zonas de disponibilidad — en la práctica, varios centros de datos físicamente separados entre sí (con su propia electricidad, refrigeración y conexión de red), pero conectados por fibra de muy baja latencia. Si una zona entera se cae por un fallo eléctrico o una catástrofe local, las demás siguen funcionando. Esta idea es la base de todo lo que vas a construir en el Tema 4 sobre alta disponibilidad: repartir tu aplicación entre dos zonas en vez de dejarla en una sola.</li>
 <li><strong>Ubicación de borde</strong> (<em>Edge Location</em>): puntos mucho más numerosos y repartidos, pensados no para ejecutar tu aplicación entera, sino para acercar contenido al usuario final — una copia en caché cerca de donde vive, para que no tenga que viajar hasta la región. Los volverás a ver en el Tema 4, cuando publiques una aplicación detrás de una CDN.</li>
 </ul>
-<pre class="mermaid"><code>flowchart TD
-    R["🌍 Región&lt;br/&gt;ej. Norte de Virginia"] --&gt; AZa["🏢 Zona A&lt;br/&gt;centro de datos independiente"]
-    R --&gt; AZb["🏢 Zona B&lt;br/&gt;centro de datos independiente"]
-    R --&gt; AZc["🏢 Zona C&lt;br/&gt;centro de datos independiente"]
-    R -.-&gt; E["📡 Ubicaciones de borde&lt;br/&gt;muchas más, cerca del usuario"]</code></pre>
+<p><img alt="Infraestructura global de AWS: región, zonas de disponibilidad y ubicaciones de borde" src="../img/diagrama_infraestructura_global.png"></p>
 <div class="admonition info">
 <p class="admonition-title">¿Por qué te importa esto ya, si hoy solo publicas un front estático?</p>
 <p>Porque el propio bucket de S3 que vas a crear hoy vive en una región concreta, y la URL pública que te va a dar depende de esa región. No hace falta que hoy elijas nada de esto de forma consciente — el Learner Lab ya trae una región fijada —, pero vas a volver a esta idea cada sesión: "¿en qué región estoy, y qué significa eso para la disponibilidad de lo que estoy construyendo?".</p>
@@ -2672,6 +2668,7 @@
 </tr>
 </tbody>
 </table>
+<p><img alt="Modelo de responsabilidad compartida de AWS" src="../img/diagrama_responsabilidad_compartida.png"></p>
 <p>La frontera no es fija: en una máquina virtual (IaaS) tú respondes del sistema operativo y de todo lo que instalas dentro; en un servicio totalmente gestionado, AWS asume buena parte de eso. Pero hay una cosa que <strong>nunca</strong> deja de ser tuya, sea cual sea el servicio: la configuración de acceso a tus propios datos. Un bucket de S3 abierto al mundo entero no es un fallo de AWS — es una decisión de configuración, y esa decisión es tuya.</p>
 <div class="admonition example">
 <p class="admonition-title">Seis incidentes, ¿de quién es la culpa?</p>

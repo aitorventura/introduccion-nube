@@ -2650,7 +2650,8 @@
 <p><strong>Comprueba</strong>: que el número de cuenta y el resultado del listado de buckets coinciden entre CLI y consola.</p>
 <p><strong>Captura</strong>: tu propio menú de identidad en la consola, con tu número de cuenta visible, y la salida de <code>aws sts get-caller-identity</code> en tu terminal.</p>
 <h3 id="paso-3-crea-y-configura-el-bucket-desde-la-consola">Paso 3 — Crea y configura el bucket desde la consola<a class="headerlink" href="#paso-3-crea-y-configura-el-bucket-desde-la-consola" title="Permanent link">¶</a></h3>
-<p>Esta es la primera vez que tocas S3, así que hazlo desde la consola, paso a paso, sin saltarte ninguna pantalla:</p>
+<p>Esta es la primera vez que tocas S3, así que hazlo desde la consola, paso a paso, sin saltarte ninguna pantalla. Esto es lo que vas a tener montado al terminar el paso:</p>
+<p><img alt="El Manillar — sitio estático publicado en S3" src="../img/diagrama_s3_estatico.png"></p>
 <ol>
 <li>Dentro del servicio S3, haz clic en <strong>Crear bucket</strong>.</li>
 <li>Deja la región que te indique el Learner Lab.</li>
@@ -2774,7 +2775,7 @@
 </tr>
 <tr>
 <td>Front de El Manillar publicado y accesible desde internet</td>
-<td>2</td>
+<td>3</td>
 </tr>
 <tr>
 <td>Control del gasto del laboratorio identificado y documentado</td>
@@ -2782,10 +2783,6 @@
 </tr>
 <tr>
 <td>Reflexión sobre responsabilidad compartida razonada</td>
-<td>1</td>
-</tr>
-<tr>
-<td>Documentación en el repositorio</td>
 <td>1</td>
 </tr>
 </tbody>
@@ -2815,7 +2812,11 @@
 </table>
 <hr>
 <h2 id="cierre">✅ Cierre<a class="headerlink" href="#cierre" title="Permanent link">¶</a></h2>
-<p>Ya tienes algo tuyo publicado en internet, con una dirección propia, y sabes distinguir qué parte de lo que acabas de montar depende de AWS y qué parte depende de ti. La próxima sesión cambias de escenario y empiezas a diseñar redes virtuales desde cero.</p></div>
+<p>Ya tienes algo tuyo publicado en internet, con una dirección propia, y sabes distinguir qué parte de lo que acabas de montar depende de AWS y qué parte depende de ti. La próxima sesión cambias de escenario y empiezas a diseñar redes virtuales desde cero.</p>
+<div class="admonition tip">
+<p class="admonition-title">Antes de salir: valora si sigues necesitando el bucket</p>
+<p>Nada del resto del módulo depende de que <code>el-manillar-front-&lt;tu-identificador&gt;</code> siga existiendo. Su coste es prácticamente nulo (cuatro ficheros diminutos), así que no es urgente, pero es buena costumbre no dejar recursos públicos abiertos sin necesidad — si quieres borrarlo, primero tienes que vaciarlo de objetos (S3 no deja borrar un bucket con contenido dentro).</p>
+</div></div>
 
 
 

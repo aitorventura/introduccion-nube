@@ -2653,11 +2653,7 @@
 </tr>
 <tr>
 <td>Reparto de tráfico comprobado con evidencia real</td>
-<td>1</td>
-</tr>
-<tr>
-<td>Documentación en el repositorio</td>
-<td>1</td>
+<td>2</td>
 </tr>
 </tbody>
 </table>
@@ -2682,7 +2678,11 @@
 </table>
 <hr>
 <h2 id="cierre">✅ Cierre<a class="headerlink" href="#cierre" title="Permanent link">¶</a></h2>
-<p>Encuestas en Vivo ya no depende de una única instancia: si una cae, el grupo repone otra sin que nadie tenga que intervenir, y si sube el tráfico durante el evento, el sistema escala dentro de los límites que has definido. La próxima sesión resuelves el siguiente punto débil de esta misma arquitectura: el dominio y el certificado, que hasta ahora siguen dependiendo de una URL genérica de AWS sin HTTPS propio.</p></div>
+<p>Encuestas en Vivo ya no depende de una única instancia: si una cae, el grupo repone otra sin que nadie tenga que intervenir, y si sube el tráfico durante el evento, el sistema escala dentro de los límites que has definido. La próxima sesión resuelves el siguiente punto débil de esta misma arquitectura: el dominio y el certificado, que hasta ahora siguen dependiendo de una URL genérica de AWS sin HTTPS propio.</p>
+<div class="admonition warning">
+<p class="admonition-title">No apagues nada todavía</p>
+<p>A diferencia del resto de actividades del módulo, hoy <strong>no</strong> termines el balanceador de carga ni el grupo de escalado al salir — la Actividad 4.2 de la próxima sesión los necesita en marcha, con sus instancias respondiendo. Es la única excepción del módulo: normalmente el cierre te pide apagar lo que no vayas a necesitar más, pero aquí es justo lo contrario. La limpieza de estos recursos llega al final de la 4.2.</p>
+</div></div>
 
 
 

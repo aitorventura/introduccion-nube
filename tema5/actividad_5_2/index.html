@@ -2585,7 +2585,7 @@
 <hr>
 <h2 id="parte-b-politicas-mal-escritas-y-auditoria-real-reto">Parte B — Políticas mal escritas y auditoría real (reto)<a class="headerlink" href="#parte-b-politicas-mal-escritas-y-auditoria-real-reto" title="Permanent link">¶</a></h2>
 <p><strong>Corrige cinco políticas sin ayuda paso a paso.</strong> El profesor te entrega cinco políticas IAM con errores reales (comodines de más, recursos completamente abiertos, permisos de escritura donde solo hacía falta lectura). Para cada una: <strong>antes de tocar nada</strong>, predice por escrito qué acceso de más está concediendo la política tal como está. Después, usa el simulador de políticas de IAM para comprobar tu predicción contra una acción concreta, y corrige la política al mínimo privilegio real que necesita.</p>
-<p><strong>Confirma que la base de datos sigue sin credenciales en el código.</strong> Inventario lee su credencial de base de datos desde una variable de entorno de la instancia (<code>DB_PASSWORD</code>), simulando que llega inyectada desde Secrets Manager. Comprueba la ruta <code>/estado-bd</code> de la aplicación, revisa el código de <code>app.py</code> para confirmar que ningún valor de contraseña aparece escrito en él, y verifica que la variable tampoco ha aparecido nunca en texto plano en ningún commit del repositorio.</p>
+<p><strong>Confirma que la base de datos sigue sin credenciales en el código.</strong> Inventario lee su credencial de base de datos desde una variable de entorno de la instancia (<code>DB_PASSWORD</code>), simulando que llega inyectada desde Secrets Manager. Comprueba la ruta <code>/estado-bd</code> de la aplicación, y revisa el código de <code>app.py</code> para confirmar que ningún valor de contraseña aparece escrito en él.</p>
 <p><strong>Localiza en el registro de auditoría quién hizo qué.</strong> Activa (o revisa, si ya estaba activo) el registro de eventos de CloudTrail de tu cuenta, y busca en él la corrección de la incidencia que hiciste en la Actividad 5.1: ¿qué llamada a la API queda registrada como el momento exacto en que corregiste el problema?</p>
 <p><strong>Comprueba</strong>: que cada política corregida sigue permitiendo lo que la aplicación necesita de verdad (no la has dejado tan restrictiva que rompe algo), y que localizas el evento de auditoría exacto de la incidencia anterior, no una búsqueda aproximada.</p>
 <p><strong>Captura</strong>: tus cinco predicciones escritas antes de usar el simulador, junto con el resultado real del simulador para cada una; las políticas corregidas; el evento de CloudTrail localizado con su marca de tiempo.</p>
@@ -2602,15 +2602,11 @@
 <tbody>
 <tr>
 <td>Instancia de Inventario desplegada, con la aplicación funcionando</td>
-<td>1</td>
+<td>2</td>
 </tr>
 <tr>
 <td>Rol preasignado adjuntado y acceso a S3 verificado sin credenciales propias</td>
 <td>5</td>
-</tr>
-<tr>
-<td>Documentación en el repositorio</td>
-<td>1</td>
 </tr>
 </tbody>
 </table>
@@ -2635,7 +2631,11 @@
 </table>
 <hr>
 <h2 id="cierre">✅ Cierre<a class="headerlink" href="#cierre" title="Permanent link">¶</a></h2>
-<p>Ya sabes leer una política IAM sin que te intimide el JSON, y sabes que "sin credenciales en el código" no es un eslogan — es algo que puedes verificar de verdad, dentro y fuera de la instancia. La próxima sesión cierras el tema del gobierno de la nube con una pregunta distinta: cuánto cuesta de verdad una arquitectura en la nube, con números reales y no una estimación de memoria.</p></div>
+<p>Ya sabes leer una política IAM sin que te intimide el JSON, y sabes que "sin credenciales en el código" no es un eslogan — es algo que puedes verificar de verdad, dentro y fuera de la instancia. La próxima sesión cierras el tema del gobierno de la nube con una pregunta distinta: cuánto cuesta de verdad una arquitectura en la nube, con números reales y no una estimación de memoria.</p>
+<div class="admonition danger">
+<p class="admonition-title">Antes de salir: borra la instancia de Inventario</p>
+<p>Termina la instancia (<code>inventario-...</code>) — no le sirve a ninguna actividad posterior. El bucket de S3 puedes dejarlo o vaciarlo y borrarlo, su coste es prácticamente nulo.</p>
+</div></div>
 
 
 

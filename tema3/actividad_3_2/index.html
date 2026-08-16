@@ -2568,8 +2568,8 @@
 </code></pre></div></td></tr></table></div>
 <p><img alt="La aplicación mostrando el catálogo de libros con datos reales servidos desde RDS" src="img/actividad_3_2_paso2.png">
 <em>🖼️ Captura de referencia del profesor — guardar como <code>img/actividad_3_2_paso2.png</code></em></p>
-<p><strong>Comprueba</strong>: que la aplicación muestra datos que vienen de la base de datos, y que en ningún fichero del repositorio aparece la contraseña en texto plano.</p>
-<p><strong>Captura</strong>: tu propia aplicación mostrando el catálogo de libros con datos reales de RDS, y un <code>grep</code> sobre el repositorio que no encuentra ninguna credencial en texto plano.</p>
+<p><strong>Comprueba</strong>: que la aplicación muestra datos que vienen de la base de datos, y que en ningún fichero de la aplicación aparece la contraseña en texto plano.</p>
+<p><strong>Captura</strong>: tu propia aplicación mostrando el catálogo de libros con datos reales de RDS, y un <code>grep</code> sobre los ficheros de la aplicación que no encuentra ninguna credencial en texto plano.</p>
 <div class="admonition question">
 <p class="admonition-title">Reflexiona</p>
 <p>Si mañana cambia la contraseña de la base de datos (por ejemplo, por rotación automática), ¿qué parte de tu configuración tendrías que tocar para que la aplicación siga funcionando? Compáralo con lo que habría pasado si la contraseña estuviera escrita directamente en el código.</p>
@@ -2602,11 +2602,7 @@
 </tr>
 <tr>
 <td>Aplicación conectada sin credenciales en el código</td>
-<td>3</td>
-</tr>
-<tr>
-<td>Documentación en el repositorio</td>
-<td>1</td>
+<td>4</td>
 </tr>
 </tbody>
 </table>
@@ -2631,7 +2627,11 @@
 </table>
 <hr>
 <h2 id="cierre">✅ Cierre<a class="headerlink" href="#cierre" title="Permanent link">¶</a></h2>
-<p>Ya tienes una base de datos gestionada, protegida en subred privada, con sus credenciales fuera de tu código y de tu vista — y sabes exactamente cuánto dura de verdad una conmutación por error, no solo lo que dice la teoría. La próxima sesión despliegas una arquitectura de tres capas completa desde cero: front, aplicación y base de datos trabajando juntas por primera vez.</p></div>
+<p>Ya tienes una base de datos gestionada, protegida en subred privada, con sus credenciales fuera de tu código y de tu vista — y sabes exactamente cuánto dura de verdad una conmutación por error, no solo lo que dice la teoría. La próxima sesión despliegas una arquitectura de tres capas completa desde cero: front, aplicación y base de datos trabajando juntas por primera vez.</p>
+<div class="admonition danger">
+<p class="admonition-title">Antes de salir: borra la base de datos RDS y la instancia de aplicación</p>
+<p>Es el recurso más caro que has creado hoy: una instancia RDS factura por hora exista o no tráfico, y si has activado Multi-AZ en la Parte B, el coste se duplica (pagas también la réplica en espera). Bórrala en cuanto termines (RDS → tu instancia → <strong>Acciones</strong> → <strong>Eliminar</strong> — no hace falta snapshot final, es una base de datos de prueba). Termina también la instancia de aplicación. <strong>No borres la VPC ni las subredes del Tema 2</strong> — las sigue necesitando el resto del módulo.</p>
+</div></div>
 
 
 

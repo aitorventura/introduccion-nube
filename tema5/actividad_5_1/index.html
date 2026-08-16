@@ -2647,15 +2647,11 @@
 </tr>
 <tr>
 <td>Alarmas de CPU y de comprobación de salud configuradas y funcionando</td>
-<td>2</td>
+<td>3</td>
 </tr>
 <tr>
 <td>Gasto acumulado localizado o alarmado, según lo permita el Lab</td>
 <td>2</td>
-</tr>
-<tr>
-<td>Documentación en el repositorio</td>
-<td>1</td>
 </tr>
 </tbody>
 </table>
@@ -2680,7 +2676,11 @@
 </table>
 <hr>
 <h2 id="cierre">✅ Cierre<a class="headerlink" href="#cierre" title="Permanent link">¶</a></h2>
-<p>Ya sabes diagnosticar sin mirar por dentro de una instancia — la habilidad que de verdad importa cuando una arquitectura escala sola y las instancias van y vienen. La próxima sesión te toca la otra mitad de la gobernanza: quién puede tocar qué, y cómo verificarlo antes de que sea un problema.</p></div>
+<p>Ya sabes diagnosticar sin mirar por dentro de una instancia — la habilidad que de verdad importa cuando una arquitectura escala sola y las instancias van y vienen. La próxima sesión te toca la otra mitad de la gobernanza: quién puede tocar qué, y cómo verificarlo antes de que sea un problema.</p>
+<div class="admonition danger">
+<p class="admonition-title">Antes de salir: borra la instancia de Entradas</p>
+<p>Termina la instancia (<code>entradas-...</code>, o la que hayas reutilizado de otra actividad) — no le sirve a ninguna actividad posterior. El panel de CloudWatch y las alarmas no tienen coste por existir, puedes dejarlos tal cual.</p>
+</div></div>
 
 
 
