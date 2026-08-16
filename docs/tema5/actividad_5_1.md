@@ -119,9 +119,8 @@ Documenta tu proceso completo, no solo la conclusión: qué has mirado primero y
 |---|---|
 | Instancia de Entradas desplegada, con la aplicación funcionando | 1 |
 | Panel con las tres métricas de la instancia | 1 |
-| Alarmas de CPU y de comprobación de salud configuradas y funcionando | 2 |
+| Alarmas de CPU y de comprobación de salud configuradas y funcionando | 3 |
 | Gasto acumulado localizado o alarmado, según lo permita el Lab | 2 |
-| Documentación en el repositorio | 1 |
 
 **Parte B — reto, hasta 3 puntos adicionales (máximo total: 10)**
 
@@ -135,3 +134,6 @@ Documenta tu proceso completo, no solo la conclusión: qué has mirado primero y
 ## ✅ Cierre
 
 Ya sabes diagnosticar sin mirar por dentro de una instancia — la habilidad que de verdad importa cuando una arquitectura escala sola y las instancias van y vienen. La próxima sesión te toca la otra mitad de la gobernanza: quién puede tocar qué, y cómo verificarlo antes de que sea un problema.
+
+!!! danger "Antes de salir: borra la instancia de Entradas"
+    Termina la instancia (`entradas-...`, o la que hayas reutilizado de otra actividad) — no le sirve a ninguna actividad posterior. El panel de CloudWatch y las alarmas no tienen coste por existir, puedes dejarlos tal cual.

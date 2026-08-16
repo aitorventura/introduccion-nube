@@ -80,7 +80,7 @@ aws s3 ls s3://<tu-bucket-de-inventario>
 
 **Corrige cinco políticas sin ayuda paso a paso.** El profesor te entrega cinco políticas IAM con errores reales (comodines de más, recursos completamente abiertos, permisos de escritura donde solo hacía falta lectura). Para cada una: **antes de tocar nada**, predice por escrito qué acceso de más está concediendo la política tal como está. Después, usa el simulador de políticas de IAM para comprobar tu predicción contra una acción concreta, y corrige la política al mínimo privilegio real que necesita.
 
-**Confirma que la base de datos sigue sin credenciales en el código.** Inventario lee su credencial de base de datos desde una variable de entorno de la instancia (`DB_PASSWORD`), simulando que llega inyectada desde Secrets Manager. Comprueba la ruta `/estado-bd` de la aplicación, revisa el código de `app.py` para confirmar que ningún valor de contraseña aparece escrito en él, y verifica que la variable tampoco ha aparecido nunca en texto plano en ningún commit del repositorio.
+**Confirma que la base de datos sigue sin credenciales en el código.** Inventario lee su credencial de base de datos desde una variable de entorno de la instancia (`DB_PASSWORD`), simulando que llega inyectada desde Secrets Manager. Comprueba la ruta `/estado-bd` de la aplicación, y revisa el código de `app.py` para confirmar que ningún valor de contraseña aparece escrito en él.
 
 **Localiza en el registro de auditoría quién hizo qué.** Activa (o revisa, si ya estaba activo) el registro de eventos de CloudTrail de tu cuenta, y busca en él la corrección de la incidencia que hiciste en la Actividad 5.1: ¿qué llamada a la API queda registrada como el momento exacto en que corregiste el problema?
 
@@ -96,9 +96,8 @@ aws s3 ls s3://<tu-bucket-de-inventario>
 
 | Apartado | Puntos |
 |---|---|
-| Instancia de Inventario desplegada, con la aplicación funcionando | 1 |
+| Instancia de Inventario desplegada, con la aplicación funcionando | 2 |
 | Rol preasignado adjuntado y acceso a S3 verificado sin credenciales propias | 5 |
-| Documentación en el repositorio | 1 |
 
 **Parte B — reto, hasta 3 puntos adicionales (máximo total: 10)**
 
@@ -112,3 +111,6 @@ aws s3 ls s3://<tu-bucket-de-inventario>
 ## ✅ Cierre
 
 Ya sabes leer una política IAM sin que te intimide el JSON, y sabes que "sin credenciales en el código" no es un eslogan — es algo que puedes verificar de verdad, dentro y fuera de la instancia. La próxima sesión cierras el tema del gobierno de la nube con una pregunta distinta: cuánto cuesta de verdad una arquitectura en la nube, con números reales y no una estimación de memoria.
+
+!!! danger "Antes de salir: borra la instancia de Inventario"
+    Termina la instancia (`inventario-...`) — no le sirve a ninguna actividad posterior. El bucket de S3 puedes dejarlo o vaciarlo y borrarlo, su coste es prácticamente nulo.

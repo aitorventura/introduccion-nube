@@ -105,7 +105,9 @@ Y por consola: en el buscador de servicios de la parte superior, escribe "S3" y 
 
 ### Paso 3 — Crea y configura el bucket desde la consola
 
-Esta es la primera vez que tocas S3, así que hazlo desde la consola, paso a paso, sin saltarte ninguna pantalla:
+Esta es la primera vez que tocas S3, así que hazlo desde la consola, paso a paso, sin saltarte ninguna pantalla. Esto es lo que vas a tener montado al terminar el paso:
+
+![El Manillar — sitio estático publicado en S3](img/diagrama_s3_estatico.png)
 
 1. Dentro del servicio S3, haz clic en **Crear bucket**.
 2. Deja la región que te indique el Learner Lab.
@@ -234,10 +236,9 @@ Después, aplica el mismo criterio a seis incidentes nuevos — distintos a los 
 | Apartado | Puntos |
 |---|---|
 | Recorrido por consola y CLI documentado (mismas operaciones, ambos caminos) | 1 |
-| Front de El Manillar publicado y accesible desde internet | 2 |
+| Front de El Manillar publicado y accesible desde internet | 3 |
 | Control del gasto del laboratorio identificado y documentado | 2 |
 | Reflexión sobre responsabilidad compartida razonada | 1 |
-| Documentación en el repositorio | 1 |
 
 **Parte B — reto, hasta 3 puntos adicionales (máximo total: 10)**
 
@@ -252,3 +253,6 @@ Después, aplica el mismo criterio a seis incidentes nuevos — distintos a los 
 ## ✅ Cierre
 
 Ya tienes algo tuyo publicado en internet, con una dirección propia, y sabes distinguir qué parte de lo que acabas de montar depende de AWS y qué parte depende de ti. La próxima sesión cambias de escenario y empiezas a diseñar redes virtuales desde cero.
+
+!!! tip "Antes de salir: valora si sigues necesitando el bucket"
+    Nada del resto del módulo depende de que `el-manillar-front-<tu-identificador>` siga existiendo. Su coste es prácticamente nulo (cuatro ficheros diminutos), así que no es urgente, pero es buena costumbre no dejar recursos públicos abiertos sin necesidad — si quieres borrarlo, primero tienes que vaciarlo de objetos (S3 no deja borrar un bucket con contenido dentro).

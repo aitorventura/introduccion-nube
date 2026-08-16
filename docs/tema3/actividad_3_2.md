@@ -69,9 +69,9 @@ aws secretsmanager get-secret-value --secret-id <nombre-del-secreto> --query Sec
 ![La aplicación mostrando el catálogo de libros con datos reales servidos desde RDS](img/actividad_3_2_paso2.png)
 *🖼️ Captura de referencia del profesor — guardar como `img/actividad_3_2_paso2.png`*
 
-**Comprueba**: que la aplicación muestra datos que vienen de la base de datos, y que en ningún fichero del repositorio aparece la contraseña en texto plano.
+**Comprueba**: que la aplicación muestra datos que vienen de la base de datos, y que en ningún fichero de la aplicación aparece la contraseña en texto plano.
 
-**Captura**: tu propia aplicación mostrando el catálogo de libros con datos reales de RDS, y un `grep` sobre el repositorio que no encuentra ninguna credencial en texto plano.
+**Captura**: tu propia aplicación mostrando el catálogo de libros con datos reales de RDS, y un `grep` sobre los ficheros de la aplicación que no encuentra ninguna credencial en texto plano.
 
 !!! question "Reflexiona"
     Si mañana cambia la contraseña de la base de datos (por ejemplo, por rotación automática), ¿qué parte de tu configuración tendrías que tocar para que la aplicación siga funcionando? Compáralo con lo que habría pasado si la contraseña estuviera escrita directamente en el código.
@@ -101,8 +101,7 @@ aws secretsmanager get-secret-value --secret-id <nombre-del-secreto> --query Sec
 | Apartado | Puntos |
 |---|---|
 | RDS creada en subred privada, credenciales por Secrets Manager | 3 |
-| Aplicación conectada sin credenciales en el código | 3 |
-| Documentación en el repositorio | 1 |
+| Aplicación conectada sin credenciales en el código | 4 |
 
 **Parte B — reto, hasta 3 puntos adicionales (máximo total: 10)**
 
@@ -116,3 +115,6 @@ aws secretsmanager get-secret-value --secret-id <nombre-del-secreto> --query Sec
 ## ✅ Cierre
 
 Ya tienes una base de datos gestionada, protegida en subred privada, con sus credenciales fuera de tu código y de tu vista — y sabes exactamente cuánto dura de verdad una conmutación por error, no solo lo que dice la teoría. La próxima sesión despliegas una arquitectura de tres capas completa desde cero: front, aplicación y base de datos trabajando juntas por primera vez.
+
+!!! danger "Antes de salir: borra la base de datos RDS y la instancia de aplicación"
+    Es el recurso más caro que has creado hoy: una instancia RDS factura por hora exista o no tráfico, y si has activado Multi-AZ en la Parte B, el coste se duplica (pagas también la réplica en espera). Bórrala en cuanto termines (RDS → tu instancia → **Acciones** → **Eliminar** — no hace falta snapshot final, es una base de datos de prueba). Termina también la instancia de aplicación. **No borres la VPC ni las subredes del Tema 2** — las sigue necesitando el resto del módulo.

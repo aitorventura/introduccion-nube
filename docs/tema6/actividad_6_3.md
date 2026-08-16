@@ -104,3 +104,6 @@ El código fuente del contador de asistencia, versión 1 y versión 2 (cada carp
 ## ✅ Cierre
 
 Has ejecutado una aplicación de tres formas distintas a lo largo de este tema, y tienes datos propios —no solo teoría— para decidir cuál encaja mejor en cada situación. Con esto se cierra el Tema 6. En el Tema 7, la última sesión del módulo, das un paso atrás y auditas todo lo que has construido con un marco de referencia real.
+
+!!! danger "Antes de salir: para el servicio de ECS"
+    Cada tarea de Fargate factura por hora mientras esté en marcha, y si has hecho la Parte B tienes varias a la vez. Baja a 0 el número de tareas deseadas del servicio (o borra directamente el servicio y el clúster) en cuanto termines — no le sirve a ninguna actividad posterior. El repositorio ECR con las imágenes apenas cuesta nada, puedes dejarlo.

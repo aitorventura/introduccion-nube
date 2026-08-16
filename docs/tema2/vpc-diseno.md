@@ -4,7 +4,7 @@
 
 ---
 
-La sesión pasada publicaste un front estático en S3 y quedó accesible para cualquiera, sin que tuvieras que pensar en redes para nada — S3 ya trae su propia conectividad incluida. Eso se acaba hoy. A partir de ahora vas a alojar piezas que **no** deben ser accesibles para cualquiera: la base de datos, y más adelante la propia aplicación por dentro. Antes de lanzar ninguna máquina necesitas construir el terreno donde va a vivir todo eso — tu propia red privada dentro de AWS, con zonas que sí hablan con internet y zonas que no. Hoy la diseñas en papel y la levantas en consola; en la Actividad 2.1 la construyes tú mismo, de dos zonas, siguiendo tu propio diseño.
+El front que publicaste la sesión pasada no necesitó ni una decisión de red: S3 ya viene con su propia conectividad puesta. Eso ha sido la excepción, no la norma. Casi todo lo demás que vas a construir en este módulo va a vivir dentro de un espacio con reglas propias, con partes abiertas a internet y partes que no lo están nunca. Hoy diseñas ese espacio: primero en papel, después en consola, repartido en dos zonas de disponibilidad. En la Actividad 2.1 lo construyes tú mismo, siguiendo tu propio diseño.
 
 ---
 
@@ -32,30 +32,36 @@ Cada máquina conectada a una red necesita una **dirección IP**: un número que
 !!! example "De la VPC a la subred, con números reales"
     Si tu VPC es `10.0.0.0/16`, tienes 65.536 direcciones para repartir. Si divides ese rango en subredes `/24`, obtienes 256 subredes de 256 direcciones cada una: `10.0.0.0/24`, `10.0.1.0/24`, `10.0.2.0/24`... Con solo dos o tres de esas subredes ya te sobra espacio para todo lo que vas a construir en el módulo.
 
-No necesitas usar las 256 subredes posibles — con cuatro o seis te sobra para todo el curso. Lo importante es que el reparto quede documentado: en la Actividad 2.1 vas a diseñar sobre papel qué subred es cuál *antes* de crear nada en consola, exactamente igual que un plano se dibuja antes de levantar la primera pared.
+No necesitas usar las 256 subredes posibles — con cuatro o seis te sobra para todo el curso. Mientras cada subred use un rango distinto —incrementando el tercer octeto, como en el ejemplo de arriba— no se solapan entre sí; el error típico es repetir sin darte cuenta el mismo rango en dos subredes. Lo importante es que el reparto quede documentado: en la Actividad 2.1 vas a diseñar sobre papel qué subred es cuál *antes* de crear nada en consola, exactamente igual que un plano se dibuja antes de levantar la primera pared.
 
 ---
 
 ## 🔧 Subredes públicas y privadas
 
-Dentro de la VPC no todas las subredes tienen el mismo papel. La diferencia entre una **subred pública** y una **subred privada** no está en ningún atributo especial que actives al crearla — está en si tiene o no un camino de salida directo a internet, algo que defines con la tabla de rutas de la siguiente sección.
+Dentro de la VPC no todas las subredes tienen el mismo papel. Piensa en un edificio de oficinas: la recepción tiene puerta directa a la calle, cualquiera entra sin pedir permiso; la sala de servidores está en el sótano, y solo se llega a ella pasando antes por dentro del edificio. Una **subred pública** y una **subred privada** son exactamente eso — la diferencia no es ningún interruptor especial que actives al crearlas, es simplemente si tienen puerta a internet o no. Esa "puerta" se define con la tabla de rutas, que ves en la siguiente sección.
 
 ```mermaid
 flowchart TB
     subgraph VPC["🏗️ VPC 10.0.0.0/16"]
         subgraph Pub["🌐 Subred pública"]
-            EC2["Instancia con IP pública"]
+            EC2["Recurso con IP pública"]
         end
         subgraph Priv["🔒 Subred privada"]
             DB["Base de datos"]
         end
     end
     Internet(("🌍 Internet")) <--> Pub
-    Pub --> Priv
+    Pub <--> Priv
     Internet -.->|❌| Priv
 ```
 
-Fíjate en la flecha tachada del diagrama: internet nunca llega directamente a la subred privada. Solo lo que ya está dentro de la VPC —como la instancia de la subred pública— puede alcanzarla. Esa asimetría es intencionada, y es la razón de ser de todo lo que viene a continuación.
+Fíjate en la flecha tachada del diagrama: internet nunca llega directamente a la subred privada. Solo lo que ya está dentro de la VPC —como el recurso de la subred pública— puede alcanzarla. Esa asimetría es intencionada, y es la razón de ser de todo lo que viene a continuación.
+
+El diagrama de arriba solo dibuja una subred de cada tipo para no complicarlo, pero en la Actividad 2.1 vas a repartir pública y privada en **dos zonas de disponibilidad** distintas, no en una sola — el mismo patrón, repetido dos veces:
+
+![VPC con subredes públicas y privadas en dos zonas de disponibilidad](img/diagrama_vpc_dos_zonas.png)
+
+Es la misma redundancia que viste en el Tema 1: si una zona entera se cae por un fallo eléctrico o de red, la otra sigue funcionando. Diseñar la VPC pensando en dos zonas desde el primer día sale mucho más barato que añadir la segunda más adelante, cuando ya tengas media aplicación construida encima de la primera.
 
 ---
 
@@ -70,7 +76,9 @@ Lo que convierte a una subred en pública es una combinación de dos piezas: una
 | Tabla de rutas sin esa entrada | El tráfico externo no tiene adónde ir | Así es exactamente como se define una subred privada |
 
 !!! warning "El error más común de la sesión de hoy"
-    Una subred no es pública "porque tú la llamaste así" — lo es porque su tabla de rutas apunta a la pasarela. Es habitual crear una instancia, asignarle una IP pública y esperar que funcione, y que no responda porque la subred donde vive sigue apuntando a ninguna parte. Vas a diagnosticar justo este fallo en la Actividad 2.2 de la próxima sesión.
+    Una subred no es pública "porque tú la llamaste así" — lo es porque su tabla de rutas apunta a la pasarela. Es habitual crear un recurso, asignarle una IP pública y esperar que funcione, y que no responda porque la subred donde vive sigue apuntando a ninguna parte. Vas a diagnosticar justo este fallo en la Actividad 2.2 de la próxima sesión.
+
+La ruta no es la única pieza que decide si algo responde o no, aunque hoy sea la única que vas a tocar. La próxima sesión añades una capa más —los **grupos de seguridad**, una especie de portero que decide quién entra aunque la puerta (la ruta) esté abierta— capaz de bloquear tráfico incluso con la tabla de rutas perfecta. Todavía no los necesitas para la actividad de hoy, pero ya puedes intuir que "no me llega tráfico" tiene más de una causa posible: la ruta, o quién tiene permiso para pasar por ella.
 
 ---
 

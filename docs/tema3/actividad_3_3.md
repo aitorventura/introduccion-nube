@@ -112,8 +112,7 @@ No hay pasos guiados para esta parte: el reto es producir tres entregables reale
 | Apartado | Puntos |
 |---|---|
 | Base de datos creada y backend conectado de verdad, sin credenciales en el código | 3 |
-| Front estático publicado y mostrando reseñas reales a través del backend | 3 |
-| Documentación en el repositorio | 1 |
+| Front estático publicado y mostrando reseñas reales a través del backend | 4 |
 
 **Parte B — reto, hasta 3 puntos adicionales (máximo total: 10)**
 
@@ -128,3 +127,6 @@ No hay pasos guiados para esta parte: el reto es producir tres entregables reale
 ## ✅ Cierre
 
 Has desplegado una arquitectura de tres capas completa en una sola sesión, con sus tres capas separadas y su base de datos protegida — y tienes en la mano la lista de puntos únicos de fallo que va a marcar el resto del módulo. Con esto se cierra el Tema 3. En el Tema 4 empiezas a resolver esa lista: el primer punto único de fallo que vas a eliminar es que toda la aplicación depende de una única instancia.
+
+!!! danger "Antes de salir: borra la base de datos RDS y la instancia backend"
+    Igual que en la Actividad 3.2, la instancia RDS es lo que más factura por hora — bórrala en cuanto termines. Termina también la instancia backend. El bucket del front puedes dejarlo o vaciarlo y borrarlo, su coste es prácticamente nulo. **No borres la VPC ni las subredes del Tema 2** — las sigue necesitando el resto del módulo.

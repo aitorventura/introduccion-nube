@@ -101,9 +101,8 @@ Después, estima el coste mensual de ambas opciones para dos volúmenes de tráf
 | Apartado | Puntos |
 |---|---|
 | Función creada y disparador de S3 configurado correctamente | 3 |
-| Miniatura generada automáticamente, sin intervención manual | 2 |
+| Miniatura generada automáticamente, sin intervención manual | 3 |
 | Metadatos registrados correctamente | 1 |
-| Documentación en el repositorio | 1 |
 
 **Parte B — reto, hasta 3 puntos adicionales (máximo total: 10)**
 
@@ -117,3 +116,6 @@ Después, estima el coste mensual de ambas opciones para dos volúmenes de tráf
 ## ✅ Cierre
 
 Ya tienes procesamiento de imágenes que se dispara solo, sin ningún servidor que administres, y sabes con datos propios cuándo compensa serverless y cuándo no. La próxima sesión ves la tercera forma de ejecutar una aplicación: contenedores, sin servidor que gestionar pero sin el modelo de eventos de hoy.
+
+!!! tip "Antes de salir: borra la instancia de comparación, si la has creado"
+    Si has hecho la Parte B, termina la instancia que desplegaste para comparar su latencia con la función Lambda — es lo único de esta actividad con coste por hora. La función, el bucket y la pasarela API no cuestan nada por existir sin tráfico, puedes dejarlos.

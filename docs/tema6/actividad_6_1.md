@@ -119,9 +119,8 @@ terraform apply
 | Apartado | Puntos |
 |---|---|
 | Módulo leído y entendido, descripción correcta antes de ejecutar | 2 |
-| Aplicado correctamente, con plan revisado antes de cada cambio | 3 |
+| Aplicado correctamente, con plan revisado antes de cada cambio | 4 |
 | Subred añadida por código, sin tocar recursos existentes | 1 |
-| Documentación en el repositorio | 1 |
 
 **Parte B — reto, hasta 3 puntos adicionales (máximo total: 10)**
 
@@ -135,3 +134,6 @@ terraform apply
 ## ✅ Cierre
 
 Ya sabes leer, modificar y reconstruir infraestructura completa desde código, con un plan que revisas antes de aplicar cualquier cambio — y has medido con tus propios números cuánto se gana en tiempo y en trazabilidad frente a montarlo a mano. La próxima sesión subes un peldaño más en la escalera de responsabilidad: dejas de gestionar instancias del todo, y ejecutas código sin ningún servidor que tú administres.
+
+!!! danger "Antes de salir: destruye toda la infraestructura con Terraform"
+    Es la limpieza más fácil de todo el módulo, porque ya la tienes automatizada: ejecuta `terraform destroy` en cada entorno que hayas desplegado (el módulo original del Paso 2, y si has hecho la Parte B, también `dev` y `prod`) — confirma cuando te lo pida, igual que hiciste con `apply`. No dejes ninguno a medias: recuerda que la propia actividad te pedía comprobar que no queda ningún recurso huérfano tras destruir y reconstruir.
