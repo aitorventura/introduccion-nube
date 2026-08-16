@@ -120,8 +120,7 @@ Consulta la página principal (`/`) de Encuestas en Vivo a través de la URL del
 | Plantilla de lanzamiento propia, con user data funcionando | 1 |
 | Balanceador y grupo de destino configurados con comprobación de salud | 2 |
 | Grupo de escalado automático funcionando con dos instancias en dos zonas | 2 |
-| Reparto de tráfico comprobado con evidencia real | 1 |
-| Documentación en el repositorio | 1 |
+| Reparto de tráfico comprobado con evidencia real | 2 |
 
 **Parte B — reto, hasta 3 puntos adicionales (máximo total: 10)**
 
@@ -135,3 +134,6 @@ Consulta la página principal (`/`) de Encuestas en Vivo a través de la URL del
 ## ✅ Cierre
 
 Encuestas en Vivo ya no depende de una única instancia: si una cae, el grupo repone otra sin que nadie tenga que intervenir, y si sube el tráfico durante el evento, el sistema escala dentro de los límites que has definido. La próxima sesión resuelves el siguiente punto débil de esta misma arquitectura: el dominio y el certificado, que hasta ahora siguen dependiendo de una URL genérica de AWS sin HTTPS propio.
+
+!!! warning "No apagues nada todavía"
+    A diferencia del resto de actividades del módulo, hoy **no** termines el balanceador de carga ni el grupo de escalado al salir — la Actividad 4.2 de la próxima sesión los necesita en marcha, con sus instancias respondiendo. Es la única excepción del módulo: normalmente el cierre te pide apagar lo que no vayas a necesitar más, pero aquí es justo lo contrario. La limpieza de estos recursos llega al final de la 4.2.

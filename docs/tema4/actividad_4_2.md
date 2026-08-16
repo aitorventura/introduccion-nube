@@ -104,8 +104,7 @@ Sube el contenido de `recursos/tema4/actividad_4_1/estaticos/` (la página del p
 
 | Apartado | Puntos |
 |---|---|
-| Certificado emitido y HTTPS funcionando sobre subdominio propio | 6 |
-| Documentación en el repositorio | 1 |
+| Certificado emitido y HTTPS funcionando sobre subdominio propio | 7 |
 
 **Parte B — reto, hasta 3 puntos adicionales (máximo total: 10)**
 
@@ -120,3 +119,6 @@ Sube el contenido de `recursos/tema4/actividad_4_1/estaticos/` (la página del p
 ## ✅ Cierre
 
 Encuestas en Vivo ya tiene nombre propio, conexión cifrada de extremo a extremo hasta el borde, y contenido servido cerca de cada asistente en vez de siempre desde la misma región. Con esto se cierra el Tema 4. En el Tema 5 dejas de construir infraestructura nueva por un rato: te toca vigilar lo que ya tienes, controlar quién puede tocarlo, y entender cuánto está costando de verdad.
+
+!!! danger "Antes de salir: borra el balanceador, el grupo de escalado y la CDN"
+    Con esto se cierra el Tema 4, y es el momento de más coste acumulado de todo el módulo si no lo apagas: el balanceador de carga factura por hora, y el grupo de escalado mantiene entre 2 y 4 instancias EC2 encendidas a la vez. Borra primero el grupo de Auto Scaling (termina sus instancias automáticamente), después el grupo de destino y el balanceador. Si has hecho la Parte B, deshabilita y borra también la distribución de CloudFront (tarda varios minutos en desactivarse antes de dejarse borrar) y el bucket de contenido estático. Nada de esto le sirve a ninguna actividad posterior.

@@ -93,8 +93,7 @@ Cuando tengas las cuatro averías resueltas, añade una pasarela NAT a tu VPC (s
 | Apartado | Puntos |
 |---|---|
 | Instancia pública con servidor web automático (user data) y grupo mínimo | 3 |
-| Instancia privada accesible solo desde la pública | 3 |
-| Documentación en el repositorio | 1 |
+| Instancia privada accesible solo desde la pública | 4 |
 
 **Parte B — reto, hasta 3 puntos adicionales (máximo total: 10)**
 
@@ -108,3 +107,6 @@ Cuando tengas las cuatro averías resueltas, añade una pasarela NAT a tu VPC (s
 ## ✅ Cierre
 
 Ya sabes diagnosticar una red de fuera hacia dentro, capa a capa, en vez de cambiar cosas al azar hasta que funcione — es la habilidad que más vas a usar el resto del curso cada vez que algo no responda como esperabas. La próxima sesión dejas de crear instancias a mano, una a una: vas a automatizar su lanzamiento con plantillas, para no repetir este mismo proceso cada vez que necesites una máquina más.
+
+!!! danger "Antes de salir: borra las instancias y la pasarela NAT si la has creado"
+    Termina las dos instancias EC2 de hoy (la pública del tablón y la privada) — la Actividad 2.3 lanza una instancia nueva, no reutiliza estas. Si has hecho la Parte B, borra también la pasarela NAT: es el recurso más caro de toda la sesión, factura por hora exista o no tráfico, y no le sirve a nadie después de hoy. **No borres la VPC, las subredes ni las tablas de rutas** — las sigue necesitando el resto del módulo.

@@ -111,13 +111,7 @@ AWS no es "un centro de datos en algún sitio" — es una infraestructura repart
 - **Zona de disponibilidad** (*Availability Zone*, AZ): dentro de una región hay varias zonas de disponibilidad — en la práctica, varios centros de datos físicamente separados entre sí (con su propia electricidad, refrigeración y conexión de red), pero conectados por fibra de muy baja latencia. Si una zona entera se cae por un fallo eléctrico o una catástrofe local, las demás siguen funcionando. Esta idea es la base de todo lo que vas a construir en el Tema 4 sobre alta disponibilidad: repartir tu aplicación entre dos zonas en vez de dejarla en una sola.
 - **Ubicación de borde** (*Edge Location*): puntos mucho más numerosos y repartidos, pensados no para ejecutar tu aplicación entera, sino para acercar contenido al usuario final — una copia en caché cerca de donde vive, para que no tenga que viajar hasta la región. Los volverás a ver en el Tema 4, cuando publiques una aplicación detrás de una CDN.
 
-```mermaid
-flowchart TD
-    R["🌍 Región<br/>ej. Norte de Virginia"] --> AZa["🏢 Zona A<br/>centro de datos independiente"]
-    R --> AZb["🏢 Zona B<br/>centro de datos independiente"]
-    R --> AZc["🏢 Zona C<br/>centro de datos independiente"]
-    R -.-> E["📡 Ubicaciones de borde<br/>muchas más, cerca del usuario"]
-```
+![Infraestructura global de AWS: región, zonas de disponibilidad y ubicaciones de borde](img/diagrama_infraestructura_global.png)
 
 !!! info "¿Por qué te importa esto ya, si hoy solo publicas un front estático?"
     Porque el propio bucket de S3 que vas a crear hoy vive en una región concreta, y la URL pública que te va a dar depende de esa región. No hace falta que hoy elijas nada de esto de forma consciente — el Learner Lab ya trae una región fijada —, pero vas a volver a esta idea cada sesión: "¿en qué región estoy, y qué significa eso para la disponibilidad de lo que estoy construyendo?".
@@ -133,6 +127,8 @@ Aquí llega la pregunta que de verdad importa cuando delegas infraestructura en 
 | Qué cubre | Centros de datos, hardware físico, red global, virtualización | Tus datos, tu configuración, tus permisos, tu código |
 | Ejemplos | Que un disco físico no falle sin redundancia, que el edificio tenga corriente, que el hipervisor esté parcheado | Que tu bucket de S3 no sea público por error, que tus credenciales no acaben en un repositorio, que actualices el software que tú instalas dentro de una máquina virtual |
 | Cambia según el servicio | — | Cuanto más gestionado es un servicio (recuerda la escalera IaaS→PaaS→SaaS), menos responsabilidad operativa cargas tú |
+
+![Modelo de responsabilidad compartida de AWS](img/diagrama_responsabilidad_compartida.png)
 
 La frontera no es fija: en una máquina virtual (IaaS) tú respondes del sistema operativo y de todo lo que instalas dentro; en un servicio totalmente gestionado, AWS asume buena parte de eso. Pero hay una cosa que **nunca** deja de ser tuya, sea cual sea el servicio: la configuración de acceso a tus propios datos. Un bucket de S3 abierto al mundo entero no es un fallo de AWS — es una decisión de configuración, y esa decisión es tuya.
 

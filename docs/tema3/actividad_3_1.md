@@ -119,8 +119,7 @@ Tres retos, cada uno más exigente que su equivalente de la Parte A. No hay coma
 |---|---|
 | Bucket creado con versionado y ciclo de vida activos | 2 |
 | Disco ampliado por CLI, cambio verificado | 1 |
-| EFS creado y montado desde dos instancias, con fichero compartido visible | 3 |
-| Documentación en el repositorio | 1 |
+| EFS creado y montado desde dos instancias, con fichero compartido visible | 4 |
 
 **Parte B — reto, hasta 3 puntos adicionales (máximo total: 10)**
 
@@ -134,3 +133,6 @@ Tres retos, cada uno más exigente que su equivalente de la Parte A. No hay coma
 ## ✅ Cierre
 
 Ya sabes elegir familia de almacenamiento según el patrón de acceso, no por costumbre, y sabes que ampliar un disco en AWS es solo la mitad del trabajo — la otra mitad vive dentro del sistema operativo. La próxima sesión dejas de guardar datos sueltos: montas una base de datos relacional gestionada, y conectas una aplicación a ella sin escribir ni una sola credencial en el código.
+
+!!! danger "Antes de salir: borra las instancias y el sistema de archivos EFS"
+    Termina las dos instancias del festival, y borra el sistema de archivos EFS — factura por GB almacenado cada mes mientras exista, y no le sirve a ninguna actividad posterior. El bucket de fotos puedes dejarlo o vaciarlo y borrarlo, su coste es prácticamente nulo. **No borres la VPC ni las subredes del Tema 2.**

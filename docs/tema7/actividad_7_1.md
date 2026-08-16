@@ -83,10 +83,9 @@ No hay procedimiento dado: a partir de los tres hallazgos priorizados, diseña y
 
 | Apartado | Puntos |
 |---|---|
-| Auditoría completa de los seis pilares, con hallazgos reales | 3 |
+| Auditoría completa de los seis pilares, con hallazgos reales | 4 |
 | Recomendaciones automáticas consultadas y contrastadas con criterio propio | 2 |
 | Tres hallazgos priorizados con impacto, esfuerzo y justificación | 1 |
-| Documentación en el repositorio | 1 |
 
 **Parte B — reto, hasta 3 puntos adicionales (máximo total: 10)**
 

@@ -86,8 +86,7 @@ Con eso hecho, compara el coste mensual estimado de mantener esta misma carga (u
 | Apartado | Puntos |
 |---|---|
 | App de turnos desplegada automáticamente con user data, puertos mínimos | 3 |
-| Imagen propia creada a partir de la instancia | 3 |
-| Documentación en el repositorio | 1 |
+| Imagen propia creada a partir de la instancia | 4 |
 
 **Parte B — reto, hasta 3 puntos adicionales (máximo total: 10)**
 
@@ -101,3 +100,6 @@ Con eso hecho, compara el coste mensual estimado de mantener esta misma carga (u
 ## ✅ Cierre
 
 Ya tienes una imagen propia y una plantilla parametrizada — puedes lanzar tantas copias idénticas del catálogo como necesites, sin repetir la instalación ni un solo parámetro a mano. Con esto se cierra el Tema 2: tienes la red, la seguridad y las instancias resueltas. En el Tema 3 vas a decidir dónde guardar los datos de verdad — objetos, ficheros compartidos y una base de datos gestionada— y a montar la primera arquitectura completa de tres capas.
+
+!!! danger "Antes de salir: borra las instancias, no la imagen ni la VPC"
+    Termina la instancia del Paso 1 y, si has hecho la Parte B, las dos que has lanzado desde la plantilla — ninguna le sirve a otra actividad después de hoy. Tu AMI propia y la plantilla de lanzamiento puedes dejarlas, apenas tienen coste. **No borres la VPC ni las subredes** — las sigue necesitando el resto del módulo.

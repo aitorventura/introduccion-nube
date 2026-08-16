@@ -91,8 +91,7 @@ No hay procedimiento dado para ninguno de los tres retos siguientes — decide t
 
 | Apartado | Puntos |
 |---|---|
-| Estimación completa de la arquitectura de referencia, desglosada por servicio | 6 |
-| Documentación en el repositorio | 1 |
+| Estimación completa de la arquitectura de referencia, desglosada por servicio | 7 |
 
 **Parte B — reto, hasta 3 puntos adicionales (máximo total: 10)**
 
