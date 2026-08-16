@@ -3,8 +3,11 @@
 !!! warning "Descarga la plantilla"
     📄 [Plantilla 6.3 — Tu imagen, sin servidores](plantillas/Actividad_6_3_INU_Plantilla.docx){target="_blank" rel="noopener"}
 
+!!! warning "Descarga los recursos"
+    📦 [Recursos de la Actividad 6.3](recursos/actividad_6_3_recursos.zip){target="_blank" rel="noopener"} — descomprímelo en la raíz de tu proyecto: crea la carpeta `recursos/tema6/actividad_6_3/`, la misma ruta que usan los pasos de esta actividad.
+
 !!! info "La imagen te la entrega el profesor"
-    Este módulo no cubre cómo se construye una imagen de contenedor desde cero — eso pertenece a otro tipo de formación. El profesor te entrega el código fuente de la aplicación (en `recursos/tema6/actividad_6_3/v1/` y `v2/`, cada una con su `Dockerfile` listo para construir); tu trabajo de hoy es construir la imagen, publicarla y ejecutarla como servicio gestionado.
+    Este módulo no cubre cómo se construye una imagen de contenedor desde cero — eso pertenece a otro tipo de formación. El código fuente de la aplicación (en `recursos/tema6/actividad_6_3/v1/` y `v2/`, cada una con su `Dockerfile` listo para construir) está en el zip que has descargado arriba; tu trabajo de hoy es construir la imagen, publicarla y ejecutarla como servicio gestionado.
 
 ## Contexto
 
@@ -19,7 +22,7 @@ Un evento necesita mostrar en pantalla, en tiempo real, cuántos asistentes se h
 
 ## Requisitos previos
 
-El código fuente del contador de asistencia, versión 1 y versión 2, en `recursos/tema6/actividad_6_3/v1/` y `recursos/tema6/actividad_6_3/v2/` (cada carpeta con su `app.py`, `requirements.txt` y `Dockerfile`). Docker instalado o disponible en tu entorno de trabajo, para construir las imágenes. El apunte de esta sesión — «Contenedores gestionados» (contenedores-gestionados.md).
+El código fuente del contador de asistencia, versión 1 y versión 2 (cada carpeta con su `app.py`, `requirements.txt` y `Dockerfile`) — descárgalo del enlace de arriba. Docker no hace falta instalarlo: tu **CloudShell** (Tema 1) ya lo trae listo, así que vas a construir las imágenes ahí, sin tocar tu ordenador. El apunte de esta sesión — «Contenedores gestionados» (contenedores-gestionados.md).
 
 ---
 
@@ -31,13 +34,15 @@ El código fuente del contador de asistencia, versión 1 y versión 2, en `recur
 2. Dale un nombre (por ejemplo `contador-asistencia-<tu-identificador>`), déjalo privado, y créalo.
 3. En el repositorio recién creado, haz clic en **Ver comandos de inserción** — te da el login y los comandos exactos para tu repositorio concreto.
 
-![Repositorio ECR creado, con el botón de comandos de inserción](img/actividad_6_3_paso1.png)
+    ![Repositorio ECR creado, con el botón de comandos de inserción](img/actividad_6_3_paso1.png)
+    *🖼️ Captura de referencia del profesor — guardar como `img/actividad_6_3_paso1.png`*
 
-4. Desde tu terminal, sitúate en `recursos/tema6/actividad_6_3/v1/` y construye la imagen (`docker build -t contador-asistencia .`).
+4. Desde tu **CloudShell**: sube `actividad_6_3_recursos.zip` con **Actions → Upload file**, descomprímelo (`unzip actividad_6_3_recursos.zip`), sitúate en `recursos/tema6/actividad_6_3/v1/` y construye la imagen (`docker build -t contador-asistencia .`).
 5. Ejecuta el login y sube la imagen construida siguiendo los comandos del paso 3, etiquetándola como versión 1.
 
 **Comprueba**: que la imagen aparece listada en el repositorio, con su etiqueta de versión.
-**Captura**: `img/actividad_6_3_paso1.png`, y el repositorio mostrando la imagen subida.
+
+**Captura**: tu propio repositorio ECR creado, y la imagen subida ya listada con su etiqueta de versión.
 
 ### Paso 2 — Despliega el servicio desde la consola
 
@@ -51,9 +56,11 @@ El código fuente del contador de asistencia, versión 1 y versión 2, en `recur
 8. Configura la red (tu VPC, subred pública) y crea el servicio.
 
 ![Servicio ECS creado, con la tarea en estado running](img/actividad_6_3_paso2.png)
+*🖼️ Captura de referencia del profesor — guardar como `img/actividad_6_3_paso2.png`*
 
 **Comprueba**: que el contador responde en la IP pública de la tarea, mostrando "Asistentes registrados" con el color de la versión 1.
-**Captura**: `img/actividad_6_3_paso2.png`, y el contador respondiendo en el navegador.
+
+**Captura**: tu propio servicio ECS con la tarea en estado `running`, y el contador respondiendo en el navegador.
 
 !!! question "Reflexiona"
     No has tocado ningún sistema operativo, ni elegido un tipo de instancia, para llegar hasta aquí. ¿Qué parte exacta de lo que implicaría gestionar tú mismo una instancia EC2 (elegir la imagen base, parchear el sistema operativo, dimensionarla) ha desaparecido de tu responsabilidad, y qué parte sigue siendo tuya (la definición de tarea, el código de la imagen)?
@@ -69,20 +76,8 @@ El código fuente del contador de asistencia, versión 1 y versión 2, en `recur
 **Construye la tabla comparativa final**: con datos propios de las tres formas de ejecución que has visto en este tema (la instancia de prueba de la Actividad 6.1, la función de la Actividad 6.2, el contenedor de hoy), completa una tabla con cuatro columnas — tiempo de despliegue, coste estimado, esfuerzo operativo, y en qué caso elegirías cada una — y justifica cada celda con lo que has medido de verdad, no con la teoría del apunte.
 
 **Comprueba**: que durante la actualización de versión el contador sigue respondiendo en todo momento, y que la tabla comparativa final tiene una celda de justificación para cada combinación, no solo para las que te resultan obvias.
+
 **Captura**: el servicio escalado con varias tareas; la evidencia de la actualización sin corte (por ejemplo, peticiones continuas durante el despliegue, viendo cómo el color pasa de azul a verde); la tabla comparativa final completa.
-
----
-
-## Verificación
-
-Para dar por válida la práctica se ejecutará:
-
-```bash
-aws ecs describe-services --cluster <tu-cluster> --services <tu-servicio>
-aws ecr describe-images --repository-name contador-asistencia-<tu-identificador>
-```
-
-Y debe observarse: el servicio con el número de tareas deseado en marcha, ambas versiones de la imagen en el registro, y la tabla comparativa completa en el repositorio.
 
 ---
 

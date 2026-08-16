@@ -3,6 +3,9 @@
 !!! warning "Descarga la plantilla"
     📄 [Plantilla 4.2 — Dominio propio y caché en el borde](plantillas/Actividad_4_2_INU_Plantilla.docx){target="_blank" rel="noopener"}
 
+!!! warning "Descarga los recursos"
+    📦 [Recursos de la Actividad 4.1](recursos/actividad_4_1_recursos.zip){target="_blank" rel="noopener"} — hoy reutilizas la subcarpeta `estaticos/` de ese mismo zip; si ya lo descomprimiste en la Actividad 4.1 no hace falta que lo repitas.
+
 !!! danger "Prerrequisito de infraestructura, no solo de permisos"
     Esta actividad necesita un dominio o subdominio ya delegado hacia tu Learner Lab — el profesor tiene que haberlo preparado antes de la sesión, porque registrar un dominio nuevo no suele estar permitido ni tiene sentido dentro del laboratorio. Sin ese subdominio ya delegado no vas a poder validar el certificado. Confirma con el profesor que tienes el tuyo antes de empezar.
 
@@ -19,7 +22,7 @@ Encuestas en Vivo sigue viviendo detrás de la URL genérica del balanceador de 
 
 ## Requisitos previos
 
-El subdominio delegado por el profesor. El balanceador de carga y el grupo de escalado de la Actividad 4.1, en marcha. Los ficheros estáticos de ejemplo del evento, ya preparados en `recursos/tema4/actividad_4_1/estaticos/` (`index.html` y las imágenes de programa y patrocinadores) — el profesor te los entrega, no los programas tú. El apunte de esta sesión — «DNS, HTTPS y distribución de contenido» (dns-https-cdn.md).
+El subdominio delegado por el profesor. El balanceador de carga y el grupo de escalado de la Actividad 4.1, en marcha. Los ficheros estáticos de ejemplo del evento (`index.html` y las imágenes de programa y patrocinadores), en `recursos/tema4/actividad_4_1/estaticos/` — descárgalos del enlace de arriba, no los programas tú. El apunte de esta sesión — «DNS, HTTPS y distribución de contenido» (dns-https-cdn.md).
 
 ---
 
@@ -34,14 +37,17 @@ El subdominio delegado por el profesor. El balanceador de carga y el grupo de es
 5. Entra en el certificado recién creado: para su dominio, verás un botón **Crear registro en Route 53** (si tu zona ya está en Route 53) o el CNAME exacto que tienes que añadir a mano.
 6. Añade ese registro a tu zona DNS.
 
-![Certificado en estado Pending validation, con el registro CNAME de validación mostrado](img/actividad_4_2_paso1_a.png)
+    ![Certificado en estado Pending validation, con el registro CNAME de validación mostrado](img/actividad_4_2_paso1_a.png)
+    *🖼️ Captura de referencia del profesor — guardar como `img/actividad_4_2_paso1_a.png`*
 
 7. Espera unos minutos y recarga la página del certificado.
 
 ![Certificado en estado Issued](img/actividad_4_2_paso1_b.png)
+*🖼️ Captura de referencia del profesor — guardar como `img/actividad_4_2_paso1_b.png`*
 
 **Comprueba**: que el certificado pasa de estado `Pending validation` a `Issued` tras añadir el registro de validación.
-**Captura**: `img/actividad_4_2_paso1_a.png` y `img/actividad_4_2_paso1_b.png`.
+
+**Captura**: tu propio certificado en estado `Pending validation` con el registro CNAME mostrado, y el mismo certificado ya en estado `Issued`.
 
 ### Paso 2 — Asocia el certificado al balanceador y crea el registro por CLI
 
@@ -58,13 +64,16 @@ aws elbv2 create-listener \
 Después, crea el registro `Alias` de tu subdominio apuntando al balanceador desde la consola de Route 53: entra en tu zona → **Crear registro** → activa **Alias** → destino: tu balanceador de carga.
 
 ![Registro Alias del subdominio apuntando al balanceador](img/actividad_4_2_paso2_a.png)
+*🖼️ Captura de referencia del profesor — guardar como `img/actividad_4_2_paso2_a.png`*
 
 Abre `https://<tu-subdominio>` en el navegador.
 
 ![Encuestas en Vivo cargando por HTTPS sobre el subdominio propio, con el candado de conexión segura](img/actividad_4_2_paso2_b.png)
+*🖼️ Captura de referencia del profesor — guardar como `img/actividad_4_2_paso2_b.png`*
 
 **Comprueba**: que `https://<tu-subdominio>` carga la aplicación con el candado de conexión segura, sin ningún aviso de certificado no válido.
-**Captura**: `img/actividad_4_2_paso2_a.png` y `img/actividad_4_2_paso2_b.png`.
+
+**Captura**: tu propio registro Alias apuntando al balanceador, y Encuestas en Vivo cargando por HTTPS sobre tu subdominio, con el candado de conexión segura.
 
 !!! question "Reflexiona"
     El certificado está instalado en el balanceador, no en cada instancia. Si mañana el grupo de escalado automático termina una instancia y lanza otra nueva para reemplazarla, ¿tienes que volver a instalar el certificado en la instancia nueva? Justifica tu respuesta con lo que viste en el apunte sobre dónde vive el cifrado.
@@ -84,21 +93,8 @@ Sube el contenido de `recursos/tema4/actividad_4_1/estaticos/` (la página del p
 **Calcula el ahorro económico**: estima cuánta transferencia de salida se evita el origen (S3) al servir el contenido desde el borde en vez de desde el origen cada vez, para un volumen de tráfico razonable, y tradúcelo a euros al mes con la calculadora oficial de AWS.
 
 **Comprueba**: que puedes demostrar, con evidencia y no solo con la teoría, los tres comportamientos (caché fría/caliente, TTL respetado, invalidación efectiva).
+
 **Captura**: los tiempos medidos de caché fría y caliente; la prueba de que el contenido antiguo se sirvió hasta la invalidación; el cálculo del ahorro mensual con su justificación.
-
----
-
-## Verificación
-
-Para dar por válida la práctica se ejecutará:
-
-```bash
-curl -I https://<tu-subdominio>
-aws cloudfront get-distribution --id <distribution-id>
-aws acm describe-certificate --certificate-arn <certificado-arn>
-```
-
-Y debe observarse: `HTTPS 200` sobre tu propio subdominio, con certificado válido y emitido, y la distribución CDN activa sirviendo el contenido estático del evento y las imágenes.
 
 ---
 

@@ -3,6 +3,9 @@
 !!! warning "Descarga la plantilla"
     📄 [Plantilla 6.2 — Una función por cada imagen](plantillas/Actividad_6_2_INU_Plantilla.docx){target="_blank" rel="noopener"}
 
+!!! warning "Descarga los recursos"
+    📦 [Recursos de la Actividad 6.2](recursos/actividad_6_2_recursos.zip){target="_blank" rel="noopener"} — descomprímelo en la raíz de tu proyecto: crea la carpeta `recursos/tema6/actividad_6_2/`, la misma ruta que usan los pasos de esta actividad.
+
 ## Contexto
 
 En una carrera popular, cada participante sube la foto de su dorsal, y alguien tiene que generar su miniatura y registrar sus metadatos. Hoy esa tarea deja de depender de una instancia tuya: una función se dispara sola cuando llega la imagen, hace su trabajo, y desaparece.
@@ -15,7 +18,7 @@ En una carrera popular, cada participante sube la foto de su dorsal, y alguien t
 
 ## Requisitos previos
 
-Un bucket de S3 nuevo, creado por ti en la Parte A de esta misma actividad. El código base de la función, en `recursos/tema6/actividad_6_2/lambda_function.py` (con su `requirements.txt` y su `README.md` de empaquetado). El apunte de esta sesión — «Serverless» (serverless.md).
+Un bucket de S3 nuevo, creado por ti en la Parte A de esta misma actividad. El código base de la función, `lambda_function.py` (con su `requirements.txt` y su `README.md` de empaquetado) — descárgalo del enlace de arriba. El apunte de esta sesión — «Serverless» (serverless.md).
 
 ---
 
@@ -28,9 +31,11 @@ Un bucket de S3 nuevo, creado por ti en la Parte A de esta misma actividad. El c
 3. Deja el resto de opciones por defecto (bloqueo de acceso público activado) y créalo.
 
 ![Bucket de fotos de dorsal creado, vacío](img/actividad_6_2_paso1.png)
+*🖼️ Captura de referencia del profesor — guardar como `img/actividad_6_2_paso1.png`*
 
 **Comprueba**: que el bucket aparece vacío y accesible desde tu cuenta.
-**Captura**: `img/actividad_6_2_paso1.png`.
+
+**Captura**: tu propio bucket de fotos de dorsal creado, vacío.
 
 ### Paso 2 — Crea la función desde la consola
 
@@ -42,28 +47,33 @@ Un bucket de S3 nuevo, creado por ti en la Parte A de esta misma actividad. El c
 6. Crea la función.
 
 ![Función Lambda creada, con su configuración inicial visible](img/actividad_6_2_paso2_a.png)
+*🖼️ Captura de referencia del profesor — guardar como `img/actividad_6_2_paso2_a.png`*
 
 **Comprueba**: que la función aparece con estado activo en el panel de Lambda.
-**Captura**: `img/actividad_6_2_paso2_a.png`.
+
+**Captura**: tu propia función Lambda creada, con su configuración inicial visible.
 
 ### Paso 3 — Sube el código y configura el disparador de S3
 
 El profesor te entrega el código ya escrito en `recursos/tema6/actividad_6_2/lambda_function.py`: recibe el evento de S3, genera una miniatura real con Pillow (redimensionada a 200x200 manteniendo la proporción) bajo el prefijo `miniaturas/`, y registra un objeto JSON con los metadatos (tamaño original, formato, fecha de subida) bajo el prefijo `metadatos/`, todo en el mismo bucket.
 
-1. Pillow no viene incluida en el entorno de ejecución de Lambda por defecto — sigue las instrucciones de `recursos/tema6/actividad_6_2/README.md` para empaquetar el código junto con sus dependencias en un `.zip`.
-2. Sube ese `.zip` como código de la función (**Cargar desde → archivo .zip**), en vez de escribirlo en el editor integrado.
+1. Pillow no viene incluida en el entorno de ejecución de Lambda por defecto, y tiene partes compiladas específicas del sistema operativo — tienes que empaquetarla en un Linux compatible con Lambda, no en Windows ni macOS. Para eso usa tu **CloudShell** (Tema 1), que ya es Amazon Linux: sube `actividad_6_2_recursos.zip` con **Actions → Upload file**, descomprímelo (`unzip actividad_6_2_recursos.zip`), y sigue las instrucciones de `recursos/tema6/actividad_6_2/README.md` para empaquetar el código junto con sus dependencias en un `.zip` — todo dentro de CloudShell.
+2. El `.zip` empaquetado se ha generado dentro de CloudShell, no en tu ordenador — descárgalo primero con **Actions → Download file** (indicando la ruta del `.zip` dentro de CloudShell). Ahora sí, súbelo como código de la función desde la consola de Lambda (**Cargar desde → archivo .zip**), en vez de escribirlo en el editor integrado.
 3. Ve a la pestaña **Configuración → Disparadores → Añadir disparador**.
 4. Selecciona **S3**, elige tu bucket de fotos de dorsal, y como tipo de evento **Todos los eventos de creación de objetos**.
 5. Guarda el disparador.
 
-![Disparador de S3 configurado sobre la función](img/actividad_6_2_paso3_a.png)
+    ![Disparador de S3 configurado sobre la función](img/actividad_6_2_paso3_a.png)
+    *🖼️ Captura de referencia del profesor — guardar como `img/actividad_6_2_paso3_a.png`*
 
 6. Sube una foto de dorsal nueva a tu bucket (por CLI o por consola) y comprueba que se genera la miniatura sin que tú hayas ejecutado nada más.
 
 ![Miniatura generada automáticamente tras subir la foto original](img/actividad_6_2_paso3_b.png)
+*🖼️ Captura de referencia del profesor — guardar como `img/actividad_6_2_paso3_b.png`*
 
 **Comprueba**: que la miniatura aparece en el bucket unos segundos después de subir la foto original, sin intervención tuya, y que el objeto de metadatos aparece bajo `metadatos/` con los datos correctos.
-**Captura**: `img/actividad_6_2_paso3_a.png` y `img/actividad_6_2_paso3_b.png`.
+
+**Captura**: tu propio disparador de S3 configurado sobre la función, y la miniatura generada automáticamente tras subir la foto original.
 
 !!! question "Reflexiona"
     Si se subieran cien fotos de dorsal a la vez (por ejemplo, al final de la carrera), ¿qué pasaría con tu función? Compáralo con lo que le pasaría a una única instancia si tuviera que procesar cien peticiones simultáneas de generación de miniaturas.
@@ -79,20 +89,8 @@ Con la API funcionando, mide la latencia real de esa operación servida por tu f
 Después, estima el coste mensual de ambas opciones para dos volúmenes de tráfico distintos: uno bajo (pocas peticiones al día) y uno alto (miles de peticiones por minuto de forma sostenida), y decide, con esos números delante, en qué casos elegirías la función y en cuáles la instancia.
 
 **Comprueba**: que tus medidas de latencia distinguen claramente entre una invocación con arranque en frío y una ya caliente, y que tu comparación de coste está basada en cifras reales de la calculadora, no en una estimación aproximada.
+
 **Captura**: las medidas de latencia (fría y caliente) de ambas soluciones; la comparación de coste para los dos volúmenes de tráfico; tu decisión razonada de cuándo elegir cada una.
-
----
-
-## Verificación
-
-Para dar por válida la práctica se ejecutará:
-
-```bash
-aws lambda get-function --function-name carrera-miniaturas-<tu-identificador>
-aws s3 ls s3://carrera-dorsales-<tu-identificador>/miniaturas/
-```
-
-Y debe observarse: la función activa con su disparador de S3 configurado, al menos una miniatura generada automáticamente, y la comparación de latencia y coste documentada con datos reales.
 
 ---
 

@@ -42,9 +42,11 @@ Trabaja con esta arquitectura de referencia durante toda la actividad — podrí
 5. Guarda esa línea de la estimación.
 
 ![Línea de EC2 añadida a la calculadora, con el tipo y cantidad de instancias de la arquitectura de referencia](img/actividad_5_3_paso1.png)
+*🖼️ Captura de referencia del profesor — guardar como `img/actividad_5_3_paso1.png`*
 
 **Comprueba**: que el coste mensual de esa línea tiene un orden de magnitud razonable para dos instancias `t3.micro`.
-**Captura**: `img/actividad_5_3_paso1.png`.
+
+**Captura**: tu propia línea de EC2 añadida a la calculadora, con el tipo y cantidad de instancias de tu arquitectura de referencia.
 
 ### Paso 2 — Añade el resto de servicios de la arquitectura de referencia
 
@@ -56,9 +58,11 @@ Repite el mismo proceso para cada pieza de la arquitectura de referencia: busca 
 - **Amazon CloudFront**: 1 distribución.
 
 ![Estimación completa con todos los servicios de la arquitectura de referencia añadidos](img/actividad_5_3_paso2.png)
+*🖼️ Captura de referencia del profesor — guardar como `img/actividad_5_3_paso2.png`*
 
 **Comprueba**: que el desglose final muestra una línea por cada servicio, con su coste individual visible, no solo un total sin explicar.
-**Captura**: `img/actividad_5_3_paso2.png`, con el desglose completo y el total mensual.
+
+**Captura**: tu propia estimación completa, con todos los servicios añadidos, el desglose completo y el total mensual.
 
 !!! question "Reflexiona"
     De todas las líneas de tu desglose, ¿cuál te ha sorprendido más —por ser más cara o más barata de lo que esperabas antes de calcularlo?
@@ -76,13 +80,8 @@ No hay procedimiento dado para ninguno de los tres retos siguientes — decide t
 **Decide una migración con las 6 R**: se te presenta una aplicación heredada (el profesor te da el caso concreto) y tienes que elegir, justificando con criterios de negocio y no solo técnicos, cuál de las seis estrategias de migración aplicarías.
 
 **Comprueba**: que cada estimación de los tres escenarios está desglosada por servicio, no es solo un número final; y que tu propuesta de 400 €/mes mantiene el mismo número de zonas de disponibilidad y el mismo mecanismo de reposición automática que la arquitectura de referencia.
+
 **Captura**: las tres estimaciones de escenarios con su modelo de compra justificado; la propuesta de arquitectura a 400 €/mes con el desglose que demuestra que no ha perdido disponibilidad; la decisión de migración razonada.
-
----
-
-## Verificación
-
-Se revisará la estimación exportada de la AWS Pricing Calculator (o su enlace compartido) correspondiente a la arquitectura de referencia, los tres escenarios reestimados con su modelo de compra justificado, la propuesta a 400 €/mes con su desglose, y la decisión de migración con las 6 R razonada por escrito.
 
 ---
 

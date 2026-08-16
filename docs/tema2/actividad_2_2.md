@@ -3,6 +3,9 @@
 !!! warning "Descarga la plantilla"
     📄 [Plantilla 2.2 — Diagnóstico de fallos de red por capas](plantillas/Actividad_2_2_INU_Plantilla.docx){target="_blank" rel="noopener"}
 
+!!! warning "Descarga los recursos"
+    📦 [Recursos de la Actividad 2.2](recursos/actividad_2_2_recursos.zip){target="_blank" rel="noopener"} — descomprímelo en la raíz de tu proyecto: crea la carpeta `recursos/tema2/actividad_2_2/`, la misma ruta que usan los pasos de esta actividad.
+
 ## Contexto
 
 Sobre la VPC que construiste la sesión pasada vas a levantar hoy una instancia pública con un servidor web y una instancia privada solo alcanzable desde ella — el servidor de un tablón de anuncios municipal. Y luego, sin previo aviso, esa misma red va a dejar de funcionar: cuatro averías reales, preparadas de antemano, que tienes que diagnosticar contrarreloj.
@@ -29,17 +32,20 @@ La VPC de dos zonas de la Actividad 2.1, con sus subredes públicas y privadas y
 3. Elige la imagen (AMI) que te indique el profesor, y el tipo `t3.micro`.
 4. En **Configuración de red**, elige tu VPC y tu subred pública, y asegúrate de que **Asignar IP pública automáticamente** está en **Habilitar**.
 5. En el propio asistente, crea un grupo de seguridad nuevo con solo dos reglas: puerto 80 abierto a `0.0.0.0/0`, y puerto 22 restringido a tu propia IP (usa la opción "Mi IP" del desplegable de origen).
-6. Despliega **Detalles avanzados**, baja hasta el campo **Datos de usuario** (*user data*), y pega ahí el contenido completo de `arranque-servidor.sh` — el script vive en `recursos/tema2/actividad_2_2/arranque-servidor.sh` (fuera del sitio publicado; es un recurso que el profesor prepara y entrega antes de la sesión, como ya se ha hecho con otros scripts del módulo).
+6. Despliega **Detalles avanzados**, baja hasta el campo **Datos de usuario** (*user data*), y pega ahí el contenido completo de `arranque-servidor.sh` — el script vive en `recursos/tema2/actividad_2_2/arranque-servidor.sh`, dentro del zip que has descargado arriba.
 7. Haz clic en **Lanzar instancia**.
 
 ![Asistente de lanzamiento con el grupo de seguridad y el campo de user data rellenados](img/actividad_2_2_paso1_a.png)
+*🖼️ Captura de referencia del profesor — guardar como `img/actividad_2_2_paso1_a.png`*
 
 El script `arranque-servidor.sh` instala y arranca, al primer arranque de la instancia, un servidor web mínimo con la página del tablón de anuncios — sin intervención tuya. Espera un par de minutos y prueba la IP pública de la instancia en el navegador.
 
 ![El servidor web respondiendo en el navegador, sin haberte conectado por SSH](img/actividad_2_2_paso1_b.png)
+*🖼️ Captura de referencia del profesor — guardar como `img/actividad_2_2_paso1_b.png`*
 
 **Comprueba**: que la IP pública de la instancia responde en el puerto 80 desde tu navegador, sin haberte conectado nunca por SSH.
-**Captura**: `img/actividad_2_2_paso1_a.png` y `img/actividad_2_2_paso1_b.png`.
+
+**Captura**: tu propio asistente de lanzamiento con el grupo de seguridad y el user data rellenados, y el servidor web respondiendo en el navegador sin haberte conectado por SSH.
 
 ### Paso 2 — Lanza la instancia privada por CLI
 
@@ -53,6 +59,7 @@ aws ec2 run-instances \
 ```
 
 **Comprueba**: conéctate primero a la instancia pública, y desde ahí intenta llegar a la instancia privada — debe funcionar. Comprueba también que la instancia privada no tiene IP pública asignada.
+
 **Captura**: la conexión exitosa desde la instancia pública hacia la privada, y la ausencia de IP pública en la instancia privada.
 
 ---
@@ -71,25 +78,11 @@ Diagnostica **de fuera hacia dentro**, sin saltarte capas: primero comprueba si 
 Cuando tengas las cuatro averías resueltas, añade una pasarela NAT a tu VPC (si no la tenías ya) y **calcula su coste mensual estimado** con la calculadora oficial de AWS, a partir del precio por hora y una estimación razonable de GB de tráfico saliente de tus instancias privadas.
 
 **Comprueba**: que, tras corregir las cuatro averías, la red vuelve a comportarse exactamente como en la Parte A.
+
 **Captura**: las cuatro fichas de diagnóstico (síntoma, capa revisada, comando usado, corrección aplicada), y el desglose de coste mensual de la pasarela NAT.
 
 !!! question "Reflexiona"
     De las cuatro averías, ¿cuál has confundido primero con otra capa distinta a la que realmente era? Un grupo de seguridad cerrado y una NACL bloqueante producen síntomas muy parecidos desde fuera. ¿Qué comprobación concreta es la que de verdad distingue una de la otra?
-
----
-
-## Verificación
-
-Para dar por válida la práctica se ejecutará:
-
-```bash
-curl -I http://<ip-publica>
-aws ec2 describe-security-groups --group-ids <sg-publico> <sg-privado>
-aws ec2 describe-network-acls --filters Name=vpc-id,Values=<vpc-id>
-aws ec2 describe-route-tables --filters Name=vpc-id,Values=<vpc-id>
-```
-
-Y debe observarse: `HTTP 200` en la instancia pública, el grupo de seguridad privado sin ninguna regla abierta a `0.0.0.0/0`, y las cuatro averías documentadas con su corrección aplicada de verdad sobre los recursos.
 
 ---
 

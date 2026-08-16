@@ -19,28 +19,57 @@ Antes de entrar en AWS conviene tener clara una pregunta: cuando alguien dice "e
 | **PaaS** (*Platform as a Service*) | Hardware + sistema operativo + entorno de ejecución | Solo tu código | Un lugar donde subes tu app Java y arranca sola |
 | **SaaS** (*Software as a Service*) | Todo, incluida la aplicación | Nada — solo la usas | Gmail |
 
-Fíjate en la progresión: de izquierda a derecha delegas cada vez más, y de arriba abajo controlas cada vez menos. SaaS es justo el extremo del que partías como usuario antes de esta sesión.
+Fíjate en la progresión de la tabla: de arriba abajo (Local → IaaS → PaaS → SaaS) delegas cada vez más, y controlas cada vez menos. SaaS es justo el extremo del que partías como usuario antes de esta sesión.
 
 !!! example "El mismo problema, cuatro formas de resolverlo"
-    Imagina que necesitas una base de datos para un proyecto. *On-premise*: compras un servidor, instalas PostgreSQL, y si se cae un disco duro, lo cambias tú. IaaS: alquilas una máquina virtual y haces exactamente lo mismo, pero el hardware ya no es tuyo. PaaS: contratas una base de datos ya gestionada (la verás en el Tema 3) — no instalas nada, solo te conectas. SaaS: usarías directamente una aplicación que ya incluye su propia base de datos por dentro, sin que tú la veas nunca.
+    Imagina que necesitas una base de datos para un proyecto.
+
+    - **On-premise**: compras un servidor, instalas PostgreSQL, y si se cae un disco duro, lo cambias tú.
+    - **IaaS**: alquilas una máquina virtual y haces exactamente lo mismo, pero el hardware ya no es tuyo.
+    - **PaaS**: contratas una base de datos ya gestionada (la verás en el Tema 3) — no instalas nada, solo te conectas.
+    - **SaaS**: usarías directamente una aplicación que ya incluye su propia base de datos por dentro, sin que tú la veas nunca.
 
 Cuanto más subes en esta escalera, menos controlas — pero también menos trabajo operativo cargas encima. Ese equilibrio entre control y comodidad es la primera idea que vas a manejar todo el módulo.
 
 ```mermaid
 flowchart LR
     A["🏢 On-premise<br/>lo gestionas todo tú"] --> B["🖥️ IaaS<br/>el proveedor pone el hardware"]
-    B --> C["⚙️ PaaS<br/>el proveedor pone el SO y el entorno"]
+    B --> C["⚙️ PaaS<br/>el proveedor pone SO y entorno"]
     C --> D["📦 SaaS<br/>usas la aplicación ya terminada"]
 ```
 
 Los servicios de AWS que vas a usar en el módulo se reparten por toda esta escalera: una máquina virtual (EC2) es IaaS, una base de datos gestionada (RDS) es PaaS, una función que se ejecuta sola sin que tú administres ningún servidor (Lambda) empuja aún más hacia el extremo gestionado.
 
-Pero delegar por delegar no explica por qué una empresa decide subir esta escalera. Lo hace porque el extremo *on-premise* tiene problemas concretos, no solo "más trabajo": si quieres más capacidad, tienes que comprar hardware y esperar semanas a que llegue; si compras de más para cubrir un pico puntual (la campaña de Navidad de una tienda, por ejemplo), ese hardware queda a medio usar el resto del año; y si necesitas llegar a otro continente, montar un centro de datos ahí son meses de obra, no una decisión de una tarde. La nube resuelve las tres cosas a la vez: pides capacidad y la tienes lista en minutos, pagas solo la que usas en cada momento, y puedes desplegar en otra región del planeta sin construir nada.
+Pero delegar por delegar no explica por qué una empresa decide subir esta escalera. Lo hace porque el extremo *on-premise* tiene problemas concretos, no solo "más trabajo":
+
+- **Capacidad**: si quieres más, tienes que comprar hardware y esperar semanas a que llegue.
+- **Picos de demanda**: si compras de más para cubrir un pico puntual (la campaña de Navidad de una tienda, por ejemplo), ese hardware queda a medio usar el resto del año.
+- **Alcance geográfico**: si necesitas llegar a otro continente, montar un centro de datos ahí son meses de obra, no una decisión de una tarde.
+
+La nube resuelve las tres cosas a la vez: pides capacidad y la tienes lista en minutos, pagas solo la que usas en cada momento, y puedes desplegar en otra región del planeta sin construir nada.
 
 !!! example "El mismo negocio, dos decisiones distintas"
     Una tienda que espera un pico de tráfico solo en Navidad, si compra servidores propios, los tiene sobredimensionados y a medio usar los otros once meses del año — ha pagado por una capacidad que casi nunca necesita. En la nube, escala hacia arriba solo esas semanas y vuelve a bajar después, pagando en cada momento por lo que de verdad está usando. Vas a construir exactamente este mecanismo de escalado en el Tema 4.
 
 No hay un modelo "mejor" en la escalera, y tampoco la nube es gratis ni sustituye el criterio técnico — lo que cambia es qué compras (capacidad bajo demanda, no hardware fijo) y cuándo pagas por ello.
+
+Todo lo anterior responde a "cuánto delegas". Hay una segunda pregunta, distinta y complementaria, que responde a "de quién es esa infraestructura y quién más la usa a la vez que tú" — el **modelo de despliegue**:
+
+| Modelo de despliegue | Infraestructura | Quién la comparte |
+|---|---|---|
+| **Nube pública** | De un proveedor externo (AWS, Azure, Google Cloud...) | Miles de clientes distintos, aislados entre sí |
+| **Nube privada** | Dedicada a una sola organización — normalmente dentro de sus propias instalaciones, aunque también puede alojarla un tercero en exclusiva | Nadie más — es exclusiva |
+| **Nube híbrida** | Combinación de las dos anteriores, conectadas entre sí | Depende de la parte: pública o privada |
+| **Multi-nube** | Varios proveedores públicos a la vez (por ejemplo, AWS y Azure) | Cada proveedor por separado, sin depender de uno solo |
+
+!!! tip "¿Nube privada es lo mismo que on-premise?"
+    Casi siempre coinciden en la práctica, pero responden a preguntas distintas. "Local / on-premise" (la primera tabla, modelo de *servicio*) dice **quién gestiona cada capa** — tú, todo. "Nube privada" (esta tabla, modelo de *despliegue*) dice **quién más la usa** — nadie más, es exclusiva tuya. Lo normal es que ambas cosas pasen a la vez (tu propio centro de datos, solo para ti), pero no es obligatorio: un proveedor externo también puede alojarte una infraestructura exclusiva, fuera de tus instalaciones, y seguiría siendo "privada" porque nadie más la comparte contigo.
+
+!!! example "Por qué una empresa elige cada una"
+    Un banco con datos que una ley obliga a mantener bajo su propio control monta una nube privada para esa parte concreta, y usa nube pública para todo lo demás (su web corporativa, por ejemplo). Ambas infraestructuras existen a la vez y se comunican entre sí — eso es lo que hace que sea una nube híbrida, no el simple hecho de usar dos sitios distintos.
+
+    Una empresa que no quiere depender de un único proveedor, por si sube los precios o falla una región entera, despliega la misma aplicación tanto en AWS como en otro proveedor, cada uno funcionando por su cuenta: eso es multi-nube. La diferencia con la híbrida es esa — en la híbrida las dos partes trabajan juntas como un solo sistema; en multi-nube, cada proveedor es independiente y ni siquiera tiene por qué saber que el otro existe.
+El módulo se llama *Introducción a la Nube Pública* por algo: AWS —como Azure o Google Cloud— es un proveedor de nube pública, y ese es el modelo de despliegue en el que vas a trabajar durante todo el curso, dentro de tu Learner Lab. No es el único que existe, pero sí el más habitual como puerta de entrada al sector.
 
 ---
 
@@ -55,7 +84,7 @@ AWS ofrece varios cientos de servicios, y la consola puede resultar abrumadora l
 | 🗃️ Bases de datos | Guardar datos estructurados, gestionados por el proveedor | RDS (Tema 3) |
 | 🌐 Redes y entrega de contenido | Conectar todo lo anterior, y acercarlo al usuario | VPC (Tema 2), CloudFront, Route 53 (Tema 4) |
 | 🔐 Seguridad, identidad y cumplimiento | Quién puede hacer qué | IAM (hoy y Tema 5) |
-| 📊 Gestión y gobierno | Vigilar, medir y controlar el gasto | CloudWatch, Budgets (hoy mismo) |
+| 📊 Gestión y gobierno | Vigilar, medir y controlar el gasto | CloudWatch (Tema 5), Budgets (hoy mismo) |
 
 !!! tip "No hace falta memorizar el catálogo entero"
     Con este mapa te basta por ahora: cuando en las próximas sesiones aparezca un servicio nuevo, ubícalo primero en una de estas seis categorías — te va a costar menos entender qué hace si ya sabes para qué familia de problema existe.
@@ -63,6 +92,14 @@ AWS ofrece varios cientos de servicios, y la consola puede resultar abrumadora l
 Piensa en él como el catálogo de un supermercado grande: no necesitas conocer cada producto de memoria, necesitas saber en qué pasillo buscar cuando te haga falta uno. Hoy vas a usar concretamente dos: **S3** (almacenamiento de objetos) para publicar el front del taller de bicicletas, e **IAM** de forma indirecta, porque el rol que ya tienes asignado en el Learner Lab es justamente lo que decide qué puedes y qué no puedes hacer en el resto de servicios.
 
 En S3, cada fichero que subes es un **objeto**, y los objetos se agrupan dentro de un **bucket** — un contenedor con un nombre único en todo AWS (no solo en tu cuenta), algo así como una carpeta de primer nivel a la que luego le das forma: puede quedar privada, o —como vas a hacer hoy— servir contenido web público.
+
+Para publicar el sitio de hoy necesitas tres piezas más de S3, que vas a activar paso a paso en la actividad sin tener que dominarlas todavía — vas a volver a S3 con más calma en el Tema 3, cuando el foco ya no sea publicar un sitio sino guardar y gestionar datos:
+
+- **Bloqueo de acceso público**: por defecto, todo bucket nuevo bloquea cualquier acceso desde fuera de tu cuenta — es una medida de seguridad, no un capricho. Para servir un sitio web tienes que desactivarlo tú, a propósito.
+- **Política de bucket**: un documento (en formato JSON) que dice explícitamente quién puede hacer qué sobre los objetos del bucket — sin ella, aunque desactives el bloqueo, nadie puede leer nada igualmente.
+- **Alojamiento de sitio web estático**: la función que convierte un bucket normal en algo que responde como un servidor web, sirviendo el fichero que le indiques (normalmente `index.html`) cuando alguien visita su URL.
+
+Hoy te basta con seguir los pasos de la actividad para activar las tres — no hace falta que entiendas todavía la sintaxis completa de una política JSON.
 
 ---
 
@@ -109,7 +146,10 @@ La frontera no es fija: en una máquina virtual (IaaS) tú respondes del sistema
     5. Un disco físico del proveedor falla sin que existiera redundancia suficiente.
     6. Una cuenta se compromete porque su contraseña era `123456`.
 
-    Fíjate en el patrón: los casos 2 y 5 son sobre infraestructura física — terreno de AWS. Los casos 1, 3, 4 y 6 son sobre configuración, código y credenciales — terreno tuyo, aunque ocurran "dentro" de la nube. Vas a repartir estos seis incidentes de verdad, con justificación, en la Parte B de la actividad de hoy.
+    Vas a repartir estos seis incidentes de verdad, con justificación, en la Parte B de la actividad de hoy.
+
+??? tip "Abrir respuesta"
+    Los casos 2 y 5 son sobre infraestructura física — terreno de AWS. Los casos 1, 3, 4 y 6 son sobre configuración, código y credenciales — terreno tuyo, aunque ocurran "dentro" de la nube.
 
 ---
 
@@ -144,7 +184,7 @@ aws sts get-caller-identity
 La respuesta viene en formato **JSON** (*JavaScript Object Notation*): datos organizados en pares `"clave": "valor"` entre llaves, el formato que vas a ver constantemente en el resto del módulo cada vez que AWS te devuelva información estructurada. Fíjate en el campo `Arn` (*Amazon Resource Name*, el identificador único de cualquier recurso en AWS): no dice que seas un usuario normal con su propio nombre de usuario y contraseña — dice `assumed-role`, un **rol asumido**.
 
 !!! tip "Por qué un rol y no un usuario"
-    En el Learner Lab no existen usuarios ni roles que tú crees: hay uno ya preparado de antemano, con exactamente los permisos que necesitas para el módulo, ni uno más. Es la razón por la que en este curso vas a *leer* y *corregir* políticas de permisos en vez de crear usuarios desde cero — lo verás en detalle en el Tema 5.
+    En el Learner Lab no existen usuarios ni roles que tú crees: hay uno ya preparado de antemano por el propio Learner Lab, con los permisos que trae por defecto — nadie los ha ajustado pensando en este módulo en concreto. Es la razón por la que en este curso vas a *leer* y *corregir* políticas de permisos en vez de crear usuarios desde cero — lo verás en detalle en el Tema 5.
 
 ---
 
@@ -155,8 +195,8 @@ El entorno donde vas a trabajar todo el curso no es una cuenta de AWS normal —
 | Regla | Qué significa en la práctica |
 |---|---|
 | Sesión de 4 horas | Cuando el temporizador llega a cero, el laboratorio se apaga solo. Toda práctica del módulo está pensada para arrancar y terminar dentro de una única sesión. |
-| Crédito finito y compartido | Cuesta dinero de verdad, y agotarlo antes de tiempo afecta a todo el grupo. De ahí el **ritual de costes**: los últimos cinco minutos de cada clase, revisar el gasto, apagar lo que no haga falta y anotar el recurso más caro. |
-| Sin usuarios ni roles propios | El rol que tienes es preasignado, con permisos ya decididos para el módulo. Si un comando falla por permisos, casi nunca es "algo que has roto" — es una operación que el laboratorio no permite a propósito. |
+| Crédito finito por alumno | Cuesta dinero de verdad, y cada uno tiene su propio laboratorio con su propio crédito — si lo agotas antes de tiempo, te quedas sin entorno para terminar el módulo, no hay una recarga automática a mitad de curso. Si se agota, la única salida es pedirle al profesor que te abra un laboratorio nuevo — y ese laboratorio nuevo empieza vacío: pierdes todo lo que tuvieras construido en el anterior. De ahí el **ritual de costes**: los últimos cinco minutos de cada clase, revisar el gasto, apagar lo que no haga falta y anotar el recurso más caro. |
+| Sin usuarios ni roles propios | El rol que tienes es preasignado, con los permisos que trae por defecto el Learner Lab — nadie los ha configurado a medida para este módulo. Si un comando falla por permisos, casi nunca es "algo que has roto" — es una operación que el laboratorio no permite. |
 | Regiones y servicios restringidos | No todo lo de AWS está disponible en el laboratorio. Antes de usar un servicio nuevo, comprueba que existe en tu región de trabajo. |
 
 !!! danger "Apagar antes de salir no es opcional"
@@ -171,12 +211,13 @@ Con esto ya tienes el terreno de juego: sabes qué tipo de servicios existen, c�
 ??? tip "Abrir resumen"
 
     - La nube se mueve en una escalera de menos a más gestionado: *on-premise* → IaaS → PaaS → SaaS. Cuanto más subes, menos controlas, pero menos trabajo operativo cargas.
+    - Modelo de servicio (cuánto delegas) y modelo de despliegue (de quién es la infraestructura y quién la comparte: pública, privada, híbrida, multi-nube) son dos preguntas distintas. AWS es nube pública — el modelo en el que vas a trabajar todo el curso.
     - Frente a un sistema tradicional, la nube cambia inversión inicial por pago por uso, y meses de espera por minutos de aprovisionamiento — no es solo "más cómodo", es un modelo económico distinto.
     - Los servicios de AWS se agrupan en un puñado de categorías (cómputo, almacenamiento, bases de datos, redes, seguridad, gestión) — te sirve de mapa para todo el módulo, no hace falta memorizar el catálogo entero.
     - Región (zona geográfica independiente) → zona de disponibilidad (centros de datos separados dentro de una región) → ubicación de borde (mucho más numerosas, cerca del usuario). Es la base de la alta disponibilidad que verás en el Tema 4.
     - Modelo de responsabilidad compartida: AWS responde de la infraestructura física ("seguridad *de* la nube"), tú respondes de tus datos, tu configuración y tus credenciales ("seguridad *en* la nube").
     - Consola y CLI son dos caras de la misma API: la consola para explorar la primera vez, la CLI para repetir y automatizar.
     - En el Learner Lab no hay usuarios ni roles que tú crees — hay un rol preasignado (`assumed-role`), verificable con `aws sts get-caller-identity`.
-    - El Learner Lab tiene sesión de 4 horas y crédito finito y compartido — de ahí nace el ritual de apagar y anotar el gasto al final de cada sesión.
+    - El Learner Lab tiene sesión de 4 horas y crédito finito por alumno, sin recarga automática — de ahí nace el ritual de apagar y anotar el gasto al final de cada sesión.
 
 Con esto ya tienes las piezas para la Actividad 1.1 — Tu primer despliegue en la nube.

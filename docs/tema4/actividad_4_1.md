@@ -3,6 +3,9 @@
 !!! warning "Descarga la plantilla"
     📄 [Plantilla 4.1 — Balanceador de carga y Auto Scaling Group](plantillas/Actividad_4_1_INU_Plantilla.docx){target="_blank" rel="noopener"}
 
+!!! warning "Descarga los recursos"
+    📦 [Recursos de la Actividad 4.1](recursos/actividad_4_1_recursos.zip){target="_blank" rel="noopener"} — descomprímelo en la raíz de tu proyecto: crea la carpeta `recursos/tema4/actividad_4_1/`, la misma ruta que usan los pasos de esta actividad (incluida la subcarpeta `estaticos/` que vas a reutilizar en la Actividad 4.2).
+
 ## Contexto
 
 Una aplicación de encuestas en directo para eventos —Encuestas en Vivo— va a proyectarse en pantalla durante una conferencia con cientos de asistentes votando a la vez desde el móvil. Desplegarla en una única instancia significa que, si esa instancia se cae a mitad del evento, la encuesta desaparece delante de todo el público. Hoy resuelves justo eso — no añadiendo "una instancia más por si acaso", sino un mecanismo que reparte el tráfico entre varias copias y que repone automáticamente la que falle, sin que tú tengas que estar mirando la pantalla.
@@ -17,7 +20,7 @@ Una aplicación de encuestas en directo para eventos —Encuestas en Vivo— va 
 
 ## Requisitos previos
 
-Acceso a tu Learner Lab con una VPC de dos zonas y sus subredes públicas ya creadas (Tema 2). Los ficheros de la aplicación de Encuestas en Vivo, ya preparados en `recursos/tema4/actividad_4_1/` (`app.py`, `requirements.txt`, `arranque-encuestas.sh`) — el profesor te los entrega, no los programas tú. El apunte de esta sesión — «Balanceo de carga y escalado automático» (alta-disponibilidad-escalado.md).
+Acceso a tu Learner Lab con una VPC de dos zonas y sus subredes públicas ya creadas (Tema 2). Los ficheros de la aplicación de Encuestas en Vivo (`app.py`, `requirements.txt`, `arranque-encuestas.sh`) — descárgalos del enlace de arriba, no los programas tú. El apunte de esta sesión — «Balanceo de carga y escalado automático» (alta-disponibilidad-escalado.md).
 
 ---
 
@@ -30,15 +33,17 @@ Acceso a tu Learner Lab con una VPC de dos zonas y sus subredes públicas ya cre
 3. Elige una AMI de Amazon Linux 2023, y el tipo `t3.micro`.
 4. En **Par de claves**, elige el tuyo.
 5. En **Configuración de red**, crea (o reutiliza) un grupo de seguridad con solo dos reglas: puerto 80 abierto a `0.0.0.0/0`, y puerto 22 restringido a tu propia IP.
-6. Despliega **Detalles avanzados**, baja hasta el campo **Datos de usuario** (*user data*), y pega ahí el contenido completo de `arranque-encuestas.sh` — el script vive en `recursos/tema4/actividad_4_1/arranque-encuestas.sh` (fuera del sitio publicado; es un recurso que el profesor prepara y entrega antes de la sesión, como ya se ha hecho con otros scripts del módulo).
+6. Despliega **Detalles avanzados**, baja hasta el campo **Datos de usuario** (*user data*), y pega ahí el contenido completo de `arranque-encuestas.sh` — el script vive en `recursos/tema4/actividad_4_1/arranque-encuestas.sh`, dentro del zip que has descargado arriba.
 7. Crea la plantilla.
 
 ![Plantilla de lanzamiento creada, con la AMI, el grupo de seguridad y el user data de Encuestas en Vivo configurados](img/actividad_4_1_paso1.png)
+*🖼️ Captura de referencia del profesor — guardar como `img/actividad_4_1_paso1.png`*
 
 El script `arranque-encuestas.sh` instala y arranca, al primer arranque de cada instancia, la aplicación de Encuestas en Vivo en el puerto 80, sin intervención tuya.
 
 **Comprueba**: que la plantilla aparece creada, con la AMI, el tipo de instancia, el grupo de seguridad y el user data correctos.
-**Captura**: `img/actividad_4_1_paso1.png`.
+
+**Captura**: tu propia plantilla de lanzamiento creada, con la AMI, el grupo de seguridad y el user data configurados.
 
 ### Paso 2 — Crea el balanceador y el grupo de destino desde la consola
 
@@ -53,13 +58,15 @@ El script `arranque-encuestas.sh` instala y arranca, al primer arranque de cada 
 5. Vuelve al asistente del balanceador, selecciona el grupo de destino recién creado, y haz clic en **Crear balanceador de carga**.
 
 ![Balanceador creado, con su listener apuntando al grupo de destino y su comprobación de salud en /salud](img/actividad_4_1_paso2.png)
+*🖼️ Captura de referencia del profesor — guardar como `img/actividad_4_1_paso2.png`*
 
 **Comprueba**: que el grupo de destino aparece vacío por ahora (todavía no tienes instancias registradas) y que el balanceador está `active`.
-**Captura**: `img/actividad_4_1_paso2.png`.
+
+**Captura**: tu propio balanceador creado, con su listener apuntando al grupo de destino y la comprobación de salud en `/salud`.
 
 ### Paso 3 — Crea el grupo de escalado automático por CLI
 
-Crea el grupo de escalado automático por CLI, usando la plantilla de lanzamiento del Paso 1, con capacidad mínima 2, deseada 2 y máxima 4, en las dos zonas de tu VPC, asociado al grupo de destino del Paso 2:
+Aquí la consola no te ahorra trabajo: crear un grupo de Auto Scaling por consola significa recorrer un asistente de varias pantallas repitiendo datos que ya diste en la plantilla del Paso 1; por CLI es un único comando con los mismos parámetros. Si aun así prefieres verlo por consola, está en EC2 → **Grupos de Auto Scaling** → **Crear grupo de Auto Scaling**. Usa la plantilla de lanzamiento del Paso 1, con capacidad mínima 2, deseada 2 y máxima 4, en las dos zonas de tu VPC, asociado al grupo de destino del Paso 2:
 
 ```bash
 aws autoscaling create-auto-scaling-group \
@@ -73,15 +80,18 @@ aws autoscaling create-auto-scaling-group \
 Comprueba el resultado en consola: entra en tu grupo de destino, pestaña **Destinos registrados**.
 
 ![Grupo de destino con dos instancias en estado healthy, una por zona](img/actividad_4_1_paso3.png)
+*🖼️ Captura de referencia del profesor — guardar como `img/actividad_4_1_paso3.png`*
 
 **Comprueba**: que al cabo de unos minutos, el grupo de destino del balanceador muestra dos instancias en estado `healthy`, una en cada zona.
-**Captura**: `img/actividad_4_1_paso3.png`.
+
+**Captura**: tu propio grupo de destino con las instancias en estado `healthy`, una por zona.
 
 ### Paso 4 — Comprueba el reparto real de tráfico
 
 Consulta la página principal (`/`) de Encuestas en Vivo a través de la URL del balanceador varias veces seguidas, y observa qué identificador de instancia aparece respondiendo en cada petición.
 
 **Comprueba**: que el identificador de instancia cambia entre peticiones sucesivas, señal de que el balanceador está repartiendo el tráfico entre las dos.
+
 **Captura**: al menos cuatro peticiones consecutivas a la URL del balanceador, mostrando identificadores distintos.
 
 !!! question "Reflexiona"
@@ -96,20 +106,8 @@ Consulta la página principal (`/`) de Encuestas en Vivo a través de la URL del
 **Genera carga real** contra el endpoint `/carga` hasta forzar que el grupo de escalado automático añada una instancia nueva por encima de la capacidad deseada, y mide con precisión el tiempo transcurrido desde que la métrica de CPU supera el umbral hasta que esa instancia nueva empieza a atender tráfico de verdad a través del balanceador. Representa esa curva de escalado con los datos reales que hayas recogido, no con una estimación.
 
 **Comprueba**: que, tras terminar la instancia a mano, el grupo vuelve a tener exactamente el número de instancias saludables de su capacidad deseada, sin que hayas lanzado tú ninguna manualmente.
+
 **Captura**: el momento en que terminas la instancia y el momento en que el grupo la ha repuesto; la curva de escalado con los tiempos reales medidos durante la generación de carga.
-
----
-
-## Verificación
-
-Para dar por válida la práctica se ejecutará:
-
-```bash
-aws elbv2 describe-target-health --target-group-arn <target-group-arn>
-aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names encuestas-asg-<tu-identificador>
-```
-
-Y debe observarse: el grupo de destino con el número de instancias saludables igual a la capacidad deseada, y el historial de actividad del grupo de escalado mostrando al menos un evento de reposición y uno de escalado por carga.
 
 ---
 
