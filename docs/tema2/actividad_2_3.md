@@ -3,6 +3,9 @@
 !!! warning "Descarga la plantilla"
     📄 [Plantilla 2.3 — De instancia a plantilla](plantillas/Actividad_2_3_INU_Plantilla.docx){target="_blank" rel="noopener"}
 
+!!! warning "Descarga los recursos"
+    📦 [Recursos de la Actividad 2.3](recursos/actividad_2_3_recursos.zip){target="_blank" rel="noopener"} — descomprímelo en la raíz de tu proyecto: crea la carpeta `recursos/tema2/actividad_2_3/`, la misma ruta que usan los pasos de esta actividad.
+
 ## Contexto
 
 Hasta ahora has lanzado instancias sueltas, a mano, repitiendo los mismos parámetros cada vez. Hoy conviertes ese proceso manual en algo repetible: instalas una aplicación de gestión de turnos de una peluquería en una instancia, capturas el resultado como tu propia imagen, y empaquetas todo en una plantilla de lanzamiento que puedes usar tantas veces como haga falta.
@@ -24,9 +27,10 @@ La VPC de dos zonas de la Actividad 2.1, con su subred pública ya creada — ho
 
 ### Paso 1 — Despliega la app de turnos con user data, solo en los puertos necesarios
 
-Lanza una instancia nueva en tu subred pública, con un grupo de seguridad que abra **únicamente** el puerto 80 (y el 22 restringido a tu IP para poder revisar si algo falla), y con un script de user data que instale y arranque, sin intervención tuya, la app de gestión de turnos de la peluquería. El script vive en `recursos/tema2/actividad_2_3/instalar-catalogo.sh` (fuera del sitio publicado; es un recurso que el profesor prepara y entrega antes de la sesión, autocontenido — no depende de subir ningún fichero aparte):
+Lanza una instancia nueva en tu subred pública, con un grupo de seguridad que abra **únicamente** el puerto 80 (y el 22 restringido a tu IP para poder revisar si algo falla), y con un script de user data que instale y arranque, sin intervención tuya, la app de gestión de turnos de la peluquería. El comando siguiente usa `file://` para leer el script desde donde lo ejecutes — así que hazlo desde tu **CloudShell** (Tema 1), no desde tu ordenador: sube `actividad_2_3_recursos.zip` con **Actions → Upload file** y descomprímelo (`unzip actividad_2_3_recursos.zip`) para tener `instalar-catalogo.sh` ahí mismo, en `recursos/tema2/actividad_2_3/`.
 
 ```bash
+cd recursos/tema2/actividad_2_3/
 aws ec2 run-instances \
   --image-id <ami-base> \
   --instance-type t3.micro \
@@ -36,9 +40,11 @@ aws ec2 run-instances \
 ```
 
 ![La app de turnos funcionando en el navegador](img/actividad_2_3_paso1.png)
+*🖼️ Captura de referencia del profesor — guardar como `img/actividad_2_3_paso1.png`*
 
 **Comprueba**: que la app responde en el puerto 80 sin que te hayas conectado nunca por SSH a instalarla a mano, y que ningún otro puerto además del 80 y el 22 (restringido) está abierto.
-**Captura**: `img/actividad_2_3_paso1.png`, y el grupo de seguridad mostrando solo los puertos estrictamente necesarios.
+
+**Captura**: tu propia app de turnos funcionando en el navegador, y el grupo de seguridad mostrando solo los puertos estrictamente necesarios.
 
 ### Paso 2 — Crea tu propia imagen desde la consola
 
@@ -51,9 +57,11 @@ Con la instancia del Paso 1 ya funcionando y estable, captúrala como AMI propia
 5. Ve al menú lateral, a **AMIs** (dentro de Imágenes), y espera a que el estado pase de `pending` a `available` — tarda unos minutos.
 
 ![La AMI propia en estado available, con su nombre y tamaño](img/actividad_2_3_paso2.png)
+*🖼️ Captura de referencia del profesor — guardar como `img/actividad_2_3_paso2.png`*
 
 **Comprueba**: que la imagen aparece como disponible (`available`) al cabo de unos minutos, y que su tamaño y descripción tienen sentido.
-**Captura**: `img/actividad_2_3_paso2.png`.
+
+**Captura**: tu propia AMI en estado `available`, con su nombre y tamaño visibles.
 
 ---
 
@@ -66,23 +74,8 @@ El reto: construye una plantilla de lanzamiento parametrizada con tu propia imag
 Con eso hecho, compara el coste mensual estimado de mantener esta misma carga (una instancia sirviendo la app de turnos, tráfico moderado) en tres familias distintas de instancia, usando la calculadora oficial de AWS, y justifica cuál elegirías para producción y cuál para clase.
 
 **Comprueba**: que las dos instancias lanzadas desde la plantilla responden con la app de turnos sin ninguna configuración adicional, exactamente igual que la instancia original.
+
 **Captura**: el cronómetro real de arranque de las dos instancias, tu predicción escrita de antemano, y la tabla comparativa de coste mensual de las tres familias con su justificación.
-
----
-
-## Verificación
-
-Para dar por válida la práctica se ejecutará:
-
-```bash
-aws ec2 describe-images --owners self
-aws ec2 describe-launch-templates --launch-template-names turnos-lt-<tu-identificador>
-aws ec2 describe-instances --filters Name=tag:LaunchedFrom,Values=turnos-lt-<tu-identificador>
-curl -I http://<ip-instancia-1>
-curl -I http://<ip-instancia-2>
-```
-
-Y debe observarse: tu AMI propia disponible, la plantilla de lanzamiento con los parámetros correctos, y las dos instancias lanzadas desde ella respondiendo `HTTP 200` con la app de turnos.
 
 ---
 

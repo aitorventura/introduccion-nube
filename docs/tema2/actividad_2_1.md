@@ -26,6 +26,7 @@ El apunte de esta sesión — «Diseño de la red virtual» (vpc-diseno.md). No 
 Antes de abrir la consola, dibuja una tabla con cuatro columnas para un rango `10.0.0.0/16`: nombre de subred, CIDR, zona de disponibilidad y tipo (pública/privada). Necesitas como mínimo cuatro subredes: una pública y una privada en cada una de las dos zonas.
 
 **Comprueba**: que ninguno de los rangos que has repartido se solapa con otro, y que cada subred cabe dentro del `/16` de la VPC.
+
 **Captura**: la tabla de diseño completa, con los cuatro rangos y sus zonas.
 
 ### Paso 2 — Crea la VPC y las subredes desde la consola
@@ -38,7 +39,8 @@ Es tu primera VPC, así que constrúyela desde la consola, paso a paso:
 4. En **Bloque de dirección IPv4**, escribe `10.0.0.0/16`.
 5. Dale un nombre reconocible (por ejemplo `pistas-vpc-<tu-identificador>`) y crea la VPC.
 
-![VPC creada con el rango 10.0.0.0/16](img/actividad_2_1_paso2_a.png)
+    ![VPC creada con el rango 10.0.0.0/16](img/actividad_2_1_paso2_a.png)
+    *🖼️ Captura de referencia del profesor — guardar como `img/actividad_2_1_paso2_a.png`*
 
 6. En el menú lateral, entra en **Subredes** → **Crear subred**.
 7. Selecciona la VPC que acabas de crear.
@@ -46,13 +48,17 @@ Es tu primera VPC, así que constrúyela desde la consola, paso a paso:
 9. Haz clic en **Crear subred**.
 
 ![Las cuatro subredes creadas, con su CIDR y zona visibles](img/actividad_2_1_paso2_b.png)
+*🖼️ Captura de referencia del profesor — guardar como `img/actividad_2_1_paso2_b.png`*
 
 **Comprueba**: en el panel de subredes de la consola, que ves las cuatro con los CIDR y zonas de tu diseño, sin ninguna de más ni de menos.
-**Captura**: `img/actividad_2_1_paso2_a.png` y `img/actividad_2_1_paso2_b.png`.
 
-### Paso 3 — Convierte en públicas solo las subredes que deben serlo, por CLI
+**Captura**: tu propia VPC creada con el rango 10.0.0.0/16, y las cuatro subredes con su CIDR y zona visibles.
 
-Ahora repite un patrón que vas a necesitar automatizar más adelante: crea la pasarela de internet, asóciala a la VPC, y añade la ruta `0.0.0.0/0` solo en la tabla de rutas de las dos subredes públicas, esta vez por CLI:
+### Paso 3 — Convierte en públicas solo las subredes que deben serlo
+
+Ahora repite un patrón que vas a necesitar automatizar más adelante: crea la pasarela de internet, asóciala a la VPC, y añade la ruta `0.0.0.0/0` solo en la tabla de rutas de las dos subredes públicas.
+
+Si prefieres verlo primero por consola, el camino es: panel de VPC → **Internet Gateways** → **Crear pasarela de internet** → adjúntala a tu VPC; luego **Tablas de rutas** → **Crear tabla de rutas** → añade la ruta `0.0.0.0/0` hacia la pasarela y asóciala a tus dos subredes públicas. Por CLI es el mismo resultado en cinco comandos:
 
 ```bash
 aws ec2 create-internet-gateway
@@ -65,9 +71,11 @@ aws ec2 associate-route-table --route-table-id <rt-id> --subnet-id <subnet-publi
 Entra en el panel de VPC → **Tablas de rutas** en la consola y compara visualmente las dos: la asociada a tus subredes públicas debe mostrar la ruta `0.0.0.0/0 → igw-...`; la principal, la que siguen usando tus subredes privadas, no.
 
 ![Tabla de rutas pública (con ruta a la pasarela) junto a la privada (sin ella)](img/actividad_2_1_paso3.png)
+*🖼️ Captura de referencia del profesor — guardar como `img/actividad_2_1_paso3.png`*
 
 **Comprueba**: que las dos subredes privadas siguen usando la tabla de rutas principal (sin la ruta a la pasarela), y que solo las dos públicas tienen la ruta `0.0.0.0/0`.
-**Captura**: `img/actividad_2_1_paso3.png`.
+
+**Captura**: tu propia tabla de rutas pública, con la ruta hacia la pasarela, junto a la privada sin ella.
 
 !!! question "Reflexiona"
     Imagina que lanzas una instancia en una de tus subredes privadas y compruebas que no sale a internet. Antes de tocar nada más: ¿falta una ruta en la tabla de rutas, falta una regla de un grupo de seguridad, o falta la pasarela en sí? Nómbralo con precisión — la próxima sesión vas a diagnosticar averías reales de este mismo tipo.
@@ -83,21 +91,8 @@ Antes de comprobar que la subred privada no sale a internet, predice por escrito
 Cuando tengas la evidencia, documenta el diagrama de red completo (las cuatro subredes, la pasarela, lo que hayas usado para probar la conectividad) y justifica por escrito el reparto de rangos que elegiste en el Paso 1: por qué ese tamaño de subred y no otro, por qué esa distribución entre las dos zonas.
 
 **Comprueba**: que el diagrama documentado coincide exactamente con lo que existe en tu cuenta (mismos CIDR, mismas zonas).
+
 **Captura**: la evidencia de los tres comportamientos demostrados, tu predicción escrita de antemano, y el diagrama de red final.
-
----
-
-## Verificación
-
-Para dar por válida la práctica se ejecutará:
-
-```bash
-aws ec2 describe-vpcs --filters Name=cidr,Values=10.0.0.0/16
-aws ec2 describe-route-tables --filters Name=vpc-id,Values=<vpc-id>
-aws ec2 describe-subnets --filters Name=vpc-id,Values=<vpc-id>
-```
-
-Y debe observarse: una VPC `10.0.0.0/16` con cuatro subredes en dos zonas de disponibilidad distintas, dos tablas de rutas diferenciadas (una con ruta a la pasarela, otra sin ella), y el diagrama de red documentado en el repositorio con la justificación del reparto de rangos.
 
 ---
 

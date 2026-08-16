@@ -22,6 +22,9 @@ flowchart LR
 
 Fíjate en que el front y la aplicación reciben tráfico de internet por caminos distintos —el front directamente desde S3, la aplicación desde su propia instancia—, y que solo la aplicación tiene permiso para hablar con la base de datos. Ninguna capa se salta a la de al lado.
 
+!!! info "Por qué el backend necesita permitir CORS"
+    El front vive en una URL de S3 y la aplicación en la IP de una instancia EC2 — para el navegador son dos **orígenes** distintos (dominio o puerto diferente), y por defecto un script cargado desde un origen no puede llamar a una API que vive en otro. **CORS** (*Cross-Origin Resource Sharing*) es el mecanismo por el que el servidor autoriza explícitamente esas peticiones desde fuera de su propio origen — sin él, el navegador bloquea la respuesta aunque la aplicación la haya procesado perfectamente bien. El script de arranque de la aplicación de hoy ya lo trae configurado; vas a necesitar entender qué hace para responder a la Reflexión de la actividad.
+
 ---
 
 ## 🧩 Separación de responsabilidades

@@ -3,9 +3,12 @@
 !!! warning "Descarga la plantilla"
     📄 [Plantilla 6.1 — Destruir y reconstruir](plantillas/Actividad_6_1_INU_Plantilla.docx){target="_blank" rel="noopener"}
 
+!!! warning "Descarga los recursos"
+    📦 [Recursos de la Actividad 6.1](recursos/actividad_6_1_recursos.zip){target="_blank" rel="noopener"} — descomprímelo en la raíz de tu proyecto: crea la carpeta `recursos/tema6/actividad_6_1/terraform/`, la misma ruta que usan los pasos de esta actividad.
+
 ## Contexto
 
-El profesor te entrega un módulo de Terraform ya escrito, autocontenido, que despliega una VPC de ejemplo con una subred pública y una privada en dos zonas de disponibilidad — vive en `recursos/tema6/actividad_6_1/terraform/`. Hoy lo lees, lo entiendes, lo modificas, y lo destruyes y reconstruyes por completo — cronometrando cuánto tarda el código en hacer lo que a mano, clic a clic en la consola, te llevaría mucho más tiempo y sería fácil de dejar a medias.
+El profesor te entrega un módulo de Terraform ya escrito, autocontenido, que despliega una VPC de ejemplo con una subred pública y una privada en dos zonas de disponibilidad — descárgalo del enlace de arriba, en `recursos/tema6/actividad_6_1/terraform/`. Hoy lo lees, lo entiendes, lo modificas, y lo destruyes y reconstruyes por completo — cronometrando cuánto tarda el código en hacer lo que a mano, clic a clic en la consola, te llevaría mucho más tiempo y sería fácil de dejar a medias.
 
 ## Qué vas a practicar
 
@@ -16,7 +19,7 @@ El profesor te entrega un módulo de Terraform ya escrito, autocontenido, que de
 
 ## Requisitos previos
 
-Terraform instalado o disponible en tu entorno de trabajo. El módulo de Terraform que te entrega el profesor, en `recursos/tema6/actividad_6_1/terraform/` (`main.tf`, `variables.tf`, `outputs.tf`). El apunte de esta sesión — «Infraestructura como código» (infraestructura-como-codigo.md).
+Terraform no viene instalado en tu CloudShell (Tema 1) por defecto — lo instalas tú mismo en el Paso 2, sin necesitar permisos de administrador, porque es un único binario que se descomprime en tu propia carpeta. El módulo de Terraform (`main.tf`, `variables.tf`, `outputs.tf`) — descárgalo del enlace de arriba. El apunte de esta sesión — «Infraestructura como código» (infraestructura-como-codigo.md).
 
 ---
 
@@ -33,11 +36,24 @@ Abre los tres ficheros `.tf` del módulo y localiza, sin ejecutar todavía nada:
 Anota, en tus propias palabras, qué infraestructura completa describe el módulo — sin ejecutarlo, solo leyéndolo.
 
 **Comprueba**: que tu descripción coincide con lo que realmente declaran los ficheros — una VPC, una subred pública y una privada en dos zonas de disponibilidad distintas, una pasarela de internet y su tabla de rutas.
+
 **Captura**: tu descripción escrita del módulo, junto a una captura del propio fichero `.tf` con los recursos señalados.
 
 ### Paso 2 — Inicializa y aplica por primera vez
 
+Desde tu **CloudShell** (Tema 1): sube `actividad_6_1_recursos.zip` con **Actions → Upload file** y descomprímelo (`unzip actividad_6_1_recursos.zip`). Terraform no viene instalado por defecto, así que instálalo tú mismo — es un único binario, no hace falta ser administrador:
+
 ```bash
+curl -O https://releases.hashicorp.com/terraform/1.9.0/terraform_1.9.0_linux_amd64.zip
+unzip terraform_1.9.0_linux_amd64.zip
+export PATH=$PATH:$(pwd)
+terraform -version
+```
+
+Vas a tener que repetir esta instalación cada vez que arranques el laboratorio — CloudShell no conserva lo instalado entre sesiones. Ahora sí, entra en la carpeta del módulo y aplica:
+
+```bash
+cd recursos/tema6/actividad_6_1/terraform/
 terraform init
 terraform plan
 ```
@@ -51,9 +67,11 @@ terraform apply
 Confirma cuando te lo pida. Al terminar, comprueba en la consola de AWS que la VPC y las subredes existen de verdad.
 
 ![La VPC y las subredes creadas por Terraform, visibles en la consola de AWS](img/actividad_6_1_paso2.png)
+*🖼️ Captura de referencia del profesor — guardar como `img/actividad_6_1_paso2.png`*
 
 **Comprueba**: que el número de recursos creados coincide exactamente con lo que mostraba el plan.
-**Captura**: la salida de `terraform apply` con el resumen final, y `img/actividad_6_1_paso2.png`.
+
+**Captura**: la salida de `terraform apply` con el resumen final, y tu propia VPC con las subredes creadas por Terraform, visibles en la consola de AWS.
 
 ### Paso 3 — Modifica el módulo para añadir una subred
 
@@ -70,6 +88,7 @@ terraform apply
 ```
 
 **Comprueba**: que la subred nueva aparece en la consola con exactamente el CIDR y la zona que has definido en el código.
+
 **Captura**: el plan mostrando solo la creación añadida, y la subred nueva visible en consola.
 
 !!! question "Reflexiona"
@@ -88,20 +107,8 @@ terraform apply
 **Cronometra destruir y reconstruir**: destruye uno de los dos entornos por completo y vuelve a crearlo desde cero, cronometrando el tiempo real desde el primer comando hasta que la infraestructura vuelve a estar disponible. Compáralo con una estimación razonada de lo que tardarías en montar la misma infraestructura a mano, clic a clic en la consola.
 
 **Comprueba**: que los dos entornos coexisten sin conflicto de nombres ni de rangos, y que tras destruir y reconstruir un entorno, no queda ningún recurso huérfano de la versión anterior.
+
 **Captura**: el código parametrizado; los dos entornos desplegados y visibles en consola; el cronómetro real de destruir/reconstruir, comparado con tu estimación del montaje manual.
-
----
-
-## Verificación
-
-Para dar por válida la práctica se ejecutará:
-
-```bash
-terraform show
-terraform state list
-```
-
-Sobre cada entorno desplegado. Debe observarse: la infraestructura completa (VPC, subredes, instancia de prueba) declarada en el estado, los dos entornos sin solapamiento de recursos, y el fichero de código con las variables parametrizadas.
 
 ---
 

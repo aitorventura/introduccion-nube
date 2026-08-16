@@ -3,6 +3,9 @@
 !!! warning "Descarga la plantilla"
     📄 [Plantilla 5.2 — Gestión de credenciales y políticas IAM](plantillas/Actividad_5_2_INU_Plantilla.docx){target="_blank" rel="noopener"}
 
+!!! warning "Descarga los recursos"
+    📦 [Recursos de la Actividad 5.2](recursos/actividad_5_2_recursos.zip){target="_blank" rel="noopener"} — descomprímelo en la raíz de tu proyecto: crea la carpeta `recursos/tema5/actividad_5_2/`, la misma ruta que usan los pasos de esta actividad.
+
 !!! info "Adaptación por las restricciones del Learner Lab"
     El Learner Lab no permite crear roles ni usuarios IAM nuevos. Donde el enunciado dice "rol con permisos mínimos", vas a usar el rol ya preasignado a tu laboratorio, adjuntándolo a la instancia y **verificando qué permisos concede de verdad**, en vez de crear uno desde cero. El principio de mínimo privilegio se practica hoy leyendo y corrigiendo políticas ya escritas, no diseñando una nueva.
 
@@ -20,7 +23,7 @@ Inventario —la aplicación de gestión de inventario de un almacén— necesit
 
 ## Requisitos previos
 
-Acceso a tu Learner Lab, con un bucket S3 propio (puedes crear uno nuevo o reutilizar uno existente) con algún objeto dentro. Los ficheros de la aplicación de Inventario, ya preparados en `recursos/tema5/actividad_5_2/` (`app.py`, `requirements.txt`, `arranque-inventario.sh`) — el profesor te los entrega, no los programas tú. El apunte de esta sesión — «Identidad y gestión de accesos» (iam-aplicado.md).
+Acceso a tu Learner Lab, con un bucket S3 propio (puedes crear uno nuevo o reutilizar uno existente) con algún objeto dentro. Los ficheros de la aplicación de Inventario (`app.py`, `requirements.txt`, `arranque-inventario.sh`) — descárgalos del enlace de arriba, no los programas tú. El apunte de esta sesión — «Identidad y gestión de accesos» (iam-aplicado.md).
 
 ---
 
@@ -36,9 +39,11 @@ Acceso a tu Learner Lab, con un bucket S3 propio (puedes crear uno nuevo o reuti
 6. Lanza la instancia. Todavía no tendrá permisos sobre S3 — eso es justo lo que vas a resolver en el paso siguiente.
 
 ![Instancia respondiendo en el puerto 80, con el error de acceso al bucket antes de tener rol asignado](img/actividad_5_2_paso1.png)
+*🖼️ Captura de referencia del profesor — guardar como `img/actividad_5_2_paso1.png`*
 
 **Comprueba**: que la instancia responde en el puerto 80, y que la ruta `/` muestra un error de acceso al bucket (todavía no tiene rol asignado).
-**Captura**: `img/actividad_5_2_paso1.png`.
+
+**Captura**: tu propia instancia respondiendo en el puerto 80, con el error de acceso al bucket antes de tener rol asignado.
 
 ### Paso 2 — Adjunta el rol preasignado a la instancia desde la consola
 
@@ -48,9 +53,11 @@ Acceso a tu Learner Lab, con un bucket S3 propio (puedes crear uno nuevo o reuti
 4. Haz clic en **Actualizar rol de IAM**.
 
 ![Rol de IAM del Learner Lab adjuntado a la instancia](img/actividad_5_2_paso2.png)
+*🖼️ Captura de referencia del profesor — guardar como `img/actividad_5_2_paso2.png`*
 
 **Comprueba**: en la pestaña **Seguridad** de los detalles de la instancia, que el rol IAM aparece asignado, y que la ruta `/` ahora muestra el listado del bucket como fichas de inventario.
-**Captura**: `img/actividad_5_2_paso2.png`.
+
+**Captura**: tu propio rol de IAM del Learner Lab ya adjuntado a la instancia.
 
 ### Paso 3 — Verifica el acceso desde dentro de la instancia, sin credenciales propias
 
@@ -61,6 +68,7 @@ aws s3 ls s3://<tu-bucket-de-inventario>
 ```
 
 **Comprueba**: que el comando devuelve el listado sin ningún error de credenciales, y que dentro de la instancia no existe ningún fichero `~/.aws/credentials` con claves de acceso escritas.
+
 **Captura**: la salida del comando, y la comprobación de que no existe fichero de credenciales.
 
 !!! question "Reflexiona"
@@ -77,21 +85,8 @@ aws s3 ls s3://<tu-bucket-de-inventario>
 **Localiza en el registro de auditoría quién hizo qué.** Activa (o revisa, si ya estaba activo) el registro de eventos de CloudTrail de tu cuenta, y busca en él la corrección de la incidencia que hiciste en la Actividad 5.1: ¿qué llamada a la API queda registrada como el momento exacto en que corregiste el problema?
 
 **Comprueba**: que cada política corregida sigue permitiendo lo que la aplicación necesita de verdad (no la has dejado tan restrictiva que rompe algo), y que localizas el evento de auditoría exacto de la incidencia anterior, no una búsqueda aproximada.
+
 **Captura**: tus cinco predicciones escritas antes de usar el simulador, junto con el resultado real del simulador para cada una; las políticas corregidas; el evento de CloudTrail localizado con su marca de tiempo.
-
----
-
-## Verificación
-
-Para dar por válida la práctica se ejecutará:
-
-```bash
-aws sts get-caller-identity
-aws s3 ls s3://<tu-bucket-de-inventario>
-aws cloudtrail lookup-events --max-results 10
-```
-
-Ambos comandos deben ejecutarse desde dentro de la instancia sin ningún fichero de credenciales local. Debe observarse: acceso correcto a S3 solo por el rol, las cinco políticas corregidas con su predicción documentada, y el evento de auditoría de la incidencia anterior localizado.
 
 ---
 

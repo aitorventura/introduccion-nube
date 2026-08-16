@@ -3,6 +3,9 @@
 !!! warning "Descarga la plantilla"
     📄 [Plantilla 3.2 — Migración a base de datos gestionada con RDS](plantillas/Actividad_3_2_INU_Plantilla.docx){target="_blank" rel="noopener"}
 
+!!! warning "Descarga los recursos"
+    📦 [Recursos de la Actividad 3.2](recursos/actividad_3_2_recursos.zip){target="_blank" rel="noopener"} — descomprímelo en la raíz de tu proyecto: crea la carpeta `recursos/tema3/actividad_3_2/`, la misma ruta que usan los pasos de esta actividad.
+
 ## Contexto
 
 El sistema de reservas de una biblioteca de barrio necesita una base de datos de verdad para su catálogo de libros y sus préstamos, y hoy la vas a montar como servicio gestionado en vez de instalarla tú mismo. La condición que la hace realista: ni una sola credencial escrita en el código de la aplicación.
@@ -19,7 +22,7 @@ El sistema de reservas de una biblioteca de barrio necesita una base de datos de
 La VPC con subred privada del Tema 2, y una instancia en marcha en subred pública para conectar la aplicación de la biblioteca. El apunte de esta sesión — «Bases de datos gestionadas» (bases-datos-gestionadas.md).
 
 !!! info "Recursos de apoyo"
-    En `recursos/tema3/actividad_3_2/` tienes los cuatro ficheros que necesitas para esta actividad: `schema.sql` (la tabla `libros` con datos de ejemplo), `app.py` (la aplicación Flask que consulta el catálogo), `requirements.txt` (sus dependencias) y `arranque-app.sh` (el script de user-data que instala todo, resuelve el secreto de Secrets Manager y arranca la aplicación sola en el primer arranque de la instancia).
+    En `recursos/tema3/actividad_3_2/` (dentro del zip que has descargado arriba) tienes los cuatro ficheros que necesitas para esta actividad: `schema.sql` (la tabla `libros` con datos de ejemplo), `app.py` (la aplicación Flask que consulta el catálogo), `requirements.txt` (sus dependencias) y `arranque-app.sh` (el script de user-data que instala todo, resuelve el secreto de Secrets Manager y arranca la aplicación sola en el primer arranque de la instancia).
 
 ---
 
@@ -39,16 +42,19 @@ La VPC con subred privada del Tema 2, y una instancia en marcha en subred públi
 7. En el grupo de seguridad, crea uno nuevo o usa uno existente que solo acepte el puerto 5432 desde el grupo de seguridad de tu instancia de aplicación.
 8. Crea la base de datos y espera a que su estado pase a `available` (tarda varios minutos).
 
-![Instancia RDS en estado available, con su endpoint visible](img/actividad_3_2_paso1_a.png)
+    ![Instancia RDS en estado available, con su endpoint visible](img/actividad_3_2_paso1_a.png)
+    *🖼️ Captura de referencia del profesor — guardar como `img/actividad_3_2_paso1_a.png`*
 
 9. Busca "Secrets Manager" en el buscador de servicios y comprueba que existe un secreto asociado a tu base de datos, generado automáticamente — no lo abras para copiar el valor, solo confirma que está ahí.
 
-![Secreto de la base de datos listado en Secrets Manager, sin mostrar su valor](img/actividad_3_2_paso1_b.png)
+    ![Secreto de la base de datos listado en Secrets Manager, sin mostrar su valor](img/actividad_3_2_paso1_b.png)
+    *🖼️ Captura de referencia del profesor — guardar como `img/actividad_3_2_paso1_b.png`*
 
 10. Conéctate a la base de datos (por ejemplo desde tu instancia, con `psql`) y ejecuta `schema.sql` de `recursos/tema3/actividad_3_2/` para crear la tabla `libros` con sus filas de ejemplo.
 
 **Comprueba**: que la instancia RDS aparece como `available`, que en Secrets Manager existe un secreto asociado a ella que tú no has escrito a mano, y que la tabla `libros` tiene datos.
-**Captura**: `img/actividad_3_2_paso1_a.png` y `img/actividad_3_2_paso1_b.png`.
+
+**Captura**: tu propia instancia RDS en estado `available`, y el secreto asociado listado en Secrets Manager (sin mostrar su valor).
 
 ### Paso 2 — Conecta la aplicación resolviendo el secreto en tiempo de ejecución
 
@@ -61,9 +67,11 @@ aws secretsmanager get-secret-value --secret-id <nombre-del-secreto> --query Sec
 ```
 
 ![La aplicación mostrando el catálogo de libros con datos reales servidos desde RDS](img/actividad_3_2_paso2.png)
+*🖼️ Captura de referencia del profesor — guardar como `img/actividad_3_2_paso2.png`*
 
 **Comprueba**: que la aplicación muestra datos que vienen de la base de datos, y que en ningún fichero del repositorio aparece la contraseña en texto plano.
-**Captura**: `img/actividad_3_2_paso2.png`, y un `grep` sobre el repositorio que no encuentra ninguna credencial en texto plano.
+
+**Captura**: tu propia aplicación mostrando el catálogo de libros con datos reales de RDS, y un `grep` sobre el repositorio que no encuentra ninguna credencial en texto plano.
 
 !!! question "Reflexiona"
     Si mañana cambia la contraseña de la base de datos (por ejemplo, por rotación automática), ¿qué parte de tu configuración tendrías que tocar para que la aplicación siga funcionando? Compáralo con lo que habría pasado si la contraseña estuviera escrita directamente en el código.
@@ -81,20 +89,8 @@ aws secretsmanager get-secret-value --secret-id <nombre-del-secreto> --query Sec
 3. El histórico de préstamos, donde cada informe cruza socio, préstamo y ejemplar con consultas complejas.
 
 **Comprueba**: que tu medición de interrupción tiene un instante de inicio y uno de fin claramente identificados, no una estimación aproximada.
+
 **Captura**: el cronómetro o registro de la interrupción real, y la tabla de los tres patrones de acceso con el modelo elegido y su justificación.
-
----
-
-## Verificación
-
-Para dar por válida la práctica se ejecutará:
-
-```bash
-aws rds describe-db-instances --db-instance-identifier <tu-instancia-rds>
-aws secretsmanager describe-secret --secret-id <nombre-del-secreto>
-```
-
-Y debe observarse: la instancia RDS en subred privada, con Multi-AZ activo, credenciales gestionadas por Secrets Manager, y ningún fichero del repositorio con una contraseña en texto plano.
 
 ---
 

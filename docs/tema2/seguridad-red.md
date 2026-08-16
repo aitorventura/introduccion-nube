@@ -8,6 +8,9 @@ Ya tienes una VPC con subredes públicas y privadas bien repartidas — la sesi�
 
 Hoy añades justo eso: dos capas de filtrado que se confunden constantemente entre sí, una forma de dar salida a internet a las subredes privadas sin exponerlas, y el hábito de administrar una instancia sin dejar su puerto de **SSH** (*Secure Shell*, el protocolo que usas para conectarte a la terminal de una máquina remota y ejecutar comandos en ella como si estuvieras delante) abierto al mundo entero.
 
+!!! info "Antes de empezar: qué es 'datos de usuario'"
+    En la actividad de hoy vas a lanzar una instancia que arranca su propio servidor web sola, sin que te conectes a configurarla — usando un script de **datos de usuario** (*user data*): un fichero de texto que le pasas a la instancia al crearla, y que se ejecuta automáticamente la primera vez que arranca. Hoy te basta con pegarlo donde te indica el asistente de lanzamiento; lo vas a ver con más detalle, junto a las plantillas de lanzamiento que lo reutilizan, en la próxima sesión.
+
 ---
 
 ## 🧭 Grupos de seguridad frente a NACL

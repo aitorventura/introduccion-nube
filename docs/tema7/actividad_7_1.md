@@ -27,6 +27,7 @@ Acceso a la arquitectura que vas a auditar (la prepara el profesor, o es la de o
 Antes de buscar fallos concretos, dibuja o recupera el diagrama completo de la arquitectura que vas a auditar (igual que hiciste con la tuya propia en la Actividad 3.3). Para cada uno de los seis pilares del apunte de hoy, recórrela y anota, sin filtrar todavía, cualquier cosa que te llame la atención — no descartes nada en esta primera pasada.
 
 **Comprueba**: que has anotado al menos algo para cada uno de los seis pilares, no solo para los más evidentes (seguridad y coste suelen saltar a la vista; fiabilidad y sostenibilidad requieren mirar con más atención).
+
 **Captura**: tus notas iniciales, organizadas por pilar.
 
 ### Paso 2 — Consulta las recomendaciones automáticas desde la consola
@@ -36,11 +37,13 @@ Antes de buscar fallos concretos, dibuja o recupera el diagrama completo de la a
 3. Si tienes acceso a **Compute Optimizer**, revisa también sus recomendaciones de ajuste de tamaño de instancia.
 
 ![Recomendaciones automáticas visibles en Trusted Advisor o Compute Optimizer](img/actividad_7_1_paso2.png)
+*🖼️ Captura de referencia del profesor — guardar como `img/actividad_7_1_paso2.png`*
 
 Para cada recomendación que veas, anota si la aplicarías tal cual, o si hay una razón de contexto por la que no —como la del ejemplo del apunte de hoy sobre la CPU baja en horario fuera de clase.
 
 **Comprueba**: que para cada recomendación automática tienes una decisión razonada (aplicar o descartar), no una lista sin analizar.
-**Captura**: `img/actividad_7_1_paso2.png`, y tu tabla de recomendaciones con su decisión justificada.
+
+**Captura**: tus propias recomendaciones visibles en Trusted Advisor o Compute Optimizer, y tu tabla de recomendaciones con su decisión justificada.
 
 ### Paso 3 — Prioriza tres hallazgos
 
@@ -52,6 +55,7 @@ De todo lo que has anotado en el Paso 1, elige los **tres hallazgos** que consid
 4. Por qué has priorizado este hallazgo por encima de otros que también anotaste.
 
 **Comprueba**: que los tres hallazgos están priorizados con un criterio explícito (impacto frente a esfuerzo), no simplemente en el orden en que los encontraste.
+
 **Captura**: la ficha de los tres hallazgos priorizados, con impacto, esfuerzo y justificación de la prioridad.
 
 !!! question "Reflexiona"
@@ -68,13 +72,8 @@ No hay procedimiento dado: a partir de los tres hallazgos priorizados, diseña y
 - Para cada recomendación automática del Paso 2 que hayas decidido aplicar, cómo queda reflejada en la versión mejorada; para cada una que hayas descartado, la justificación de por qué no aplica a este caso.
 
 **Comprueba**: que cada uno de los tres hallazgos priorizados en la Parte A tiene una solución concreta y visible en el diagrama mejorado, no una mención genérica.
+
 **Captura**: el diagrama de la arquitectura mejorada, la comparación de coste antes/después, y la tabla final de recomendaciones aplicadas/descartadas con su justificación.
-
----
-
-## Verificación
-
-Se revisará el diagrama original con los seis pilares auditados, los tres hallazgos priorizados con impacto y esfuerzo, el diagrama de la versión mejorada con la comparación de coste, y la tabla de recomendaciones automáticas con su decisión justificada.
 
 ---
 

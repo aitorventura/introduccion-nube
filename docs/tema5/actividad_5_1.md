@@ -3,6 +3,9 @@
 !!! warning "Descarga la plantilla"
     📄 [Plantilla 5.1 — Monitorización y diagnóstico con CloudWatch](plantillas/Actividad_5_1_INU_Plantilla.docx){target="_blank" rel="noopener"}
 
+!!! warning "Descarga los recursos"
+    📦 [Recursos de la Actividad 5.1](recursos/actividad_5_1_recursos.zip){target="_blank" rel="noopener"} — descomprímelo en la raíz de tu proyecto: crea la carpeta `recursos/tema5/actividad_5_1/`, la misma ruta que usan los pasos de esta actividad.
+
 ## Contexto
 
 El servidor de Entradas —una aplicación de venta de entradas para conciertos— va a estar en marcha sin que nadie lo mire constantemente. Si algo falla a las tres de la madrugada, cuando se abre la venta de un concierto muy esperado, nadie está delante de una pantalla viéndolo en directo. Hoy montas el panel que te avisa cuando algo falla sin que tengas que estar mirando, y después diagnosticas una incidencia real usando solo lo que ese panel te cuenta — sin conectarte a ninguna instancia a mirar por dentro.
@@ -15,7 +18,7 @@ El servidor de Entradas —una aplicación de venta de entradas para conciertos�
 
 ## Requisitos previos
 
-Acceso a tu Learner Lab. Los ficheros de la aplicación de Entradas, ya preparados en `recursos/tema5/actividad_5_1/` (`app.py`, `requirements.txt`, `arranque-entradas.sh`) — el profesor te los entrega, no los programas tú. Si ya tienes una instancia en marcha de otra actividad (por ejemplo la Actividad 4.1) puedes reutilizarla para esta sesión, pero no es obligatorio. El apunte de esta sesión — «Monitorización y operación» (monitorizacion-operacion.md).
+Acceso a tu Learner Lab. Los ficheros de la aplicación de Entradas (`app.py`, `requirements.txt`, `arranque-entradas.sh`) — descárgalos del enlace de arriba, no los programas tú. Si ya tienes una instancia en marcha de otra actividad (por ejemplo la Actividad 4.1) puedes reutilizarla para esta sesión, pero no es obligatorio. El apunte de esta sesión — «Monitorización y operación» (monitorizacion-operacion.md).
 
 ---
 
@@ -31,9 +34,11 @@ Acceso a tu Learner Lab. Los ficheros de la aplicación de Entradas, ya preparad
 6. Lanza la instancia.
 
 ![Entradas respondiendo en el navegador, con el catálogo de conciertos](img/actividad_5_1_paso1.png)
+*🖼️ Captura de referencia del profesor — guardar como `img/actividad_5_1_paso1.png`*
 
 **Comprueba**: que la IP pública de la instancia responde en el puerto 80 con el catálogo de conciertos de Entradas, al cabo de un par de minutos.
-**Captura**: `img/actividad_5_1_paso1.png`.
+
+**Captura**: tu propia instancia de Entradas respondiendo en el navegador, con el catálogo de conciertos.
 
 ### Paso 2 — Construye el panel desde la consola
 
@@ -45,13 +50,15 @@ Acceso a tu Learner Lab. Los ficheros de la aplicación de Entradas, ya preparad
 6. Guarda el panel.
 
 ![Panel de CloudWatch con los tres widgets mostrando actividad real](img/actividad_5_1_paso2.png)
+*🖼️ Captura de referencia del profesor — guardar como `img/actividad_5_1_paso2.png`*
 
 **Comprueba**: que el panel muestra datos reales de las últimas horas para cada widget, no gráficas vacías.
-**Captura**: `img/actividad_5_1_paso2.png`.
 
-### Paso 3 — Crea dos alarmas por CLI
+**Captura**: tu propio panel de CloudWatch con los tres widgets mostrando actividad real.
 
-Crea por CLI una alarma de CPU sostenida (por ejemplo, por encima del 80 % durante 5 minutos) sobre tu instancia, y otra sobre el estado de la comprobación de salud de la instancia:
+### Paso 3 — Crea dos alarmas
+
+Crea una alarma de CPU sostenida (por ejemplo, por encima del 80 % durante 5 minutos) sobre tu instancia, y otra sobre el estado de la comprobación de salud de la instancia. Por consola: CloudWatch → **Alarmas** → **Crear alarma** → elige la métrica, el umbral y el periodo. Por CLI, las dos en dos comandos seguidos:
 
 ```bash
 aws cloudwatch put-metric-alarm \
@@ -65,23 +72,27 @@ aws cloudwatch put-metric-alarm \
 Comprueba el resultado en consola: CloudWatch → **Alarmas**.
 
 ![Las dos alarmas listadas con su estado y su umbral configurado](img/actividad_5_1_paso3.png)
+*🖼️ Captura de referencia del profesor — guardar como `img/actividad_5_1_paso3.png`*
 
 **Comprueba**: que ambas alarmas aparecen en estado `OK` (o `ALARM` si de verdad hay carga en ese momento), no en estado de datos insuficientes.
-**Captura**: `img/actividad_5_1_paso3.png`.
+
+**Captura**: tus propias alarmas listadas, con su estado y su umbral configurado.
 
 ### Paso 4 — Localiza dónde controlar el gasto acumulado
 
 !!! warning "Comprueba esto antes de la sesión"
     Igual que en la sesión 1, una alarma de gasto acumulado con CloudWatch/Budgets no está garantizada en todos los Learner Lab.
 
-Si tu laboratorio lo permite: busca "Billing and Cost Management" → **Budgets** → crea o revisa el presupuesto de la sesión 1, y añádele si no la tenía una alarma sobre el gasto estimado del mes.
+Si tu laboratorio lo permite: busca "Administración de facturación y costos" → **Presupuestos y planificación** → **Presupuestos** → crea o revisa el presupuesto de la sesión 1, y añádele si no la tenía una alarma sobre el gasto estimado del mes.
 
 Si no te deja: entra en el panel de tu Learner Lab (fuera de la consola de AWS) y documenta con precisión dónde consultas el gasto acumulado, y qué umbral usarías como referencia para saber que te estás acercando al límite.
 
 ![Alarma de gasto acumulado, o panel de crédito del Learner Lab](img/actividad_5_1_paso4.png)
+*🖼️ Captura de referencia del profesor — guardar como `img/actividad_5_1_paso4.png`*
 
 **Comprueba**: que sabes decir, sin dudar, qué vas a mirar para saber si te estás acercando al límite de crédito del laboratorio.
-**Captura**: `img/actividad_5_1_paso4.png`.
+
+**Captura**: tu propia alarma de gasto acumulado, o el panel de crédito del Learner Lab, según tu caso.
 
 !!! question "Reflexiona"
     De las tres alarmas, ¿cuál te habría avisado antes de un problema real y cuál solo te lo habría confirmado después de que ya hubiera pasado? No todas las alarmas son igual de útiles como aviso temprano.
@@ -95,20 +106,8 @@ El profesor va a introducir una incidencia real sobre tu instancia de Entradas �
 Documenta tu proceso completo, no solo la conclusión: qué has mirado primero y por qué, qué descartaste y por qué, y qué evidencia concreta te ha llevado a identificar la causa real. Corrige la incidencia, y **crea la alarma que la habría detectado antes** de que tú tuvieras que ponerte a buscar — si esa alarma hubiera existido desde el principio, ¿te habría avisado antes de que un usuario notara el problema?
 
 **Comprueba**: que, tras tu corrección, la aplicación vuelve a comportarse con normalidad, y que la alarma nueva se dispara si reproduces el mismo fallo.
+
 **Captura**: tu proceso de diagnóstico documentado paso a paso, la corrección aplicada, y la alarma nueva configurada.
-
----
-
-## Verificación
-
-Para dar por válida la práctica se ejecutará:
-
-```bash
-aws cloudwatch describe-alarms --alarm-name-prefix entradas
-aws cloudwatch get-dashboard --dashboard-name <tu-panel>
-```
-
-Y debe observarse: al menos tres alarmas configuradas con umbrales razonables, el panel con las métricas de la instancia, y la documentación del proceso de diagnóstico con la causa real identificada y corregida.
 
 ---
 
