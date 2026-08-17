@@ -2546,7 +2546,7 @@
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Descarga los recursos</p>
-<p>📦 <a href="../recursos/actividad_4_1_recursos.zip" rel="noopener" target="_blank">Recursos de la Actividad 4.1</a> — descomprímelo en la raíz de tu proyecto: crea la carpeta <code>recursos/tema4/actividad_4_1/</code>, la misma ruta que usan los pasos de esta actividad (incluida la subcarpeta <code>estaticos/</code> que vas a reutilizar en la Actividad 4.2).</p>
+<p>📦 <a href="../recursos/actividad_4_1_recursos.zip" rel="noopener" target="_blank">Recursos de la Actividad 4.1</a> — descomprímelo donde vayas a abrir <code>arranque-encuestas.sh</code> con un editor de texto, para copiar su contenido en el Paso 1 (incluye la subcarpeta <code>estaticos/</code> que vas a reutilizar en la Actividad 4.2).</p>
 </div>
 <h2 id="contexto">Contexto<a class="headerlink" href="#contexto" title="Permanent link">¶</a></h2>
 <p>Una aplicación de encuestas en directo para eventos —Encuestas en Vivo— va a proyectarse en pantalla durante una conferencia con cientos de asistentes votando a la vez desde el móvil. Desplegarla en una única instancia significa que, si esa instancia se cae a mitad del evento, la encuesta desaparece delante de todo el público. Hoy resuelves justo eso — no añadiendo "una instancia más por si acaso", sino un mecanismo que reparte el tráfico entre varias copias y que repone automáticamente la que falle, sin que tú tengas que estar mirando la pantalla.</p>
@@ -2559,7 +2559,7 @@
 <li>Medir el tiempo real de reposición automática y de escalado por carga.</li>
 </ul>
 <h2 id="requisitos-previos">Requisitos previos<a class="headerlink" href="#requisitos-previos" title="Permanent link">¶</a></h2>
-<p>Acceso a tu Learner Lab con una VPC de dos zonas y sus subredes públicas ya creadas (Tema 2). Los ficheros de la aplicación de Encuestas en Vivo (<code>app.py</code>, <code>requirements.txt</code>, <code>arranque-encuestas.sh</code>) — descárgalos del enlace de arriba, no los programas tú. El apunte de esta sesión — «Balanceo de carga y escalado automático» (alta-disponibilidad-escalado.md).</p>
+<p>Acceso a tu Learner Lab con una VPC de dos zonas y sus subredes públicas ya creadas (Tema 2). Los ficheros de la aplicación de Encuestas en Vivo (<code>app.py</code>, <code>requirements.txt</code>, <code>arranque-encuestas.sh</code>) — descárgalos del enlace de arriba, no los programas tú. Los apuntes de esta sesión — <a href="../alta-disponibilidad-escalado/">«Balanceo de carga y escalado automático»</a>.</p>
 <hr>
 <h2 id="parte-a-balanceador-y-escalado-automatico-guiada">Parte A — Balanceador y escalado automático (guiada)<a class="headerlink" href="#parte-a-balanceador-y-escalado-automatico-guiada" title="Permanent link">¶</a></h2>
 <h3 id="paso-1-crea-tu-plantilla-de-lanzamiento-desde-la-consola">Paso 1 — Crea tu plantilla de lanzamiento desde la consola<a class="headerlink" href="#paso-1-crea-tu-plantilla-de-lanzamiento-desde-la-consola" title="Permanent link">¶</a></h3>

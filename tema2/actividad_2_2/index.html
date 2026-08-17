@@ -738,15 +738,24 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#paso-3-crea-una-pasarela-nat-para-la-subred-privada" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 3 — Crea una pasarela NAT para la subred privada
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#parte-b-diagnostico-de-las-cuatro-averias-reto" class="md-nav__link">
+  <a href="#parte-b-diagnostica-tu-averia-reto" class="md-nav__link">
     <span class="md-ellipsis">
-      Parte B — Diagnóstico de las cuatro averías (reto)
+      Parte B — Diagnostica tu avería (reto)
     </span>
   </a>
   
@@ -2455,15 +2464,24 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#paso-3-crea-una-pasarela-nat-para-la-subred-privada" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 3 — Crea una pasarela NAT para la subred privada
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#parte-b-diagnostico-de-las-cuatro-averias-reto" class="md-nav__link">
+  <a href="#parte-b-diagnostica-tu-averia-reto" class="md-nav__link">
     <span class="md-ellipsis">
-      Parte B — Diagnóstico de las cuatro averías (reto)
+      Parte B — Diagnostica tu avería (reto)
     </span>
   </a>
   
@@ -2510,66 +2528,155 @@
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Descarga los recursos</p>
-<p>📦 <a href="../recursos/actividad_2_2_recursos.zip" rel="noopener" target="_blank">Recursos de la Actividad 2.2</a> — descomprímelo en la raíz de tu proyecto: crea la carpeta <code>recursos/tema2/actividad_2_2/</code>, la misma ruta que usan los pasos de esta actividad.</p>
+<p>📦 <a href="../recursos/actividad_2_2_recursos.zip" rel="noopener" target="_blank">Recursos de la Actividad 2.2</a> — trae dos ficheros: <code>arranque-servidor.sh</code> (ábrelo con un editor de texto para copiar su contenido en el Paso 1) y <code>rompe_red.sh</code> (este lo subes tal cual a tu CloudShell y lo ejecutas, sin abrirlo antes — lo necesitas en la Parte B).</p>
 </div>
 <h2 id="contexto">Contexto<a class="headerlink" href="#contexto" title="Permanent link">¶</a></h2>
-<p>Sobre la VPC que construiste la sesión pasada vas a levantar hoy una instancia pública con un servidor web y una instancia privada solo alcanzable desde ella — el servidor de un tablón de anuncios municipal. Y luego, sin previo aviso, esa misma red va a dejar de funcionar: cuatro averías reales, preparadas de antemano, que tienes que diagnosticar contrarreloj.</p>
+<p>Sobre la VPC que construiste la sesión pasada vas a levantar hoy la primera pieza real de la aplicación de reservas de pistas deportivas: una instancia pública con un servidor web y una instancia privada solo alcanzable desde ella. Y luego, sin previo aviso, esa misma red va a dejar de funcionar: una avería real, elegida al azar entre tres posibles, que tienes que diagnosticar contrarreloj.</p>
 <h2 id="que-vas-a-practicar">Qué vas a practicar<a class="headerlink" href="#que-vas-a-practicar" title="Permanent link">¶</a></h2>
 <ul>
 <li>Levantar una instancia pública que arranca su propio servidor web sin que tengas que conectarte a mano.</li>
 <li>Aislar una instancia privada, accesible solo desde la pública.</li>
+<li>Crear una pasarela NAT para dar salida a internet a una subred privada, sin exponerla.</li>
 <li>Diagnosticar fallos de red de fuera hacia dentro, capa a capa, sin dar palos de ciego.</li>
 <li>Calcular el coste mensual real de una pasarela NAT.</li>
 </ul>
 <h2 id="requisitos-previos">Requisitos previos<a class="headerlink" href="#requisitos-previos" title="Permanent link">¶</a></h2>
-<p>La VPC de dos zonas de la Actividad 2.1, con sus subredes públicas y privadas ya creadas. El apunte de esta sesión — «Seguridad de red» (seguridad-red.md).</p>
+<p>La VPC de dos zonas de la Actividad 2.1, con sus subredes públicas y privadas ya creadas. Los apuntes de esta sesión — <a href="../seguridad-red/">«Seguridad de red»</a>.</p>
 <hr>
 <h2 id="parte-a-instancia-publica-y-privada-guiada">Parte A — Instancia pública y privada (guiada)<a class="headerlink" href="#parte-a-instancia-publica-y-privada-guiada" title="Permanent link">¶</a></h2>
 <h3 id="paso-1-lanza-la-instancia-publica-desde-la-consola">Paso 1 — Lanza la instancia pública desde la consola<a class="headerlink" href="#paso-1-lanza-la-instancia-publica-desde-la-consola" title="Permanent link">¶</a></h3>
 <ol>
 <li>Busca "EC2" en el buscador de servicios → <strong>Instancias</strong> → <strong>Lanzar instancia</strong>.</li>
-<li>Dale un nombre (por ejemplo <code>tablon-publica-&lt;tu-identificador&gt;</code>).</li>
-<li>Elige la imagen (AMI) que te indique el profesor, y el tipo <code>t3.micro</code>.</li>
+<li>Dale un nombre (por ejemplo <code>pistas-app-publica-&lt;tu-identificador&gt;</code>).</li>
+<li>Elige como AMI <strong>Amazon Linux 2023</strong> (la más reciente disponible en la capa gratuita), y como tipo de instancia <code>t3.micro</code>.</li>
 <li>En <strong>Configuración de red</strong>, elige tu VPC y tu subred pública, y asegúrate de que <strong>Asignar IP pública automáticamente</strong> está en <strong>Habilitar</strong>.</li>
-<li>En el propio asistente, crea un grupo de seguridad nuevo con solo dos reglas: puerto 80 abierto a <code>0.0.0.0/0</code>, y puerto 22 restringido a tu propia IP (usa la opción "Mi IP" del desplegable de origen).</li>
-<li>Despliega <strong>Detalles avanzados</strong>, baja hasta el campo <strong>Datos de usuario</strong> (<em>user data</em>), y pega ahí el contenido completo de <code>arranque-servidor.sh</code> — el script vive en <code>recursos/tema2/actividad_2_2/arranque-servidor.sh</code>, dentro del zip que has descargado arriba.</li>
-<li>Haz clic en <strong>Lanzar instancia</strong>.</li>
+<li>
+<p>En <strong>Grupo de seguridad</strong>, elige <strong>Crear un nuevo grupo de seguridad</strong>. El asistente añade por defecto una única regla SSH — en su desplegable de origen, cámbiala de "Anywhere" a <strong>Mi IP</strong>.</p>
+<p>Añade una <strong>segunda</strong> regla SSH (<strong>Agregar regla de seguridad</strong> → tipo <strong>SSH</strong>), esta vez con origen <strong>Anywhere-IPv4</strong> (<code>0.0.0.0/0</code>). Y una tercera para el puerto 80: <strong>Agregar regla de seguridad</strong> de nuevo, tipo <strong>HTTP</strong>, origen <code>0.0.0.0/0</code>. Debes terminar con exactamente tres reglas: dos de SSH (una a tu IP, otra abierta) y una de HTTP abierta.</p>
+<div class="admonition warning">
+<p class="admonition-title">Las dos reglas juntas no son buena práctica — son una limitación del aula</p>
+<p>En cuanto abres <code>0.0.0.0/0</code>, la regla de <strong>Mi IP</strong> deja de proteger nada de verdad: cualquiera puede intentar conectar por el puerto 22, la estrecha no bloquea lo que la ancha ya deja pasar. No son dos capas que se complementen — la ancha anula a la estrecha por completo. En un trabajo real nunca tendrías las dos a la vez: elegirías <strong>una</strong>, según cómo te fueras a conectar. Aquí están juntas solo porque la red del centro bloquea la conexión SSH directa, así que necesitas el método del navegador (<strong>EC2 Instance Connect</strong>, que no pasa por tu red local, sino por la infraestructura de AWS) sí o sí — y de paso practicas también la regla de "Mi IP" que sí aplicarías en un caso real, aunque hoy no esté haciendo su trabajo. Ya viste el mismo razonamiento del navegador en la Actividad 2.1.</p>
+</div>
+<p><img alt="Las tres reglas de entrada ya configuradas: SSH a Mi IP, SSH a 0.0.0.0/0 y HTTP a 0.0.0.0/0" src="../img/actividad_2_2_paso1_reglas_finales.png">
+<em>🖼️ Captura de referencia del profesor — guardar como <code>img/actividad_2_2_paso1_reglas_finales.png</code></em></p>
+</li>
+<li>
+<p>Antes de seguir, echa un vistazo a la <strong>NACL</strong> de tu subred pública — el otro filtro de tráfico que actúa antes de llegar a la instancia, a nivel de subred en vez de por instancia (lo has visto en <a href="../seguridad-red/">«Seguridad de red»</a>). Ve a <strong>VPC → Seguridad → ACL de red</strong>, busca la asociada a <code>pistas-publica-a</code> y abre la pestaña <strong>Reglas de entrada</strong>: por defecto verás una regla <code>100</code> que permite (<code>ALLOW</code>) todo el tráfico, y una regla final <code>*</code> que deniega (<code>DENY</code>) todo lo que no haya coincidido antes — es la que actúa solo si ninguna otra regla numerada lo ha hecho. No cambies nada todavía: solo fíjate en qué aspecto tiene una NACL completamente abierta, para reconocer más adelante una que no lo esté.</p>
+</li>
+<li>
+<p>Despliega <strong>Detalles avanzados</strong>. Busca el campo <strong>Perfil de instancia de IAM</strong> y selecciona <code>LabInstanceProfile</code> — lo necesitas más adelante, para autorizar el salto por SSH hacia la instancia privada. Baja hasta el campo <strong>Datos de usuario</strong> (<em>user data</em>: un fichero de texto que le pasas a la instancia al crearla, y que se ejecuta solo, automáticamente, la primera vez que arranca — hoy te basta con pegarlo aquí; lo vas a ver con más detalle, junto a las plantillas de lanzamiento que lo reutilizan, en la Actividad 2.3), y pega ahí el contenido completo de <code>arranque-servidor.sh</code> — el script vive en <code>recursos/tema2/actividad_2_2/arranque-servidor.sh</code>, dentro del zip que has descargado arriba.</p>
+<div class="admonition tip">
+<p class="admonition-title">Si al abrir el script ves símbolos raros en vez de acentos (Ã³, Ã©...)</p>
+<p>El fichero está bien, en UTF-8 — lo que falla es el programa con el que lo has abierto, que ha adivinado mal la codificación (típico del Bloc de notas de Windows en algunas configuraciones). No lo arregles a mano: ábrelo con un editor que respete UTF-8 (por ejemplo VS Code) en vez de hacer doble clic, o simplemente copia el contenido tal cual te lo dé el profesor en clase.</p>
+</div>
+<p>Antes de hacer clic en <strong>Lanzar instancia</strong>, haz ya tu propia captura del asistente relleno: en cuanto lances la instancia, desaparece, y no hay forma de volver atrás a verlo.</p>
+</li>
+<li>
+<p>Ahora sí, haz clic en <strong>Lanzar instancia</strong>.</p>
+</li>
 </ol>
-<p><img alt="Asistente de lanzamiento con el grupo de seguridad y el campo de user data rellenados" src="img/actividad_2_2_paso1_a.png">
-<em>🖼️ Captura de referencia del profesor — guardar como <code>img/actividad_2_2_paso1_a.png</code></em></p>
-<p>El script <code>arranque-servidor.sh</code> instala y arranca, al primer arranque de la instancia, un servidor web mínimo con la página del tablón de anuncios — sin intervención tuya. Espera un par de minutos y prueba la IP pública de la instancia en el navegador.</p>
-<p><img alt="El servidor web respondiendo en el navegador, sin haberte conectado por SSH" src="img/actividad_2_2_paso1_b.png">
-<em>🖼️ Captura de referencia del profesor — guardar como <code>img/actividad_2_2_paso1_b.png</code></em></p>
+<p>El script <code>arranque-servidor.sh</code> instala y arranca, al primer arranque de la instancia, un servidor web mínimo con la página de reservas de pistas deportivas — sin intervención tuya. Espera un par de minutos y prueba en el navegador <code>http://&lt;ip-pública&gt;</code> — <strong>escribe el <code>http://</code> a mano</strong>, sin dejar que el navegador lo complete solo.</p>
+<div class="admonition warning">
+<p class="admonition-title">Si ves ERR_SSL_PROTOCOL_ERROR ('conexión no segura')</p>
+<p>Es el error más habitual de este paso. Muchos navegadores, si solo escribes la IP sin prefijo, prueban <code>https://</code> por defecto — y esta instancia no tiene ningún certificado, solo sirve tráfico sin cifrar por el puerto 80. No es un fallo de tu instancia ni del grupo de seguridad: escribe <code>http://</code> explícitamente delante de la IP y el error desaparece.</p>
+</div>
 <p><strong>Comprueba</strong>: que la IP pública de la instancia responde en el puerto 80 desde tu navegador, sin haberte conectado nunca por SSH.</p>
-<p><strong>Captura</strong>: tu propio asistente de lanzamiento con el grupo de seguridad y el user data rellenados, y el servidor web respondiendo en el navegador sin haberte conectado por SSH.</p>
+<p><strong>Captura</strong>: el asistente de lanzamiento con el grupo de seguridad y el user data rellenados (<strong>antes</strong> de lanzar, tu propia captura de ese momento), y el servidor web respondiendo en el navegador sin haberte conectado por SSH (<strong>después</strong>, ya con la instancia en marcha).</p>
 <h3 id="paso-2-lanza-la-instancia-privada-por-cli">Paso 2 — Lanza la instancia privada por CLI<a class="headerlink" href="#paso-2-lanza-la-instancia-privada-por-cli" title="Permanent link">¶</a></h3>
-<p>Lanza una segunda instancia en tu subred privada, esta vez por CLI. Su grupo de seguridad no debe permitir tráfico desde <code>0.0.0.0/0</code> en ningún puerto — solo desde el grupo de seguridad de la instancia pública:</p>
+<p>Hasta ahora siempre has lanzado instancias rellenando el asistente de la consola, pantalla a pantalla. Para esta segunda instancia usas por primera vez la <strong>CLI</strong>: el mismo lanzamiento, pero como un único comando de texto en vez de veinte clics — no son dos herramientas distintas, son dos caras de la misma API que ya viste en el Tema 1, y a partir de aquí las vas a alternar según te convenga en cada momento.</p>
+<p>Antes de lanzar necesitas tres datos, y cada uno se busca de una forma distinta:</p>
+<ol>
+<li>
+<p><strong>El ID de la AMI</strong>: la misma que usaste en el Paso 1 (Amazon Linux 2023). Consíguelo desde tu instancia pública ya lanzada — consola: <strong>EC2 → Instancias</strong> → selecciona tu instancia pública → pestaña <strong>Detalles</strong> → campo <strong>ID de AMI</strong>. Por CLI, si ya tienes el ID de esa instancia:</p>
 <div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
-<span class="normal"><a href="#__codelineno-0-2">2</a></span>
-<span class="normal"><a href="#__codelineno-0-3">3</a></span>
-<span class="normal"><a href="#__codelineno-0-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a>aws<span class="w"> </span>ec2<span class="w"> </span>run-instances<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="w">  </span>--image-id<span class="w"> </span>&lt;ami-id&gt;<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">  </span>--subnet-id<span class="w"> </span>&lt;subnet-privada-id&gt;<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">  </span>--security-group-ids<span class="w"> </span>&lt;sg-privado-id&gt;
+<span class="normal"><a href="#__codelineno-0-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a>aws<span class="w"> </span>ec2<span class="w"> </span>describe-instances<span class="w"> </span>--instance-ids<span class="w"> </span>&lt;id-instancia-publica&gt;<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="w">  </span>--query<span class="w"> </span><span class="s2">"Reservations[0].Instances[0].ImageId"</span><span class="w"> </span>--output<span class="w"> </span>text
 </code></pre></div></td></tr></table></div>
-<p><strong>Comprueba</strong>: conéctate primero a la instancia pública, y desde ahí intenta llegar a la instancia privada — debe funcionar. Comprueba también que la instancia privada no tiene IP pública asignada.</p>
-<p><strong>Captura</strong>: la conexión exitosa desde la instancia pública hacia la privada, y la ausencia de IP pública en la instancia privada.</p>
+</li>
+<li>
+<p><strong>El ID de tu subred privada</strong>: consola: <strong>VPC → Subredes</strong> → clic en <code>pistas-privada-a</code> → copia el <strong>ID de la subred</strong> (empieza por <code>subnet-</code>). Por CLI:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span>
+<span class="normal"><a href="#__codelineno-1-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a>aws<span class="w"> </span>ec2<span class="w"> </span>describe-subnets<span class="w"> </span>--filters<span class="w"> </span><span class="s2">"Name=tag:Name,Values=pistas-privada-a"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="w">  </span>--query<span class="w"> </span><span class="s2">"Subnets[0].SubnetId"</span><span class="w"> </span>--output<span class="w"> </span>text
+</code></pre></div></td></tr></table></div>
+</li>
+<li>
+<p><strong>Un grupo de seguridad nuevo para la privada</strong>, que no existe todavía — lo creas tú ahora, y a diferencia del de la pública, no debe permitir tráfico desde <code>0.0.0.0/0</code> en ningún puerto: solo SSH, y solo desde el grupo de seguridad de tu instancia pública (el mismo patrón de "salto" que ya viste en la Actividad 2.1). Primero, localiza el ID del grupo de seguridad de tu instancia pública (pestaña <strong>Seguridad</strong> de esa instancia, o <code>aws ec2 describe-instances --instance-ids &lt;id-instancia-publica&gt; --query "Reservations[0].Instances[0].SecurityGroups[0].GroupId" --output text</code>) y el ID de tu VPC (<strong>VPC → Su VPC</strong>, o <code>aws ec2 describe-vpcs --filters "Name=tag:Name,Values=pistas-vpc-&lt;tu-identificador&gt;" --query "Vpcs[0].VpcId" --output text</code>). Con esos dos datos, crea el grupo y autoriza la regla:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
+<span class="normal"><a href="#__codelineno-2-2">2</a></span>
+<span class="normal"><a href="#__codelineno-2-3">3</a></span>
+<span class="normal"><a href="#__codelineno-2-4">4</a></span>
+<span class="normal"><a href="#__codelineno-2-5">5</a></span>
+<span class="normal"><a href="#__codelineno-2-6">6</a></span>
+<span class="normal"><a href="#__codelineno-2-7">7</a></span>
+<span class="normal"><a href="#__codelineno-2-8">8</a></span>
+<span class="normal"><a href="#__codelineno-2-9">9</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a>aws<span class="w"> </span>ec2<span class="w"> </span>create-security-group<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="w">  </span>--group-name<span class="w"> </span>pistas-app-privada-sg-&lt;tu-identificador&gt;<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="w">  </span>--description<span class="w"> </span><span class="s2">"SSH solo desde la instancia publica"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="w">  </span>--vpc-id<span class="w"> </span>&lt;vpc-id&gt;
+<a id="__codelineno-2-5" name="__codelineno-2-5"></a>
+<a id="__codelineno-2-6" name="__codelineno-2-6"></a>aws<span class="w"> </span>ec2<span class="w"> </span>authorize-security-group-ingress<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7"></a><span class="w">  </span>--group-id<span class="w"> </span>&lt;sg-privado-id&gt;<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8"></a><span class="w">  </span>--protocol<span class="w"> </span>tcp<span class="w"> </span>--port<span class="w"> </span><span class="m">22</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9"></a><span class="w">  </span>--source-group<span class="w"> </span>&lt;sg-publico-id&gt;
+</code></pre></div></td></tr></table></div>
+<p>El primer comando te devuelve un <code>GroupId</code> en la respuesta — ese es tu <code>&lt;sg-privado-id&gt;</code> para el resto de esta actividad.</p>
+</li>
+</ol>
+<p>Con los tres datos ya en la mano, lanza la instancia:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
+<span class="normal"><a href="#__codelineno-3-2">2</a></span>
+<span class="normal"><a href="#__codelineno-3-3">3</a></span>
+<span class="normal"><a href="#__codelineno-3-4">4</a></span>
+<span class="normal"><a href="#__codelineno-3-5">5</a></span>
+<span class="normal"><a href="#__codelineno-3-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a>aws<span class="w"> </span>ec2<span class="w"> </span>run-instances<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="w">  </span>--image-id<span class="w"> </span>&lt;ami-id&gt;<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="w">  </span>--instance-type<span class="w"> </span>t3.micro<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="w">  </span>--subnet-id<span class="w"> </span>&lt;subnet-privada-id&gt;<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="w">  </span>--security-group-ids<span class="w"> </span>&lt;sg-privado-id&gt;<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6"></a><span class="w">  </span>--tag-specifications<span class="w"> </span><span class="s1">'ResourceType=instance,Tags=[{Key=Name,Value=pistas-app-privada-&lt;tu-identificador&gt;}]'</span>
+</code></pre></div></td></tr></table></div>
+<p>A diferencia del asistente de la consola, <code>run-instances</code> no pone <code>t3.micro</code> por defecto (sin <code>--instance-type</code> AWS elige otro tamaño por su cuenta) ni le pone nombre a la instancia (sin <code>--tag-specifications</code> la verías sin nombre en el listado — es la etiqueta <code>Name</code> la que la consola muestra como si fuera el nombre). Si ya has lanzado una instancia sin este parámetro, termínala y vuelve a lanzarla bien — no se puede cambiar el tipo de instancia de una ya creada sin pararla primero.</p>
+<p><strong>Comprueba</strong>: conéctate primero a la instancia pública, y desde ahí intenta llegar a la instancia privada — el mismo salto por SSH que ya hiciste en la Actividad 2.1, con los mismos comandos. Debe funcionar. Comprueba también que la instancia privada no tiene IP pública asignada.</p>
+<div class="admonition tip">
+<p class="admonition-title">Si el salto falla por permisos, revisa el rol de tu instancia pública</p>
+<p>Este salto necesita que tu instancia <strong>pública</strong> tenga el rol <code>LabInstanceProfile</code> (Paso 1). Si la lanzaste antes de tener ese campo en cuenta, añádelo ahora: <strong>EC2 → Instancias</strong> → selecciona la pública → <strong>Acciones → Seguridad → Modificar rol de IAM</strong> → elige <strong>LabInstanceProfile</strong> → <strong>Actualizar rol de IAM</strong>. No hace falta relanzar nada.</p>
+</div>
+<p>Ya que estás dentro, aprovecha para dejar constancia del punto de partida: desde ese mismo salto, comprueba que la privada <strong>todavía no</strong> sale a internet (<code>ping</code> a una IP externa, por ejemplo — no vas a crear la pasarela NAT hasta el Paso 3). Debe quedarse sin respuesta; es justo lo que vas a comparar cuando la pasarela NAT ya exista.</p>
+<p><strong>Captura</strong>: la conexión exitosa desde la instancia pública hacia la privada, la ausencia de IP pública en la instancia privada, y el <code>ping</code> sin respuesta desde dentro de la privada (todavía sin NAT).</p>
+<h3 id="paso-3-crea-una-pasarela-nat-para-la-subred-privada">Paso 3 — Crea una pasarela NAT para la subred privada<a class="headerlink" href="#paso-3-crea-una-pasarela-nat-para-la-subred-privada" title="Permanent link">¶</a></h3>
+<p>Ya sabes por los apuntes de hoy qué es una pasarela NAT y por qué tiene coste — ahora la creas de verdad, para que tu instancia privada pueda salir a internet (actualizar paquetes, por ejemplo) sin dejar de ser inalcanzable desde fuera.</p>
+<ol>
+<li>Busca "VPC" → <strong>Direcciones IP elásticas</strong> → <strong>Asignar dirección IP elástica</strong> → <strong>Asignar</strong>. Una <strong>IP elástica</strong> (<em>Elastic IP</em>) es una dirección pública fija que reservas tú y que no cambia aunque cambies o reinicies el recurso al que está asociada — a diferencia de la IP pública automática que le has visto a tus instancias hasta ahora, que sí puede cambiar. Una pasarela NAT necesita una de estas direcciones fijas propia; esta es la que le vas a dar.</li>
+<li>Ve a <strong>NAT Gateways</strong> → <strong>Crear gateway NAT</strong>.</li>
+<li>Dale un nombre. En <strong>Modo de disponibilidad</strong>, elige <strong>Zonal</strong> (no el que viene marcado por defecto, "Regional" — ese reparte la pasarela automáticamente entre zonas y no te deja elegir subred, y hoy la quieres en una subred concreta). Al elegir Zonal aparece el campo <strong>Subred</strong>: elige tu subred <strong>pública</strong> (<code>pistas-publica-a</code>) — este es el punto que más se olvida: la pasarela NAT vive en la subred pública, aunque la use la privada.</li>
+<li>En <strong>Tipo de conectividad</strong>, deja <strong>Pública</strong>. En <strong>ID de asignación de IP elástica</strong>, selecciona la que has creado en el paso 1.</li>
+<li>Crea la pasarela, y espera a que su estado pase de <code>Pending</code> a <code>Available</code> (tarda unos minutos).</li>
+<li>Ve a <strong>Tablas de enrutamiento</strong>, selecciona la tabla asociada a tu subred <strong>privada</strong> (la principal, la misma que viste en la Actividad 2.1) → pestaña <strong>Rutas</strong> → <strong>Editar rutas</strong> → <strong>Agregar ruta</strong>: en <strong>Destino</strong> escribe <code>0.0.0.0/0</code>, y en <strong>Destino de destino</strong> elige tu pasarela NAT recién creada. Guarda los cambios.</li>
+</ol>
+<p>Que la ruta esté bien puesta no demuestra por sí solo que la privada llegue a internet de verdad — compruébalo desde dentro. Conéctate a la instancia pública por <strong>EC2 Instance Connect</strong> y, desde ahí, salta a la privada por SSH con el mismo mecanismo de la Actividad 2.1 (clave temporal autorizada unos segundos) — el mismo salto y el mismo <code>ping</code> del Paso 2, pero esta vez debe responder.</p>
+<p><strong>Comprueba</strong>: que la pasarela NAT aparece en estado <code>Available</code>, que la tabla de rutas de tu subred privada tiene la entrada <code>0.0.0.0/0</code> apuntando a ella (no a la pasarela de internet, esa la usa solo la pública), y que el <code>ping</code> desde dentro de la instancia privada recibe respuesta — la prueba real de que sale a internet.</p>
+<p><strong>Captura</strong>: tu pasarela NAT en estado <code>Available</code>, la tabla de rutas de la subred privada mostrando la nueva ruta hacia ella, y la salida del <code>ping</code> con respuesta desde dentro de la instancia privada.</p>
 <hr>
-<h2 id="parte-b-diagnostico-de-las-cuatro-averias-reto">Parte B — Diagnóstico de las cuatro averías (reto)<a class="headerlink" href="#parte-b-diagnostico-de-las-cuatro-averias-reto" title="Permanent link">¶</a></h2>
-<p>El profesor va a introducir, sobre tu propia red o sobre una preparada para el ejercicio, <strong>cuatro averías</strong> independientes: una ruta incorrecta en una tabla de rutas, un grupo de seguridad cerrado donde no debería estarlo, una regla de NACL bloqueante, y una instancia parada. La red deja de responder como se espera, y no sabes de antemano cuál de las cuatro capas está fallando.</p>
-<p>Diagnostica <strong>de fuera hacia dentro</strong>, sin saltarte capas: primero comprueba si la instancia está en marcha, luego la tabla de rutas de la subred, luego la NACL, y por último el grupo de seguridad. Para cada avería que encuentres, documenta por escrito:</p>
+<h2 id="parte-b-diagnostica-tu-averia-reto">Parte B — Diagnostica tu avería (reto)<a class="headerlink" href="#parte-b-diagnostica-tu-averia-reto" title="Permanent link">¶</a></h2>
+<p>Descarga <code>rompe_red.sh</code> (junto al resto de recursos de la actividad) y ejecútalo tal cual, desde tu <strong>CloudShell</strong>, sobre tu propia cuenta:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a>bash<span class="w"> </span>rompe_red.sh
+</code></pre></div></td></tr></table></div>
+<p>El script aplica <strong>una única avería al azar</strong>, de entre tres posibles: una ruta incorrecta en una tabla de rutas, un grupo de seguridad cerrado donde no debería estarlo, o una regla de NACL bloqueante. No te dice cuál — eso es lo que tienes que averiguar. Es tu propia red la que se rompe, con un cambio real sobre tus propios recursos, no una simulación. No abras el script para mirar el código antes de terminar el diagnóstico: te chivarías la respuesta a ti mismo.</p>
+<p>Diagnostica <strong>de fuera hacia dentro</strong>, sin saltarte capas, y usa el primer síntoma como pista real, no como trámite: primero comprueba si la instancia está en marcha (aquí siempre lo va a estar, pero es el primer sitio donde mirarías en un caso real). Después, prueba lo más simple: vuelve a abrir <code>http://&lt;ip-pública&gt;</code> en el navegador, igual que en el Paso 1 — si ya no carga, ahí tienes el primer síntoma. Para saber si es la ruta o es la NACL/el grupo de seguridad, intenta conectar por <strong>EC2 Instance Connect</strong>: si tampoco puedes —ni la web ni la conexión funcionan— el problema es la ruta de la subred, el único de los tres que corta todo el tráfico, no solo el puerto 80. Si consigues conectar sin problema pero la web sigue sin responder, descarta la ruta: el problema está en la NACL o en el grupo de seguridad, y ahí el síntoma externo es idéntico entre los dos — tienes que mirar los dos sitios para saber cuál es. En cuanto localices la tuya, documenta por escrito:</p>
 <ol>
 <li>Qué síntoma has observado (qué esperabas y qué ha pasado en realidad).</li>
 <li>Qué capa has revisado primero y por qué esa y no otra.</li>
-<li>Qué comando o comprobación te ha llevado a localizar el problema exacto.</li>
+<li>Qué has visto en la consola que te ha llevado a localizar el problema exacto.</li>
 <li>Cómo lo has corregido.</li>
 </ol>
-<p>Cuando tengas las cuatro averías resueltas, añade una pasarela NAT a tu VPC (si no la tenías ya) y <strong>calcula su coste mensual estimado</strong> con la calculadora oficial de AWS, a partir del precio por hora y una estimación razonable de GB de tráfico saliente de tus instancias privadas.</p>
-<p><strong>Comprueba</strong>: que, tras corregir las cuatro averías, la red vuelve a comportarse exactamente como en la Parte A.</p>
-<p><strong>Captura</strong>: las cuatro fichas de diagnóstico (síntoma, capa revisada, comando usado, corrección aplicada), y el desglose de coste mensual de la pasarela NAT.</p>
+<p>Tanto el diagnóstico como la corrección los haces desde la <strong>consola de AWS</strong>, en el mismo sitio donde revisaste o editaste cada componente en la Parte A (tabla de rutas, NACL o grupo de seguridad) — sin comandos.</p>
+<p>Cuando tengas tu avería resuelta, <strong>calcula el coste mensual estimado</strong> de la pasarela NAT que ya creaste en la Parte A, con la <a href="https://calculator.aws/#/" rel="noopener" target="_blank">calculadora oficial de precios de AWS</a>, a partir del precio por hora y una estimación razonable de GB de tráfico saliente de tus instancias privadas.</p>
+<p><strong>Comprueba</strong>: que, tras corregir tu avería desde la consola, la red vuelve a comportarse exactamente como en la Parte A.</p>
+<p><strong>Captura</strong>: tu ficha de diagnóstico (síntoma, capa revisada, qué has visto en la consola, corrección aplicada); una captura del problema <strong>antes</strong> de corregirlo (la regla, ruta o NACL incorrecta en la consola, o el error al intentar acceder); otra <strong>después</strong>, ya corregido; y el desglose de coste mensual de la pasarela NAT.</p>
 <div class="admonition question">
 <p class="admonition-title">Reflexiona</p>
-<p>De las cuatro averías, ¿cuál has confundido primero con otra capa distinta a la que realmente era? Un grupo de seguridad cerrado y una NACL bloqueante producen síntomas muy parecidos desde fuera. ¿Qué comprobación concreta es la que de verdad distingue una de la otra?</p>
+<p>Busca a un compañero al que le haya tocado una avería distinta a la tuya, y comparad sin miraros el código de <code>rompe_red.sh</code>: ¿qué síntoma habéis visto cada uno al entrar por primera vez, y en qué momento del diagnóstico habéis podido distinguir con certeza cuál de las capas estaba fallando? Un grupo de seguridad cerrado y una NACL bloqueante producen síntomas muy parecidos desde fuera — ¿qué comprobación concreta es la que de verdad distingue una de la otra?</p>
 </div>
 <hr>
 <h2 id="criterios-de-evaluacion">Criterios de evaluación<a class="headerlink" href="#criterios-de-evaluacion" title="Permanent link">¶</a></h2>
@@ -2584,11 +2691,15 @@
 <tbody>
 <tr>
 <td>Instancia pública con servidor web automático (user data) y grupo mínimo</td>
-<td>3</td>
+<td>2</td>
 </tr>
 <tr>
 <td>Instancia privada accesible solo desde la pública</td>
-<td>4</td>
+<td>3</td>
+</tr>
+<tr>
+<td>Pasarela NAT creada, con la ruta de la subred privada apuntando a ella</td>
+<td>2</td>
 </tr>
 </tbody>
 </table>
@@ -2602,7 +2713,7 @@
 </thead>
 <tbody>
 <tr>
-<td>Las cuatro averías diagnosticadas y corregidas, con razonamiento documentado</td>
+<td>Tu avería diagnosticada y corregida, con razonamiento documentado</td>
 <td>2</td>
 </tr>
 <tr>
@@ -2616,7 +2727,7 @@
 <p>Ya sabes diagnosticar una red de fuera hacia dentro, capa a capa, en vez de cambiar cosas al azar hasta que funcione — es la habilidad que más vas a usar el resto del curso cada vez que algo no responda como esperabas. La próxima sesión dejas de crear instancias a mano, una a una: vas a automatizar su lanzamiento con plantillas, para no repetir este mismo proceso cada vez que necesites una máquina más.</p>
 <div class="admonition danger">
 <p class="admonition-title">Antes de salir: borra las instancias y la pasarela NAT si la has creado</p>
-<p>Termina las dos instancias EC2 de hoy (la pública del tablón y la privada) — la Actividad 2.3 lanza una instancia nueva, no reutiliza estas. Si has hecho la Parte B, borra también la pasarela NAT: es el recurso más caro de toda la sesión, factura por hora exista o no tráfico, y no le sirve a nadie después de hoy. <strong>No borres la VPC, las subredes ni las tablas de rutas</strong> — las sigue necesitando el resto del módulo.</p>
+<p>Termina las dos instancias EC2 de hoy (la pública de pistas y la privada) — la Actividad 2.3 lanza una instancia nueva, no reutiliza estas. Borra también la pasarela NAT que has creado en la Parte A (y su IP elástica asociada): es el recurso más caro de toda la sesión, factura por hora exista o no tráfico, y no le sirve a nadie después de hoy. <strong>No borres la VPC, las subredes ni las tablas de rutas</strong> — quita solo la ruta <code>0.0.0.0/0</code> que apuntaba a la NAT, la tabla en sí la sigue necesitando el resto del módulo.</p>
 </div></div>
 
 

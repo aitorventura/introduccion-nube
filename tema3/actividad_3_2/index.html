@@ -2510,7 +2510,7 @@
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Descarga los recursos</p>
-<p>📦 <a href="../recursos/actividad_3_2_recursos.zip" rel="noopener" target="_blank">Recursos de la Actividad 3.2</a> — descomprímelo en la raíz de tu proyecto: crea la carpeta <code>recursos/tema3/actividad_3_2/</code>, la misma ruta que usan los pasos de esta actividad.</p>
+<p>📦 <a href="../recursos/actividad_3_2_recursos.zip" rel="noopener" target="_blank">Recursos de la Actividad 3.2</a> — descomprímelo donde vayas a abrir <code>schema.sql</code> y <code>arranque-app.sh</code> con un editor de texto — los usas en los Pasos 1 y 2.</p>
 </div>
 <h2 id="contexto">Contexto<a class="headerlink" href="#contexto" title="Permanent link">¶</a></h2>
 <p>El sistema de reservas de una biblioteca de barrio necesita una base de datos de verdad para su catálogo de libros y sus préstamos, y hoy la vas a montar como servicio gestionado en vez de instalarla tú mismo. La condición que la hace realista: ni una sola credencial escrita en el código de la aplicación.</p>
@@ -2522,7 +2522,7 @@
 <li>Clasificar patrones de acceso entre los tres modelos de base de datos sin necesidad de montarlos.</li>
 </ul>
 <h2 id="requisitos-previos">Requisitos previos<a class="headerlink" href="#requisitos-previos" title="Permanent link">¶</a></h2>
-<p>La VPC con subred privada del Tema 2, y una instancia en marcha en subred pública para conectar la aplicación de la biblioteca. El apunte de esta sesión — «Bases de datos gestionadas» (bases-datos-gestionadas.md).</p>
+<p>La VPC con subred privada del Tema 2, y una instancia en marcha en subred pública para conectar la aplicación de la biblioteca. Los apuntes de esta sesión — <a href="../bases-datos-gestionadas/">«Bases de datos gestionadas»</a>.</p>
 <div class="admonition info">
 <p class="admonition-title">Recursos de apoyo</p>
 <p>En <code>recursos/tema3/actividad_3_2/</code> (dentro del zip que has descargado arriba) tienes los cuatro ficheros que necesitas para esta actividad: <code>schema.sql</code> (la tabla <code>libros</code> con datos de ejemplo), <code>app.py</code> (la aplicación Flask que consulta el catálogo), <code>requirements.txt</code> (sus dependencias) y <code>arranque-app.sh</code> (el script de user-data que instala todo, resuelve el secreto de Secrets Manager y arranca la aplicación sola en el primer arranque de la instancia).</p>

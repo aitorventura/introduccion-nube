@@ -2554,7 +2554,7 @@
 <li>Verificar qué conectividad existe de verdad, y comprobar que la que no debería existir, efectivamente no existe.</li>
 </ul>
 <h2 id="requisitos-previos">Requisitos previos<a class="headerlink" href="#requisitos-previos" title="Permanent link">¶</a></h2>
-<p>El apunte de esta sesión — <a href="../vpc-diseno/">«Diseño de la red virtual»</a>. No necesitas nada de sesiones anteriores: hoy construyes la red desde cero.</p>
+<p>Los apuntes de esta sesión — <a href="../vpc-diseno/">«Diseño de la red virtual»</a>. No necesitas nada de sesiones anteriores: hoy construyes la red desde cero.</p>
 <div class="admonition warning">
 <p class="admonition-title">Cómo hacer las capturas</p>
 <p>En cada captura tiene que verse con claridad lo que se pide (direcciones IP, CIDR, nombres de subred, salida de los comandos...) — una captura recortada, borrosa o con la información clave fuera de encuadre no sirve como evidencia. Además, tiene que verse algo que identifique que los recursos son tuyos y que la práctica la has hecho tú: tu identificador en el nombre de los recursos (<code>pistas-vpc-&lt;tu-identificador&gt;</code>), o la IP y el ID de instancia concretos que hayas usado — no una captura genérica que podría ser de cualquier otro alumno.</p>
@@ -2652,7 +2652,7 @@
 <li>
 <p>Busca "EC2" → <strong>Lanzar instancia</strong>.</p>
 <ul>
-<li>AMI <strong>Amazon Linux 2023</strong>, tipo <code>t3.micro</code>.</li>
+<li>Como AMI (<em>Amazon Machine Image</em>: la plantilla de disco con el sistema operativo y el software ya instalado, el punto de partida de la instancia), elige <strong>Amazon Linux 2023</strong>. Como tipo de instancia (la combinación de CPU y memoria que le asignas), <code>t3.micro</code>.</li>
 <li>En <strong>Configuración de red</strong>, elige tu VPC y la subred <code>pistas-publica-a</code>, con IP pública automática habilitada.</li>
 <li>Crea un grupo de seguridad nuevo con <strong>dos</strong> reglas de entrada SSH (puerto 22): una con origen <strong>Anywhere-IPv4</strong> (<code>0.0.0.0/0</code>) y otra con origen personalizado <code>10.0.0.0/16</code>.</li>
 <li>En <strong>Par de claves (inicio de sesión)</strong>, elige <strong>Continuar sin un par de claves (no recomendado)</strong> — no te hace falta ninguno, porque te vas a conectar con las claves temporales de EC2 Instance Connect, no con un par de claves fijo.</li>
