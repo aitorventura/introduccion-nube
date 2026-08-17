@@ -4,7 +4,7 @@
     📄 [Plantilla 6.1 — Destruir y reconstruir](plantillas/Actividad_6_1_INU_Plantilla.docx){target="_blank" rel="noopener"}
 
 !!! warning "Descarga los recursos"
-    📦 [Recursos de la Actividad 6.1](recursos/actividad_6_1_recursos.zip){target="_blank" rel="noopener"} — descomprímelo en la raíz de tu proyecto: crea la carpeta `recursos/tema6/actividad_6_1/terraform/`, la misma ruta que usan los pasos de esta actividad.
+    📦 [Recursos de la Actividad 6.1](recursos/actividad_6_1_recursos.zip){target="_blank" rel="noopener"} — lo vas a subir y descomprimir en el Paso 2 de esta actividad.
 
 ## Contexto
 
@@ -19,7 +19,7 @@ El profesor te entrega un módulo de Terraform ya escrito, autocontenido, que de
 
 ## Requisitos previos
 
-Terraform no viene instalado en tu CloudShell (Tema 1) por defecto — lo instalas tú mismo en el Paso 2, sin necesitar permisos de administrador, porque es un único binario que se descomprime en tu propia carpeta. El módulo de Terraform (`main.tf`, `variables.tf`, `outputs.tf`) — descárgalo del enlace de arriba. El apunte de esta sesión — «Infraestructura como código» (infraestructura-como-codigo.md).
+Terraform no viene instalado en tu CloudShell (Tema 1) por defecto — lo instalas tú mismo en el Paso 2, sin necesitar permisos de administrador, porque es un único binario que se descomprime en tu propia carpeta. El módulo de Terraform (`main.tf`, `variables.tf`, `outputs.tf`) — descárgalo del enlace de arriba. Los apuntes de esta sesión — [«Infraestructura como código»](infraestructura-como-codigo.md).
 
 ---
 

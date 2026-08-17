@@ -15,7 +15,7 @@ Hoy pones un número real a una arquitectura concreta — no una cifra aproximad
 
 ## Requisitos previos
 
-Ninguno técnico — no necesitas tener nada desplegado en el Learner Lab para esta sesión. El apunte de esta sesión — «Economía de la nube» (economia-nube.md).
+Ninguno técnico — no necesitas tener nada desplegado en el Learner Lab para esta sesión. Los apuntes de esta sesión — [«Economía de la nube»](economia-nube.md).
 
 ---
 

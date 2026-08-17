@@ -4,7 +4,7 @@
     📄 [Plantilla 4.1 — Balanceador de carga y Auto Scaling Group](plantillas/Actividad_4_1_INU_Plantilla.docx){target="_blank" rel="noopener"}
 
 !!! warning "Descarga los recursos"
-    📦 [Recursos de la Actividad 4.1](recursos/actividad_4_1_recursos.zip){target="_blank" rel="noopener"} — descomprímelo en la raíz de tu proyecto: crea la carpeta `recursos/tema4/actividad_4_1/`, la misma ruta que usan los pasos de esta actividad (incluida la subcarpeta `estaticos/` que vas a reutilizar en la Actividad 4.2).
+    📦 [Recursos de la Actividad 4.1](recursos/actividad_4_1_recursos.zip){target="_blank" rel="noopener"} — descomprímelo donde vayas a abrir `arranque-encuestas.sh` con un editor de texto, para copiar su contenido en el Paso 1 (incluye la subcarpeta `estaticos/` que vas a reutilizar en la Actividad 4.2).
 
 ## Contexto
 
@@ -20,7 +20,7 @@ Una aplicación de encuestas en directo para eventos —Encuestas en Vivo— va 
 
 ## Requisitos previos
 
-Acceso a tu Learner Lab con una VPC de dos zonas y sus subredes públicas ya creadas (Tema 2). Los ficheros de la aplicación de Encuestas en Vivo (`app.py`, `requirements.txt`, `arranque-encuestas.sh`) — descárgalos del enlace de arriba, no los programas tú. El apunte de esta sesión — «Balanceo de carga y escalado automático» (alta-disponibilidad-escalado.md).
+Acceso a tu Learner Lab con una VPC de dos zonas y sus subredes públicas ya creadas (Tema 2). Los ficheros de la aplicación de Encuestas en Vivo (`app.py`, `requirements.txt`, `arranque-encuestas.sh`) — descárgalos del enlace de arriba, no los programas tú. Los apuntes de esta sesión — [«Balanceo de carga y escalado automático»](alta-disponibilidad-escalado.md).
 
 ---
 

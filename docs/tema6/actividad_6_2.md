@@ -4,7 +4,7 @@
     📄 [Plantilla 6.2 — Una función por cada imagen](plantillas/Actividad_6_2_INU_Plantilla.docx){target="_blank" rel="noopener"}
 
 !!! warning "Descarga los recursos"
-    📦 [Recursos de la Actividad 6.2](recursos/actividad_6_2_recursos.zip){target="_blank" rel="noopener"} — descomprímelo en la raíz de tu proyecto: crea la carpeta `recursos/tema6/actividad_6_2/`, la misma ruta que usan los pasos de esta actividad.
+    📦 [Recursos de la Actividad 6.2](recursos/actividad_6_2_recursos.zip){target="_blank" rel="noopener"} — lo vas a subir y descomprimir en el Paso 3 de esta actividad.
 
 ## Contexto
 
@@ -18,7 +18,7 @@ En una carrera popular, cada participante sube la foto de su dorsal, y alguien t
 
 ## Requisitos previos
 
-Un bucket de S3 nuevo, creado por ti en la Parte A de esta misma actividad. El código base de la función, `lambda_function.py` (con su `requirements.txt` y su `README.md` de empaquetado) — descárgalo del enlace de arriba. El apunte de esta sesión — «Serverless» (serverless.md).
+Un bucket de S3 nuevo, creado por ti en la Parte A de esta misma actividad. El código base de la función, `lambda_function.py` (con su `requirements.txt` y su `README.md` de empaquetado) — descárgalo del enlace de arriba. Los apuntes de esta sesión — [«Serverless»](serverless.md).
 
 ---
 

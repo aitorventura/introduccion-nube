@@ -4,7 +4,7 @@
     📄 [Plantilla 5.1 — Monitorización y diagnóstico con CloudWatch](plantillas/Actividad_5_1_INU_Plantilla.docx){target="_blank" rel="noopener"}
 
 !!! warning "Descarga los recursos"
-    📦 [Recursos de la Actividad 5.1](recursos/actividad_5_1_recursos.zip){target="_blank" rel="noopener"} — descomprímelo en la raíz de tu proyecto: crea la carpeta `recursos/tema5/actividad_5_1/`, la misma ruta que usan los pasos de esta actividad.
+    📦 [Recursos de la Actividad 5.1](recursos/actividad_5_1_recursos.zip){target="_blank" rel="noopener"} — descomprímelo donde vayas a abrir `arranque-entradas.sh` con un editor de texto, para copiar su contenido en el Paso 1.
 
 ## Contexto
 
@@ -18,7 +18,7 @@ El servidor de Entradas —una aplicación de venta de entradas para conciertos�
 
 ## Requisitos previos
 
-Acceso a tu Learner Lab. Los ficheros de la aplicación de Entradas (`app.py`, `requirements.txt`, `arranque-entradas.sh`) — descárgalos del enlace de arriba, no los programas tú. Si ya tienes una instancia en marcha de otra actividad (por ejemplo la Actividad 4.1) puedes reutilizarla para esta sesión, pero no es obligatorio. El apunte de esta sesión — «Monitorización y operación» (monitorizacion-operacion.md).
+Acceso a tu Learner Lab. Los ficheros de la aplicación de Entradas (`app.py`, `requirements.txt`, `arranque-entradas.sh`) — descárgalos del enlace de arriba, no los programas tú. Si ya tienes una instancia en marcha de otra actividad (por ejemplo la Actividad 4.1) puedes reutilizarla para esta sesión, pero no es obligatorio. Los apuntes de esta sesión — [«Monitorización y operación»](monitorizacion-operacion.md).
 
 ---
 

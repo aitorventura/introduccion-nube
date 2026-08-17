@@ -4,7 +4,7 @@
     📄 [Plantilla 2.3 — De instancia a plantilla](plantillas/Actividad_2_3_INU_Plantilla.docx){target="_blank" rel="noopener"}
 
 !!! warning "Descarga los recursos"
-    📦 [Recursos de la Actividad 2.3](recursos/actividad_2_3_recursos.zip){target="_blank" rel="noopener"} — descomprímelo en la raíz de tu proyecto: crea la carpeta `recursos/tema2/actividad_2_3/`, la misma ruta que usan los pasos de esta actividad.
+    📦 [Recursos de la Actividad 2.3](recursos/actividad_2_3_recursos.zip){target="_blank" rel="noopener"} — lo vas a subir y descomprimir en el Paso 1 de esta actividad.
 
 ## Contexto
 
@@ -19,7 +19,7 @@ Hasta ahora has lanzado instancias sueltas, a mano, repitiendo los mismos parám
 
 ## Requisitos previos
 
-La VPC de dos zonas de la Actividad 2.1, con su subred pública ya creada — hoy lanzas una instancia nueva sobre ella, no reutilizas la de la Actividad 2.2. El apunte de esta sesión — «Máquinas virtuales» (maquinas-virtuales.md).
+La VPC de dos zonas de la Actividad 2.1, con su subred pública ya creada — hoy lanzas una instancia nueva sobre ella, no reutilizas la de la Actividad 2.2. Los apuntes de esta sesión — [«Máquinas virtuales»](maquinas-virtuales.md).
 
 ---
 

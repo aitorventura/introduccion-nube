@@ -6,16 +6,13 @@
 
 Ya tienes una VPC con subredes públicas y privadas bien repartidas — la sesión pasada construiste el terreno. Pero una subred pública sin ningún filtro más es solo una puerta abierta de par en par: cualquier instancia que lances ahí queda expuesta a todo internet, en todos sus **puertos** (un puerto es un número que identifica, dentro de una misma máquina, a qué servicio concreto va dirigida una conexión — el puerto 80, por ejemplo, es el que usa un servidor web para atender peticiones), salvo que añadas algo que decida quién entra y quién no.
 
-Hoy añades justo eso: dos capas de filtrado que se confunden constantemente entre sí, una forma de dar salida a internet a las subredes privadas sin exponerlas, y el hábito de administrar una instancia sin dejar su puerto de **SSH** (*Secure Shell*, el protocolo que usas para conectarte a la terminal de una máquina remota y ejecutar comandos en ella como si estuvieras delante) abierto al mundo entero.
-
-!!! info "Antes de empezar: qué es 'datos de usuario'"
-    En la actividad de hoy vas a lanzar una instancia que arranca su propio servidor web sola, sin que te conectes a configurarla — usando un script de **datos de usuario** (*user data*): un fichero de texto que le pasas a la instancia al crearla, y que se ejecuta automáticamente la primera vez que arranca. Hoy te basta con pegarlo donde te indica el asistente de lanzamiento; lo vas a ver con más detalle, junto a las plantillas de lanzamiento que lo reutilizan, en la próxima sesión.
+Hoy añades dos piezas para eso: dos capas de filtrado que se confunden constantemente entre sí, y el hábito de administrar una instancia sin dejar su puerto de **SSH** —el mismo que usaste en la Actividad 2.1— abierto al mundo entero. Hay un problema distinto, del lado de las subredes privadas: a veces también necesitan salir a internet, sin por eso dejar de ser inalcanzables desde fuera. Esa tercera pieza también la resuelves hoy.
 
 ---
 
 ## 🧭 Grupos de seguridad frente a NACL
 
-AWS te da dos herramientas de filtrado de tráfico, y la confusión entre ellas es uno de los errores más repetidos del curso. Ambas deciden qué tráfico entra y sale, pero funcionan de forma distinta y se aplican a nivel distinto.
+AWS te da dos herramientas de filtrado de tráfico, y la confusión entre ellas es uno de los errores más repetidos del curso. Una **ACL** (*Access Control List*, lista de control de acceso) es, en general, cualquier lista de reglas que decide quién puede hacer qué sobre un recurso — el término aparece en muchos contextos de informática, desde permisos de ficheros hasta reglas de un router. La que usas hoy es la **NACL** (*Network ACL*): una ACL aplicada al tráfico de red, asociada a una subred entera de tu VPC. Ambas herramientas —grupo de seguridad y NACL— deciden qué tráfico entra y sale, pero funcionan de forma distinta y se aplican a nivel distinto.
 
 | | Grupo de seguridad | NACL (*Network ACL*) |
 |---|---|---|
@@ -24,10 +21,17 @@ AWS te da dos herramientas de filtrado de tráfico, y la confusión entre ellas 
 | Reglas | Solo de "permitir" | De "permitir" y de "denegar" explícito |
 | Orden de evaluación | Se evalúan todas las reglas que apliquen | Se evalúan en orden numérico, la primera que coincide gana |
 
+![Las dos capas de filtrado: NACL (subred) y grupo de seguridad (instancia)](img/diagrama_sg_vs_nacl.png)
+
 !!! example "Por qué se confunden tanto"
     Imagina un portero de discoteca (grupo de seguridad) y una verja perimetral del recinto entero (NACL). El portero recuerda a quién ha dejado entrar, así que cuando esa persona sale, no le vuelve a pedir el carné — eso es "con estado". La verja del recinto no recuerda nada: cada vez que alguien cruza, en cualquier sentido, hay que comprobar la regla otra vez — eso es "sin estado". Las dos capas existen a la vez, y el tráfico tiene que pasar las dos para llegar a destino.
 
 La diferencia práctica más importante es esta: si olvidas una regla de salida en un grupo de seguridad, no pasa nada, porque el estado se encarga. Si la olvidas en una NACL, el tráfico se corta aunque la entrada estuviera permitida — es exactamente uno de los fallos que vas a diagnosticar en la Parte B de la actividad de hoy.
+
+!!! example "El orden importa: una NACL mal ordenada bloquea tráfico que "debería" pasar"
+    Imagina una NACL con dos reglas de entrada: la regla número 100 deniega todo el tráfico desde `0.0.0.0/0`, y la regla número 200 —añadida después, para dejar pasar tu aplicación— permite el puerto 80 desde ese mismo origen. AWS evalúa las reglas en orden numérico y se queda con la primera que coincide: la 100 deniega antes de que la 200 tenga ocasión de actuar, así que el tráfico se bloquea igual, aunque la regla 200 "diga que sí". La solución no es borrar la regla 100 — es darle a la regla de permitir un número más bajo que el de la que deniega.
+
+![Cómo evalúa AWS las reglas de una NACL, en orden](img/diagrama_nacl_orden.png)
 
 ---
 
@@ -53,20 +57,25 @@ flowchart LR
 
 Con grupos de seguridad, NACL y NAT ya puedes construir el patrón que vas a repetir en cada arquitectura del módulo: capas concéntricas, donde cada una solo habla con la de al lado, nunca se salta ninguna.
 
-```mermaid
-flowchart LR
-    Internet(("🌍 Internet")) --> Borde["🌐 Borde<br/>subred pública"]
-    Borde --> Aplicacion["⚙️ Aplicación<br/>subred pública o privada"]
-    Aplicacion --> Datos["🗄️ Datos<br/>subred privada"]
-```
+![Arquitectura en capas: borde, aplicación y datos](img/diagrama_arquitectura_capas.png)
 
 Cada flecha del diagrama representa, en la práctica, una regla de grupo de seguridad: la capa de datos solo acepta tráfico que venga de la capa de aplicación, nunca directamente de internet ni siquiera desde el borde. Es la misma idea de "nunca expongas más de lo necesario" de la sesión pasada, ahora aplicada capa a capa en vez de a una sola subred.
+
+El diagrama usa tres puertos como ejemplo, y no los tres son del mismo tipo:
+
+| Puerto | Qué es |
+|---|---|
+| 80 | El puerto estándar de un servidor web — ya lo conoces. |
+| 3000 | No es el puerto "oficial" de nada: es solo el que ha elegido el desarrollador para el servidor de aplicación, y podría ser cualquier otro. |
+| 5432 | El puerto por defecto de PostgreSQL — este sí es fijo. |
+
+Por eso el grupo de seguridad de la capa de datos debería tener una única regla de entrada: puerto 5432, origen el grupo de seguridad de la capa de aplicación — nunca `0.0.0.0/0`, ni siquiera el puerto 80 del borde. Vas a construir exactamente esta regla cuando conectes una base de datos gestionada en el Tema 3.
 
 ---
 
 ## ⚙️ Acceso administrativo sin exponer SSH a internet
 
-Necesitas poder entrar por SSH a tus instancias para administrarlas — pero abrir el puerto 22 a `0.0.0.0/0` (cualquier IP del mundo) es de los errores de configuración más buscados por atacantes automatizados, que escanean internet constantemente buscando exactamente ese puerto abierto.
+Necesitas poder entrar por SSH a tus instancias para administrarlas — pero abrir el puerto 22 a `0.0.0.0/0` (cualquier IP del mundo) es de los errores de configuración más buscados por atacantes automatizados, que escanean internet constantemente buscando exactamente ese puerto abierto. Hay tres formas de organizar ese acceso, de la más expuesta a la más segura:
 
 | Práctica | Qué hace | Nivel de exposición |
 |---|---|---|
@@ -74,8 +83,12 @@ Necesitas poder entrar por SSH a tus instancias para administrarlas — pero abr
 | SSH restringido a tu IP concreta | Solo tu dirección actual puede conectarse | Bajo, pero cambia si te mueves de red |
 | Instancia sin IP pública, acceso vía otra instancia intermedia | La instancia administrada nunca es alcanzable directamente desde internet | Mínimo |
 
-!!! tip "Por qué esto es solo una advertencia, no una actividad completa hoy"
-    Restringir el origen del grupo de seguridad de SSH a tu propia IP es una regla de una sola línea, y la vas a aplicar en la Actividad 2.2 sobre la instancia pública que construyas. La forma más avanzada —una instancia de salto intermedia (*bastion*) o acceso sin SSH en absoluto— la verás con más profundidad cuando trabajes con arquitecturas completas en el Tema 3.
+La tercera fila es la que ya conoces, aunque todavía no la hayas visto llamada por su nombre:
+
+!!! tip "Ya has visto la alternativa más segura, en la Actividad 2.1"
+    Restringir el origen del grupo de seguridad de SSH a tu propia IP es una regla de una sola línea, y la vas a aplicar en la Actividad 2.2 sobre la instancia pública que construyas. Pero fíjate en que ya conoces algo más avanzado: en la Actividad 2.1 saltaste por SSH desde tu instancia pública hasta la privada, sin que la privada tuviera nunca IP pública ni una regla abierta a internet. Esa instancia de salto intermedia se llama **bastión** (*bastion host*) — es exactamente el patrón que acabas de usar, y lo vas a formalizar y reutilizar en arquitecturas completas más adelante en el módulo.
+
+![Patrón bastión: un único punto de entrada por SSH hacia la red privada](img/diagrama_bastion.png)
 
 ---
 

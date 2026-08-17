@@ -16,7 +16,7 @@ Esta es la última actividad del módulo, y no construyes nada nuevo: auditas un
 
 ## Requisitos previos
 
-Acceso a la arquitectura que vas a auditar (la prepara el profesor, o es la de otro equipo del curso). El apunte de esta sesión — «Well-Architected: los seis pilares» (well-architected.md).
+Acceso a la arquitectura que vas a auditar (la prepara el profesor, o es la de otro equipo del curso). Los apuntes de esta sesión — [«Well-Architected: los seis pilares»](well-architected.md).
 
 ---
 
@@ -24,7 +24,7 @@ Acceso a la arquitectura que vas a auditar (la prepara el profesor, o es la de o
 
 ### Paso 1 — Recorre la arquitectura pilar por pilar
 
-Antes de buscar fallos concretos, dibuja o recupera el diagrama completo de la arquitectura que vas a auditar (igual que hiciste con la tuya propia en la Actividad 3.3). Para cada uno de los seis pilares del apunte de hoy, recórrela y anota, sin filtrar todavía, cualquier cosa que te llame la atención — no descartes nada en esta primera pasada.
+Antes de buscar fallos concretos, dibuja o recupera el diagrama completo de la arquitectura que vas a auditar (igual que hiciste con la tuya propia en la Actividad 3.3). Para cada uno de los seis pilares de los apuntes de hoy, recórrela y anota, sin filtrar todavía, cualquier cosa que te llame la atención — no descartes nada en esta primera pasada.
 
 **Comprueba**: que has anotado al menos algo para cada uno de los seis pilares, no solo para los más evidentes (seguridad y coste suelen saltar a la vista; fiabilidad y sostenibilidad requieren mirar con más atención).
 
@@ -39,7 +39,7 @@ Antes de buscar fallos concretos, dibuja o recupera el diagrama completo de la a
 ![Recomendaciones automáticas visibles en Trusted Advisor o Compute Optimizer](img/actividad_7_1_paso2.png)
 *🖼️ Captura de referencia del profesor — guardar como `img/actividad_7_1_paso2.png`*
 
-Para cada recomendación que veas, anota si la aplicarías tal cual, o si hay una razón de contexto por la que no —como la del ejemplo del apunte de hoy sobre la CPU baja en horario fuera de clase.
+Para cada recomendación que veas, anota si la aplicarías tal cual, o si hay una razón de contexto por la que no —como la del ejemplo de los apuntes de hoy sobre la CPU baja en horario fuera de clase.
 
 **Comprueba**: que para cada recomendación automática tienes una decisión razonada (aplicar o descartar), no una lista sin analizar.
 
