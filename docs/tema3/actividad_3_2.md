@@ -4,7 +4,7 @@
     📄 [Plantilla 3.2 — Migración a base de datos gestionada con RDS](plantillas/Actividad_3_2_INU_Plantilla.docx){target="_blank" rel="noopener"}
 
 !!! warning "Descarga los recursos"
-    📦 [Recursos de la Actividad 3.2](recursos/actividad_3_2_recursos.zip){target="_blank" rel="noopener"} — descomprímelo en la raíz de tu proyecto: crea la carpeta `recursos/tema3/actividad_3_2/`, la misma ruta que usan los pasos de esta actividad.
+    📦 [Recursos de la Actividad 3.2](recursos/actividad_3_2_recursos.zip){target="_blank" rel="noopener"} — descomprímelo donde vayas a abrir `schema.sql` y `arranque-app.sh` con un editor de texto — los usas en los Pasos 1 y 2.
 
 ## Contexto
 
@@ -19,7 +19,7 @@ El sistema de reservas de una biblioteca de barrio necesita una base de datos de
 
 ## Requisitos previos
 
-La VPC con subred privada del Tema 2, y una instancia en marcha en subred pública para conectar la aplicación de la biblioteca. El apunte de esta sesión — «Bases de datos gestionadas» (bases-datos-gestionadas.md).
+La VPC con subred privada del Tema 2, y una instancia en marcha en subred pública para conectar la aplicación de la biblioteca. Los apuntes de esta sesión — [«Bases de datos gestionadas»](bases-datos-gestionadas.md).
 
 !!! info "Recursos de apoyo"
     En `recursos/tema3/actividad_3_2/` (dentro del zip que has descargado arriba) tienes los cuatro ficheros que necesitas para esta actividad: `schema.sql` (la tabla `libros` con datos de ejemplo), `app.py` (la aplicación Flask que consulta el catálogo), `requirements.txt` (sus dependencias) y `arranque-app.sh` (el script de user-data que instala todo, resuelve el secreto de Secrets Manager y arranca la aplicación sola en el primer arranque de la instancia).

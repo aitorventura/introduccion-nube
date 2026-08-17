@@ -4,7 +4,7 @@
     📄 [Plantilla 6.3 — Tu imagen, sin servidores](plantillas/Actividad_6_3_INU_Plantilla.docx){target="_blank" rel="noopener"}
 
 !!! warning "Descarga los recursos"
-    📦 [Recursos de la Actividad 6.3](recursos/actividad_6_3_recursos.zip){target="_blank" rel="noopener"} — descomprímelo en la raíz de tu proyecto: crea la carpeta `recursos/tema6/actividad_6_3/`, la misma ruta que usan los pasos de esta actividad.
+    📦 [Recursos de la Actividad 6.3](recursos/actividad_6_3_recursos.zip){target="_blank" rel="noopener"} — lo vas a subir y descomprimir en el Paso 1 de esta actividad.
 
 !!! info "La imagen te la entrega el profesor"
     Este módulo no cubre cómo se construye una imagen de contenedor desde cero — eso pertenece a otro tipo de formación. El código fuente de la aplicación (en `recursos/tema6/actividad_6_3/v1/` y `v2/`, cada una con su `Dockerfile` listo para construir) está en el zip que has descargado arriba; tu trabajo de hoy es construir la imagen, publicarla y ejecutarla como servicio gestionado.
@@ -22,7 +22,7 @@ Un evento necesita mostrar en pantalla, en tiempo real, cuántos asistentes se h
 
 ## Requisitos previos
 
-El código fuente del contador de asistencia, versión 1 y versión 2 (cada carpeta con su `app.py`, `requirements.txt` y `Dockerfile`) — descárgalo del enlace de arriba. Docker no hace falta instalarlo: tu **CloudShell** (Tema 1) ya lo trae listo, así que vas a construir las imágenes ahí, sin tocar tu ordenador. El apunte de esta sesión — «Contenedores gestionados» (contenedores-gestionados.md).
+El código fuente del contador de asistencia, versión 1 y versión 2 (cada carpeta con su `app.py`, `requirements.txt` y `Dockerfile`) — descárgalo del enlace de arriba. Docker no hace falta instalarlo: tu **CloudShell** (Tema 1) ya lo trae listo, así que vas a construir las imágenes ahí, sin tocar tu ordenador. Los apuntes de esta sesión — [«Contenedores gestionados»](contenedores-gestionados.md).
 
 ---
 

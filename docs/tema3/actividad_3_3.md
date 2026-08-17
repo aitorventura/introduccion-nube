@@ -4,7 +4,7 @@
     📄 [Plantilla 3.3 — Arquitectura de tres capas: front, aplicación y base de datos](plantillas/Actividad_3_3_INU_Plantilla.docx){target="_blank" rel="noopener"}
 
 !!! warning "Descarga los recursos"
-    📦 [Recursos de la Actividad 3.3](recursos/actividad_3_3_recursos.zip){target="_blank" rel="noopener"} — descomprímelo en la raíz de tu proyecto: crea la carpeta `recursos/tema3/actividad_3_3/`, la misma ruta que usan los pasos de esta actividad.
+    📦 [Recursos de la Actividad 3.3](recursos/actividad_3_3_recursos.zip){target="_blank" rel="noopener"} — lo vas a subir y descomprimir en el Paso 2 de esta actividad.
 
 ## Contexto
 
@@ -18,7 +18,7 @@ Una aplicación de reseñas de restaurantes locales necesita sus tres capas de s
 
 ## Requisitos previos
 
-Una VPC con subred pública y subred privada (la del Tema 2, o una nueva creada para esta sesión). El apunte de esta sesión — «Primera arquitectura completa» (arquitectura-completa.md).
+Una VPC con subred pública y subred privada (la del Tema 2, o una nueva creada para esta sesión). Los apuntes de esta sesión — [«Primera arquitectura completa»](arquitectura-completa.md).
 
 !!! info "Recursos de apoyo"
     En `recursos/tema3/actividad_3_3/` (dentro del zip que has descargado arriba) tienes todo lo necesario, separado en dos carpetas: `backend/` (`schema.sql` con la tabla `resenas`, `app.py`, `requirements.txt` y `arranque-backend.sh`, el script de user-data que instala, configura y arranca el backend solo) y `front/` (`index.html`, `style.css`, `script.js` y `config.js`, el sitio estático que vas a publicar en S3).

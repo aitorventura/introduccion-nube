@@ -17,7 +17,7 @@ Meter ambas en una única subred pública las expondría por igual, sin necesida
 
 ## Requisitos previos
 
-El apunte de esta sesión — [«Diseño de la red virtual»](vpc-diseno.md). No necesitas nada de sesiones anteriores: hoy construyes la red desde cero.
+Los apuntes de esta sesión — [«Diseño de la red virtual»](vpc-diseno.md). No necesitas nada de sesiones anteriores: hoy construyes la red desde cero.
 
 !!! warning "Cómo hacer las capturas"
     En cada captura tiene que verse con claridad lo que se pide (direcciones IP, CIDR, nombres de subred, salida de los comandos...) — una captura recortada, borrosa o con la información clave fuera de encuadre no sirve como evidencia. Además, tiene que verse algo que identifique que los recursos son tuyos y que la práctica la has hecho tú: tu identificador en el nombre de los recursos (`pistas-vpc-<tu-identificador>`), o la IP y el ID de instancia concretos que hayas usado — no una captura genérica que podría ser de cualquier otro alumno.
@@ -101,7 +101,7 @@ Para entrar en cada una y ejecutar comandos dentro, usas **SSH** (*Secure Shell*
 Antes de comprobar que la subred privada no sale a internet, predice por escrito qué mensaje de error o comportamiento exacto esperas ver.
 
 1. Busca "EC2" → **Lanzar instancia**.
-    - AMI **Amazon Linux 2023**, tipo `t3.micro`.
+    - Como AMI (*Amazon Machine Image*: la plantilla de disco con el sistema operativo y el software ya instalado, el punto de partida de la instancia), elige **Amazon Linux 2023**. Como tipo de instancia (la combinación de CPU y memoria que le asignas), `t3.micro`.
     - En **Configuración de red**, elige tu VPC y la subred `pistas-publica-a`, con IP pública automática habilitada.
     - Crea un grupo de seguridad nuevo con **dos** reglas de entrada SSH (puerto 22): una con origen **Anywhere-IPv4** (`0.0.0.0/0`) y otra con origen personalizado `10.0.0.0/16`.
     - En **Par de claves (inicio de sesión)**, elige **Continuar sin un par de claves (no recomendado)** — no te hace falta ninguno, porque te vas a conectar con las claves temporales de EC2 Instance Connect, no con un par de claves fijo.

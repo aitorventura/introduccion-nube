@@ -4,7 +4,7 @@
     📄 [Plantilla 1.1 — Tu primer despliegue en la nube](plantillas/Actividad_1_1_INU_Plantilla.docx){target="_blank" rel="noopener"}
 
 !!! warning "Descarga los recursos"
-    📦 [Recursos de la Actividad 1.1](recursos/actividad_1_1_recursos.zip){target="_blank" rel="noopener"} — descomprímelo en la raíz de tu proyecto: crea la carpeta `recursos/tema1/actividad_1_1/front/`, la misma ruta que usan los comandos de esta actividad.
+    📦 [Recursos de la Actividad 1.1](recursos/actividad_1_1_recursos.zip){target="_blank" rel="noopener"} — lo vas a subir y descomprimir en el Paso 4 de esta actividad.
 
 ## Contexto
 
@@ -20,7 +20,7 @@
 
 ## Requisitos previos
 
-Ninguno específico de INU — es la primera sesión del módulo. Necesitas: la invitación de tu profesor al curso de AWS Academy Learner Lab, recibida por correo antes de la sesión (revísalo con antelación, no el día de clase), y los ficheros estáticos del front de El Manillar (`index.html`, `style.css`, `script.js`, `config.js`) — descárgalos del enlace de arriba, no los programas tú. Repasa antes la sección "⚙️ Modelo de responsabilidad compartida" del apunte de hoy — la vas a necesitar en la Parte B.
+Ninguno específico de INU — es la primera sesión del módulo. Necesitas: la invitación de tu profesor al curso de AWS Academy Learner Lab, recibida por correo antes de la sesión (revísalo con antelación, no el día de clase), y los ficheros estáticos del front de El Manillar (`index.html`, `style.css`, `script.js`, `config.js`) — descárgalos del enlace de arriba, no los programas tú. Repasa antes la sección "⚙️ Modelo de responsabilidad compartida" de los apuntes de hoy — la vas a necesitar en la Parte B.
 
 ---
 
@@ -151,7 +151,7 @@ Esta es la primera vez que tocas S3, así que hazlo desde la consola, paso a pas
 **Captura**: la pantalla de creación con el bloqueo desmarcado, **con el nombre de tu bucket visible en el campo** (no lo recortes); la configuración de alojamiento estático activada, **con el nombre de tu bucket visible en la ruta de navegación superior**; y la política de bucket, **con el `Resource` mostrando el ARN de tu propio bucket**, no el genérico `<tu-bucket>`.
 
 !!! warning "Público a propósito, no por descuido"
-    Acabas de convertir este bucket en accesible por cualquiera en internet. Es correcto — es justo lo que quieres para un front estático—, pero fíjate en que ha sido una decisión explícita tuya (desactivar un bloqueo que estaba activado por defecto, y pegar tú mismo la política), no un permiso heredado ni un olvido. Vuelve a leer el primero de los seis incidentes del apunte de hoy: un bucket público por error es, con diferencia, el fallo de configuración más repetido en la nube real.
+    Acabas de convertir este bucket en accesible por cualquiera en internet. Es correcto — es justo lo que quieres para un front estático—, pero fíjate en que ha sido una decisión explícita tuya (desactivar un bloqueo que estaba activado por defecto, y pegar tú mismo la política), no un permiso heredado ni un olvido. Vuelve a leer el primero de los seis incidentes de los apuntes de hoy: un bucket público por error es, con diferencia, el fallo de configuración más repetido en la nube real.
 
 **Documenta tu elección**: el nombre de bucket que has usado es tuyo — no lo copies de un compañero, no va a existir dos veces. Anota qué nombre e identificador has elegido y por qué, para que quien revise la actividad sepa que el despliegue es tuyo y no una copia.
 
@@ -214,7 +214,7 @@ Ya has hecho el despliegue una vez, a mano, combinando consola y CLI. Hoy el ret
 
 Antes de probarlo, predice: si un compañero de otro equipo intentase crear un bucket con exactamente el mismo nombre que el tuyo, ¿qué crees que pasaría? Escribe tu predicción y compruébala tú mismo, intentando crear un bucket con un nombre que ya uses tú.
 
-Después, aplica el mismo criterio a seis incidentes nuevos — distintos a los del apunte de hoy, para que no puedas copiar una respuesta ya resuelta — y repártelos, uno a uno, entre "responsabilidad de AWS" y "responsabilidad tuya", **justificando cada reparto en una frase** — no basta con la etiqueta, tiene que quedar claro el porqué:
+Después, aplica el mismo criterio a seis incidentes nuevos — distintos a los que aparecen en los apuntes de hoy, para que no puedas copiar una respuesta ya resuelta — y repártelos, uno a uno, entre "responsabilidad de AWS" y "responsabilidad tuya", **justificando cada reparto en una frase** — no basta con la etiqueta, tiene que quedar claro el porqué:
 
 1. Un grupo de seguridad (firewall de la instancia) se configura bloqueando por error el puerto que necesita el front, y la web deja de cargar.
 2. Una zona de disponibilidad entera deja de responder por un fallo de red interno del proveedor.

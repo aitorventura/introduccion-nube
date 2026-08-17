@@ -4,7 +4,7 @@
     📄 [Plantilla 5.2 — Gestión de credenciales y políticas IAM](plantillas/Actividad_5_2_INU_Plantilla.docx){target="_blank" rel="noopener"}
 
 !!! warning "Descarga los recursos"
-    📦 [Recursos de la Actividad 5.2](recursos/actividad_5_2_recursos.zip){target="_blank" rel="noopener"} — descomprímelo en la raíz de tu proyecto: crea la carpeta `recursos/tema5/actividad_5_2/`, la misma ruta que usan los pasos de esta actividad.
+    📦 [Recursos de la Actividad 5.2](recursos/actividad_5_2_recursos.zip){target="_blank" rel="noopener"} — descomprímelo donde vayas a abrir `arranque-inventario.sh` con un editor de texto, para copiar su contenido en el Paso 1.
 
 !!! info "Adaptación por las restricciones del Learner Lab"
     El Learner Lab no permite crear roles ni usuarios IAM nuevos. Donde el enunciado dice "rol con permisos mínimos", vas a usar el rol ya preasignado a tu laboratorio, adjuntándolo a la instancia y **verificando qué permisos concede de verdad**, en vez de crear uno desde cero. El principio de mínimo privilegio se practica hoy leyendo y corrigiendo políticas ya escritas, no diseñando una nueva.
@@ -23,7 +23,7 @@ Inventario —la aplicación de gestión de inventario de un almacén— necesit
 
 ## Requisitos previos
 
-Acceso a tu Learner Lab, con un bucket S3 propio (puedes crear uno nuevo o reutilizar uno existente) con algún objeto dentro. Los ficheros de la aplicación de Inventario (`app.py`, `requirements.txt`, `arranque-inventario.sh`) — descárgalos del enlace de arriba, no los programas tú. El apunte de esta sesión — «Identidad y gestión de accesos» (iam-aplicado.md).
+Acceso a tu Learner Lab, con un bucket S3 propio (puedes crear uno nuevo o reutilizar uno existente) con algún objeto dentro. Los ficheros de la aplicación de Inventario (`app.py`, `requirements.txt`, `arranque-inventario.sh`) — descárgalos del enlace de arriba, no los programas tú. Los apuntes de esta sesión — [«Identidad y gestión de accesos»](iam-aplicado.md).
 
 ---
 

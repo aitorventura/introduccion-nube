@@ -22,7 +22,7 @@ Encuestas en Vivo sigue viviendo detrás de la URL genérica del balanceador de 
 
 ## Requisitos previos
 
-El subdominio delegado por el profesor. El balanceador de carga y el grupo de escalado de la Actividad 4.1, en marcha. Los ficheros estáticos de ejemplo del evento (`index.html` y las imágenes de programa y patrocinadores), en `recursos/tema4/actividad_4_1/estaticos/` — descárgalos del enlace de arriba, no los programas tú. El apunte de esta sesión — «DNS, HTTPS y distribución de contenido» (dns-https-cdn.md).
+El subdominio delegado por el profesor. El balanceador de carga y el grupo de escalado de la Actividad 4.1, en marcha. Los ficheros estáticos de ejemplo del evento (`index.html` y las imágenes de programa y patrocinadores), en `recursos/tema4/actividad_4_1/estaticos/` — descárgalos del enlace de arriba, no los programas tú. Los apuntes de esta sesión — [«DNS, HTTPS y distribución de contenido»](dns-https-cdn.md).
 
 ---
 

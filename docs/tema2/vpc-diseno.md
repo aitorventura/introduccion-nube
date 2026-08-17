@@ -15,6 +15,8 @@ Una **VPC** (*Virtual Private Cloud*) es tu propio trozo de red dentro de AWS, a
 !!! info "Idea clave"
     Una VPC no tiene nada dentro al crearla — ni servidores, ni bases de datos, ni siquiera salida a internet. Es solo el espacio de direcciones IP donde vas a construir todo lo demás. Todo lo que uses en el resto del módulo (instancias, bases de datos gestionadas, balanceadores) va a vivir dentro de una VPC.
 
+La pieza que más vas a repetir dentro de una VPC es la **instancia**: una máquina virtual — un ordenador completo, con su propio sistema operativo, CPU, memoria y disco, pero que en realidad es una porción de un servidor físico de AWS que alquilas por horas, no una máquina que compras. Desde dentro se comporta como un ordenador normal: instalas software, ejecutas procesos, la apagas y la enciendes cuando quieras. La vas a lanzar por primera vez en la Actividad 2.1; en el punto 3 de este tema (Máquinas virtuales) ves con detalle de qué plantilla exacta arranca y cómo la eliges — hoy te basta con saber que es lo que va a vivir dentro de las subredes que estás a punto de diseñar.
+
 Ese "espacio de direcciones" no es infinito ni arbitrario: lo defines tú mediante un rango, y ese rango es la primera decisión de diseño de la sesión de hoy.
 
 ---
@@ -44,7 +46,7 @@ Dentro de la VPC no todas las subredes tienen el mismo papel. Piensa en un edifi
 flowchart TB
     subgraph VPC["🏗️ VPC 10.0.0.0/16"]
         subgraph Pub["🌐 Subred pública"]
-            EC2["Recurso con IP pública"]
+            EC2["Instancia con IP pública"]
         end
         subgraph Priv["🔒 Subred privada"]
             DB["Base de datos"]
@@ -55,7 +57,7 @@ flowchart TB
     Internet -.->|❌| Priv
 ```
 
-Fíjate en la flecha tachada del diagrama: internet nunca llega directamente a la subred privada. Solo lo que ya está dentro de la VPC —como el recurso de la subred pública— puede alcanzarla. Esa asimetría es intencionada, y es la razón de ser de todo lo que viene a continuación.
+Fíjate en la flecha tachada del diagrama: internet nunca llega directamente a la subred privada. Solo lo que ya está dentro de la VPC —como la instancia de la subred pública— puede alcanzarla. Esa asimetría es intencionada, y es la razón de ser de todo lo que viene a continuación.
 
 El diagrama de arriba solo dibuja una subred de cada tipo para no complicarlo, pero en la Actividad 2.1 vas a repartir pública y privada en **dos zonas de disponibilidad** distintas, no en una sola — el mismo patrón, repetido dos veces:
 
@@ -76,7 +78,7 @@ Lo que convierte a una subred en pública es una combinación de dos piezas: una
 | Tabla de rutas sin esa entrada | El tráfico externo no tiene adónde ir | Así es exactamente como se define una subred privada |
 
 !!! warning "El error más común de la sesión de hoy"
-    Una subred no es pública "porque tú la llamaste así" — lo es porque su tabla de rutas apunta a la pasarela. Es habitual crear un recurso, asignarle una IP pública y esperar que funcione, y que no responda porque la subred donde vive sigue apuntando a ninguna parte. Vas a diagnosticar justo este fallo en la Actividad 2.2 de la próxima sesión.
+    Una subred no es pública "porque tú la llamaste así" — lo es porque su tabla de rutas apunta a la pasarela. Es habitual crear una instancia, asignarle una IP pública y esperar que funcione, y que no responda porque la subred donde vive sigue apuntando a ninguna parte. Vas a diagnosticar justo este fallo en la Actividad 2.2 de la próxima sesión.
 
 La ruta no es la única pieza que decide si algo responde o no, aunque hoy sea la única que vas a tocar. La próxima sesión añades una capa más —los **grupos de seguridad**, una especie de portero que decide quién entra aunque la puerta (la ruta) esté abierta— capaz de bloquear tráfico incluso con la tabla de rutas perfecta. Todavía no los necesitas para la actividad de hoy, pero ya puedes intuir que "no me llega tráfico" tiene más de una causa posible: la ruta, o quién tiene permiso para pasar por ella.
 

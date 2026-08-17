@@ -4,7 +4,7 @@
     📄 [Plantilla 3.1 — S3, EBS y EFS: tres soluciones de almacenamiento](plantillas/Actividad_3_1_INU_Plantilla.docx){target="_blank" rel="noopener"}
 
 !!! warning "Descarga los recursos"
-    📦 [Recursos de la Actividad 3.1](recursos/actividad_3_1_recursos.zip){target="_blank" rel="noopener"} — descomprímelo en la raíz de tu proyecto: crea la carpeta `recursos/tema3/actividad_3_1/`, la misma ruta que usan los pasos de esta actividad.
+    📦 [Recursos de la Actividad 3.1](recursos/actividad_3_1_recursos.zip){target="_blank" rel="noopener"} — lo vas a subir y descomprimir en el Paso 1 de esta actividad.
 
 ## Contexto
 
@@ -19,7 +19,7 @@ La plataforma de gestión de un festival de música tiene ahora mismo tres neces
 
 ## Requisitos previos
 
-No necesitas ningún proyecto previo: hoy creas desde cero, en el Paso 1, el bucket y las instancias sobre los que vas a trabajar. Si ya tienes alguna instancia mínima en marcha de una sesión anterior, puedes reutilizarla — no es obligatorio, el Paso 1 también te indica cómo lanzar una nueva. El apunte de esta sesión — «Servicios de almacenamiento» (almacenamiento.md).
+No necesitas ningún proyecto previo: hoy creas desde cero, en el Paso 1, el bucket y las instancias sobre los que vas a trabajar. Si ya tienes alguna instancia mínima en marcha de una sesión anterior, puedes reutilizarla — no es obligatorio, el Paso 1 también te indica cómo lanzar una nueva. Los apuntes de esta sesión — [«Servicios de almacenamiento»](almacenamiento.md).
 
 !!! info "Recurso de apoyo"
     En `recursos/tema3/actividad_3_1/generar_fotos_ejemplo.sh` (dentro del zip que has descargado arriba) tienes un script que genera 5-6 ficheros de ejemplo con extensión `.jpg` (contenido aleatorio, no fotos reales) para que tengas algo que subir a S3 y a EFS sin tener que buscar imágenes por tu cuenta.
