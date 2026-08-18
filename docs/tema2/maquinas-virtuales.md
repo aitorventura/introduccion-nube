@@ -4,13 +4,13 @@
 
 ---
 
-En las dos sesiones anteriores has lanzado instancias sueltas, una a una, cada vez con los mismos parámetros repetidos a mano: la imagen, el tipo, la subred, el grupo de seguridad. Funciona para dos instancias de prueba, pero no escala — y hoy es el día en que dejas de repetir ese proceso manualmente. Vas a entender qué decide realmente el rendimiento y el precio de una instancia, cómo se empaqueta un servidor entero en una imagen reutilizable, y cómo se guarda toda esa receta en una plantilla que vas a lanzar tantas veces como haga falta, sin volver a teclear los mismos parámetros.
+Ya sabes que una instancia es una **máquina virtual** — lo viste en «Diseño de la red virtual». En las dos sesiones anteriores has lanzado instancias sueltas, una a una, repitiendo a mano los mismos parámetros: la imagen, el tipo, la subred, el grupo de seguridad. Funciona para dos instancias de prueba, pero no escala — hoy dejas de repetir ese proceso a mano: entiendes qué decide su rendimiento y precio, cómo se empaqueta en una imagen reutilizable, y cómo se guarda esa receta en una plantilla que lanzas tantas veces como haga falta.
 
 ---
 
 ## 🧭 Familias y tamaños de instancia
 
-Cuando lanzas una instancia EC2 eliges un **tipo**, con un nombre como `t3.micro` o `m5.large`. Ese nombre no es arbitrario: la letra inicial indica la **familia** (para qué está optimizada), y el número final indica el **tamaño** (cuánta CPU y memoria trae).
+Cuando lanzas una instancia EC2 eliges un **tipo**, con un nombre como `t3.micro` o `m5.large`. Ese nombre tiene tres partes, no dos: la letra inicial es la **familia** (para qué está optimizada), el número que sigue es la **generación** (una versión más nueva del mismo hardware, normalmente más eficiente que la anterior — cuanto más alto, más reciente), y la palabra final es el **tamaño** (cuánta CPU y memoria trae) — es esta última la que de verdad decide cuánto pagas.
 
 | Familia | Optimizada para | Ejemplo de uso típico |
 |---|---|---|
@@ -19,10 +19,23 @@ Cuando lanzas una instancia EC2 eliges un **tipo**, con un nombre como `t3.micro
 | `c` (cómputo) | Mucha CPU, poca memoria relativa | Procesamiento intensivo, no lo usarás en este módulo |
 | `r` (memoria) | Mucha memoria, poca CPU relativa | Bases de datos en memoria, no lo usarás en este módulo |
 
-!!! example "Elegir tamaño no es "cuanto más grande, mejor""
-    Una `t3.micro` cuesta una fracción de lo que cuesta una `m5.large`, y para servir el front estático de una aplicación web durante una clase de treinta alumnos es más que suficiente. Sobredimensionar una instancia es tirar presupuesto del laboratorio a la basura sin ninguna mejora perceptible — vas a comparar el coste real de tres familias en la Actividad 2.3.
+Dentro de cada familia, el tamaño sigue siempre la misma escalera de palabras: `nano → micro → small → medium → large → xlarge → 2xlarge → 4xlarge...`. Pero ojo, es un error frecuente pensar que la letra decide la CPU y el tamaño decide la memoria — no es así: **los dos números, vCPU y memoria, dependen de la combinación de las dos partes del nombre.** Lo que decide la letra es la proporción entre ambos y cómo se comporta esa CPU; lo que decide el tamaño es cuánto de esa proporción recibes. Con números reales de la familia `t3`, la que vas a usar en este módulo (**vCPU**, *virtual CPU*: el número de núcleos de procesamiento virtuales que trae la instancia — no la velocidad de cada uno, que depende del procesador físico de esa generación, no del tamaño que elijas):
 
-El propio nombre `t3.micro` te dice ya el 80 % de lo que necesitas: familia de uso general con ráfagas, tamaño mínimo. No hace falta memorizar el catálogo entero — elige la familia según qué exige la carga, y el tamaño según cuánto tráfico esperas de verdad.
+| Tipo | vCPU | Memoria RAM |
+|---|---|---|
+| `t3.nano` | 2 | 0,5 GiB |
+| `t3.micro` | 2 | 1 GiB |
+| `t3.small` | 2 | 2 GiB |
+| `t3.medium` | 2 | 4 GiB |
+| `t3.large` | 2 | 8 GiB |
+| `t3.xlarge` | 4 | 16 GiB |
+
+Fíjate en que, dentro de la familia `t3`, subir de `nano` a `large` multiplica por 16 la memoria mientras el número de vCPU se mantiene igual — solo a partir de `xlarge` empieza a subir también la CPU. No es una regla universal para todas las familias (cada una reparte CPU y memoria a su manera según para qué está pensada), pero sí confirma la idea central: el tamaño no es "solo memoria", es todo el paquete de recursos que trae la instancia.
+
+!!! example "El coste de sobredimensionar una instancia"
+    Una `t3.micro` cuesta una fracción de lo que cuesta una `t3.large` —tres peldaños por encima, con ocho veces más memoria—, y para servir el front estático de una aplicación web durante una clase de treinta alumnos es más que suficiente. Sobredimensionar una instancia es tirar presupuesto del laboratorio a la basura sin ninguna mejora perceptible — vas a comparar el coste real de tres familias en la Actividad 2.3.
+
+El propio nombre `t3.micro` te dice ya el 80 % de lo que necesitas: familia de uso general con ráfagas, tercera generación, tamaño mínimo de la escalera. No hace falta memorizar el catálogo entero — elige la familia según qué exige la carga, y sube en la escalera de tamaños solo hasta donde el tráfico real lo justifique.
 
 ---
 
@@ -75,6 +88,9 @@ flowchart TD
 
 !!! tip "Por qué esto es la base de todo lo que viene después"
     Una plantilla de lanzamiento parametrizada es exactamente lo que va a usar el grupo de escalado automático del Tema 4 para decidir "necesito una instancia más, ¿con qué características la lanzo?" — sin plantilla, no hay escalado automático posible. Lo que hoy parece solo una comodidad para no repetir parámetros a mano es, en dos sesiones, el mecanismo que sostiene la alta disponibilidad de cualquier aplicación en producción.
+
+!!! warning "Una plantilla no crea infraestructura, solo la reutiliza"
+    La plantilla no guarda una copia de tu subred o tu grupo de seguridad — guarda sus **ID**, que solo existen dentro de tu cuenta y tu región. Si le pasas tu plantilla a otra persona con otra cuenta de AWS, no le funciona: esos `subnet-...` y `sg-...` no existen ahí, así que el lanzamiento falla. Para replicar toda una infraestructura de una cuenta a otra —VPC, subredes y todo lo demás incluido, no solo el lanzamiento de instancias sobre una red que ya existe— hace falta otra herramienta distinta: **infraestructura como código** (CloudFormation, en AWS), que verás en el Tema 6.
 
 ---
 
