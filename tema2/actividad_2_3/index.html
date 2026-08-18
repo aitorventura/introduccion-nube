@@ -813,9 +813,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#paso-1-despliega-la-app-de-turnos-con-user-data-solo-en-los-puertos-necesarios" class="md-nav__link">
+  <a href="#paso-1-despliega-el-panel-de-reservas-con-user-data-solo-en-los-puertos-necesarios" class="md-nav__link">
     <span class="md-ellipsis">
-      Paso 1 — Despliega la app de turnos con user data, solo en los puertos necesarios
+      Paso 1 — Despliega el panel de reservas con user data, solo en los puertos necesarios
     </span>
   </a>
   
@@ -830,15 +830,33 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#paso-3-empaqueta-tu-ami-en-una-plantilla-de-lanzamiento" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 3 — Empaqueta tu AMI en una plantilla de lanzamiento
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-4-lanza-instancias-identicas-desde-tu-plantilla" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 4 — Lanza instancias idénticas desde tu plantilla
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#parte-b-plantilla-de-lanzamiento-y-comparacion-de-coste-reto" class="md-nav__link">
+  <a href="#parte-b-reto-la-misma-receta-con-otra-aplicacion-distinta" class="md-nav__link">
     <span class="md-ellipsis">
-      Parte B — Plantilla de lanzamiento y comparación de coste (reto)
+      Parte B — Reto: la misma receta, con otra aplicación distinta
     </span>
   </a>
   
@@ -2438,9 +2456,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#paso-1-despliega-la-app-de-turnos-con-user-data-solo-en-los-puertos-necesarios" class="md-nav__link">
+  <a href="#paso-1-despliega-el-panel-de-reservas-con-user-data-solo-en-los-puertos-necesarios" class="md-nav__link">
     <span class="md-ellipsis">
-      Paso 1 — Despliega la app de turnos con user data, solo en los puertos necesarios
+      Paso 1 — Despliega el panel de reservas con user data, solo en los puertos necesarios
     </span>
   </a>
   
@@ -2455,15 +2473,33 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#paso-3-empaqueta-tu-ami-en-una-plantilla-de-lanzamiento" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 3 — Empaqueta tu AMI en una plantilla de lanzamiento
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-4-lanza-instancias-identicas-desde-tu-plantilla" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 4 — Lanza instancias idénticas desde tu plantilla
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#parte-b-plantilla-de-lanzamiento-y-comparacion-de-coste-reto" class="md-nav__link">
+  <a href="#parte-b-reto-la-misma-receta-con-otra-aplicacion-distinta" class="md-nav__link">
     <span class="md-ellipsis">
-      Parte B — Plantilla de lanzamiento y comparación de coste (reto)
+      Parte B — Reto: la misma receta, con otra aplicación distinta
     </span>
   </a>
   
@@ -2513,58 +2549,149 @@
 <p>📦 <a href="../recursos/actividad_2_3_recursos.zip" rel="noopener" target="_blank">Recursos de la Actividad 2.3</a> — lo vas a subir y descomprimir en el Paso 1 de esta actividad.</p>
 </div>
 <h2 id="contexto">Contexto<a class="headerlink" href="#contexto" title="Permanent link">¶</a></h2>
-<p>Hasta ahora has lanzado instancias sueltas, a mano, repitiendo los mismos parámetros cada vez. Hoy conviertes ese proceso manual en algo repetible: instalas una aplicación de gestión de turnos de una peluquería en una instancia, capturas el resultado como tu propia imagen, y empaquetas todo en una plantilla de lanzamiento que puedes usar tantas veces como haga falta.</p>
+<p>Hasta ahora has lanzado instancias sueltas, a mano, repitiendo los mismos parámetros cada vez. Hoy conviertes ese proceso manual en algo repetible: instalas un panel de reservas de pistas deportivas —la misma aplicación municipal que llevas construyendo desde la Actividad 2.1— en una instancia, capturas el resultado como tu propia imagen, la empaquetas en una plantilla de lanzamiento y arrancas varias instancias idénticas desde ella. Después demuestras que el mecanismo no depende de la aplicación: repites el mismo proceso con algo completamente distinto instalado.</p>
+<p><img alt="De instancia a plantilla: capturas tu AMI propia y la empaquetas en una plantilla de lanzamiento para arrancar N instancias idénticas" src="../img/actividad_2_3_flujo_completo.png"></p>
 <h2 id="que-vas-a-practicar">Qué vas a practicar<a class="headerlink" href="#que-vas-a-practicar" title="Permanent link">¶</a></h2>
 <ul>
 <li>Automatizar el despliegue de la aplicación con user data, sin conectarte a mano a la instancia.</li>
 <li>Crear tu propia imagen de máquina (AMI) a partir de una instancia ya configurada.</li>
 <li>Construir una plantilla de lanzamiento parametrizada y lanzar varias instancias idénticas desde ella.</li>
+<li>Repetir el mismo mecanismo con una aplicación distinta, para comprobar que no depende de lo que instales.</li>
 <li>Comparar coste mensual entre familias de instancia para la misma carga.</li>
 </ul>
 <h2 id="requisitos-previos">Requisitos previos<a class="headerlink" href="#requisitos-previos" title="Permanent link">¶</a></h2>
 <p>La VPC de dos zonas de la Actividad 2.1, con su subred pública ya creada — hoy lanzas una instancia nueva sobre ella, no reutilizas la de la Actividad 2.2. Los apuntes de esta sesión — <a href="../maquinas-virtuales/">«Máquinas virtuales»</a>.</p>
 <hr>
 <h2 id="parte-a-de-instancia-manual-a-imagen-propia-guiada">Parte A — De instancia manual a imagen propia (guiada)<a class="headerlink" href="#parte-a-de-instancia-manual-a-imagen-propia-guiada" title="Permanent link">¶</a></h2>
-<h3 id="paso-1-despliega-la-app-de-turnos-con-user-data-solo-en-los-puertos-necesarios">Paso 1 — Despliega la app de turnos con user data, solo en los puertos necesarios<a class="headerlink" href="#paso-1-despliega-la-app-de-turnos-con-user-data-solo-en-los-puertos-necesarios" title="Permanent link">¶</a></h3>
-<p>Lanza una instancia nueva en tu subred pública, con un grupo de seguridad que abra <strong>únicamente</strong> el puerto 80 (y el 22 restringido a tu IP para poder revisar si algo falla), y con un script de user data que instale y arranque, sin intervención tuya, la app de gestión de turnos de la peluquería. El comando siguiente usa <code>file://</code> para leer el script desde donde lo ejecutes — así que hazlo desde tu <strong>CloudShell</strong> (Tema 1), no desde tu ordenador: sube <code>actividad_2_3_recursos.zip</code> con <strong>Actions → Upload file</strong> y descomprímelo (<code>unzip actividad_2_3_recursos.zip</code>) para tener <code>instalar-catalogo.sh</code> ahí mismo, en <code>recursos/tema2/actividad_2_3/</code>.</p>
+<h3 id="paso-1-despliega-el-panel-de-reservas-con-user-data-solo-en-los-puertos-necesarios">Paso 1 — Despliega el panel de reservas con user data, solo en los puertos necesarios<a class="headerlink" href="#paso-1-despliega-el-panel-de-reservas-con-user-data-solo-en-los-puertos-necesarios" title="Permanent link">¶</a></h3>
+<p>Lanza una instancia nueva en tu subred pública. Necesita:</p>
+<ul>
+<li>Un grupo de seguridad con el puerto 80 abierto, y las mismas dos reglas de SSH que ya justificaste en la Actividad 2.2 (a tu IP, y a <code>0.0.0.0/0</code> — es la que de verdad te deja entrar desde el aula, por EC2 Instance Connect), por si hace falta revisar algo. Si todavía conservas el de la instancia pública de la Actividad 2.2 —mismas reglas exactas—, reutilízalo en vez de crear uno nuevo.</li>
+<li>Un script de user data que instale y arranque, sin intervención tuya, el panel de reservas de pistas deportivas.</li>
+</ul>
+<p>Todo el Paso 1 lo haces por <strong>CLI</strong>, igual que en la Actividad 2.2 — el grupo de seguridad y la propia instancia, sin pasar por el asistente de consola en ningún momento. Hazlo desde tu <strong>CloudShell</strong> (Tema 1), no desde tu ordenador: sube <code>actividad_2_3_recursos.zip</code> con <strong>Actions → Upload file</strong> y descomprímelo (<code>unzip actividad_2_3_recursos.zip</code>) para tener <code>instalar-panel-reservas.sh</code> ahí mismo, en <code>recursos/tema2/actividad_2_3/</code>.</p>
+<p>Antes de lanzar necesitas tres datos — mismo método de búsqueda que ya usaste en la 2.2:</p>
+<ol>
+<li>
+<p><strong>El ID de la AMI base</strong>: la misma Amazon Linux 2023 que has usado en toda actividad anterior — reutiliza el ID que ya tengas anotado de la Actividad 2.1 o 2.2. Si no lo tienes a mano, consíguelo por CLI:</p>
 <div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
 <span class="normal"><a href="#__codelineno-0-2">2</a></span>
-<span class="normal"><a href="#__codelineno-0-3">3</a></span>
-<span class="normal"><a href="#__codelineno-0-4">4</a></span>
-<span class="normal"><a href="#__codelineno-0-5">5</a></span>
-<span class="normal"><a href="#__codelineno-0-6">6</a></span>
-<span class="normal"><a href="#__codelineno-0-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="nb">cd</span><span class="w"> </span>recursos/tema2/actividad_2_3/
-<a id="__codelineno-0-2" name="__codelineno-0-2"></a>aws<span class="w"> </span>ec2<span class="w"> </span>run-instances<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">  </span>--image-id<span class="w"> </span>&lt;ami-base&gt;<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">  </span>--instance-type<span class="w"> </span>t3.micro<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="w">  </span>--subnet-id<span class="w"> </span>&lt;subnet-publica-id&gt;<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="w">  </span>--security-group-ids<span class="w"> </span>&lt;sg-minimo&gt;<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">  </span>--user-data<span class="w"> </span>file://instalar-catalogo.sh
+<span class="normal"><a href="#__codelineno-0-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a>aws<span class="w"> </span>ec2<span class="w"> </span>describe-images<span class="w"> </span>--owners<span class="w"> </span>amazon<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="w">  </span>--filters<span class="w"> </span><span class="s2">"Name=name,Values=al2023-ami-2023*-x86_64"</span><span class="w"> </span><span class="s2">"Name=state,Values=available"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">  </span>--query<span class="w"> </span><span class="s2">"reverse(sort_by(Images, &amp;CreationDate))[:1].ImageId"</span><span class="w"> </span>--output<span class="w"> </span>text
 </code></pre></div></td></tr></table></div>
-<p><img alt="La app de turnos funcionando en el navegador" src="img/actividad_2_3_paso1.png">
+</li>
+<li>
+<p><strong>El ID de tu subred pública</strong>: consola: <strong>VPC → Subredes</strong> → clic en <code>pistas-publica-a</code> → copia el ID. Por CLI:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span>
+<span class="normal"><a href="#__codelineno-1-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a>aws<span class="w"> </span>ec2<span class="w"> </span>describe-subnets<span class="w"> </span>--filters<span class="w"> </span><span class="s2">"Name=tag:Name,Values=pistas-publica-a"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="w">  </span>--query<span class="w"> </span><span class="s2">"Subnets[0].SubnetId"</span><span class="w"> </span>--output<span class="w"> </span>text
+</code></pre></div></td></tr></table></div>
+</li>
+<li>
+<p><strong>Un grupo de seguridad con exactamente tres reglas</strong> (80 abierto, y las dos de SSH de siempre: a tu IP y a <code>0.0.0.0/0</code>). Si reutilizas el de la Actividad 2.2, no ejecutes estos comandos: búscalo por consola (<strong>EC2 → Grupos de seguridad</strong>) y copia su ID. Si creas uno nuevo, sustituye <code>&lt;tu-identificador&gt;</code> y <code>&lt;vpc-id&gt;</code> por los tuyos en los comandos siguientes — necesitas el ID de tu VPC y tu IP pública actual:</p>
+<p>Primero créalo, y anota el <code>GroupId</code> que te devuelve — es tu <code>&lt;sg-minimo&gt;</code> para los comandos siguientes:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
+<span class="normal"><a href="#__codelineno-2-2">2</a></span>
+<span class="normal"><a href="#__codelineno-2-3">3</a></span>
+<span class="normal"><a href="#__codelineno-2-4">4</a></span>
+<span class="normal"><a href="#__codelineno-2-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a>aws<span class="w"> </span>ec2<span class="w"> </span>create-security-group<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="w">  </span>--group-name<span class="w"> </span>pistas-panel-sg-&lt;tu-identificador&gt;<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="w">  </span>--description<span class="w"> </span><span class="s2">"HTTP abierto, SSH a mi IP y a 0.0.0.0/0 para EC2 Instance Connect"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="w">  </span>--vpc-id<span class="w"> </span>&lt;vpc-id&gt;<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="w">  </span>--query<span class="w"> </span><span class="s2">"GroupId"</span><span class="w"> </span>--output<span class="w"> </span>text
+</code></pre></div></td></tr></table></div>
+<p>Con el <code>GroupId</code> ya en la mano, añade las tres reglas (si las ejecutas antes de tener el ID, o sin sustituirlo, fallan):</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
+<span class="normal"><a href="#__codelineno-3-2">2</a></span>
+<span class="normal"><a href="#__codelineno-3-3">3</a></span>
+<span class="normal"><a href="#__codelineno-3-4">4</a></span>
+<span class="normal"><a href="#__codelineno-3-5">5</a></span>
+<span class="normal"><a href="#__codelineno-3-6">6</a></span>
+<span class="normal"><a href="#__codelineno-3-7">7</a></span>
+<span class="normal"><a href="#__codelineno-3-8">8</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a>aws<span class="w"> </span>ec2<span class="w"> </span>authorize-security-group-ingress<span class="w"> </span>--group-id<span class="w"> </span>&lt;sg-minimo&gt;<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="w">  </span>--protocol<span class="w"> </span>tcp<span class="w"> </span>--port<span class="w"> </span><span class="m">80</span><span class="w"> </span>--cidr<span class="w"> </span><span class="m">0</span>.0.0.0/0
+<a id="__codelineno-3-3" name="__codelineno-3-3"></a>
+<a id="__codelineno-3-4" name="__codelineno-3-4"></a>aws<span class="w"> </span>ec2<span class="w"> </span>authorize-security-group-ingress<span class="w"> </span>--group-id<span class="w"> </span>&lt;sg-minimo&gt;<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="w">  </span>--protocol<span class="w"> </span>tcp<span class="w"> </span>--port<span class="w"> </span><span class="m">22</span><span class="w"> </span>--cidr<span class="w"> </span><span class="k">$(</span>curl<span class="w"> </span>-s<span class="w"> </span>https://checkip.amazonaws.com<span class="k">)</span>/32
+<a id="__codelineno-3-6" name="__codelineno-3-6"></a>
+<a id="__codelineno-3-7" name="__codelineno-3-7"></a>aws<span class="w"> </span>ec2<span class="w"> </span>authorize-security-group-ingress<span class="w"> </span>--group-id<span class="w"> </span>&lt;sg-minimo&gt;<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8"></a><span class="w">  </span>--protocol<span class="w"> </span>tcp<span class="w"> </span>--port<span class="w"> </span><span class="m">22</span><span class="w"> </span>--cidr<span class="w"> </span><span class="m">0</span>.0.0.0/0
+</code></pre></div></td></tr></table></div>
+</li>
+</ol>
+<p>Con los tres datos ya en la mano, lanza la instancia:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span>
+<span class="normal"><a href="#__codelineno-4-2">2</a></span>
+<span class="normal"><a href="#__codelineno-4-3">3</a></span>
+<span class="normal"><a href="#__codelineno-4-4">4</a></span>
+<span class="normal"><a href="#__codelineno-4-5">5</a></span>
+<span class="normal"><a href="#__codelineno-4-6">6</a></span>
+<span class="normal"><a href="#__codelineno-4-7">7</a></span>
+<span class="normal"><a href="#__codelineno-4-8">8</a></span>
+<span class="normal"><a href="#__codelineno-4-9">9</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="nb">cd</span><span class="w"> </span>recursos/tema2/actividad_2_3/
+<a id="__codelineno-4-2" name="__codelineno-4-2"></a>aws<span class="w"> </span>ec2<span class="w"> </span>run-instances<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="w">  </span>--image-id<span class="w"> </span>&lt;ami-base&gt;<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="w">  </span>--instance-type<span class="w"> </span>t3.micro<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5"></a><span class="w">  </span>--subnet-id<span class="w"> </span>&lt;subnet-publica-id&gt;<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6"></a><span class="w">  </span>--security-group-ids<span class="w"> </span>&lt;sg-minimo&gt;<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7"></a><span class="w">  </span>--associate-public-ip-address<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8"></a><span class="w">  </span>--user-data<span class="w"> </span>file://instalar-panel-reservas.sh<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9"></a><span class="w">  </span>--tag-specifications<span class="w"> </span><span class="s1">'ResourceType=instance,Tags=[{Key=Name,Value=pistas-panel-&lt;tu-identificador&gt;}]'</span>
+</code></pre></div></td></tr></table></div>
+<p>Fíjate en <code>--associate-public-ip-address</code>: tu subred pública no asigna IP pública por defecto (lo has tenido que marcar a mano en el asistente de consola en actividades anteriores), así que por CLI hay que pedirla explícitamente — sin este flag, la instancia lanzaría sin IP pública y no podrías llegar a ella. No hace falta ningún perfil de IAM esta vez: a diferencia de la 2.2, aquí no saltas a ninguna instancia privada, solo te conectas a esta misma por Instance Connect.</p>
+<p><img alt="Salida en CloudShell de los comandos de creación del grupo de seguridad y del run-instances, con los IDs devueltos" src="../img/actividad_2_3_paso1.png">
 <em>🖼️ Captura de referencia del profesor — guardar como <code>img/actividad_2_3_paso1.png</code></em></p>
-<p><strong>Comprueba</strong>: que la app responde en el puerto 80 sin que te hayas conectado nunca por SSH a instalarla a mano, y que ningún otro puerto además del 80 y el 22 (restringido) está abierto.</p>
-<p><strong>Captura</strong>: tu propia app de turnos funcionando en el navegador, y el grupo de seguridad mostrando solo los puertos estrictamente necesarios.</p>
+<p><strong>Comprueba</strong>: que el panel responde en el puerto 80 sin que te hayas conectado nunca por SSH a instalarlo a mano, y que ningún otro puerto además del 80 y el 22 está abierto.</p>
+<p><strong>Captura</strong>: tu propio panel de reservas funcionando en el navegador, y el grupo de seguridad mostrando solo los puertos estrictamente necesarios.</p>
 <h3 id="paso-2-crea-tu-propia-imagen-desde-la-consola">Paso 2 — Crea tu propia imagen desde la consola<a class="headerlink" href="#paso-2-crea-tu-propia-imagen-desde-la-consola" title="Permanent link">¶</a></h3>
 <p>Con la instancia del Paso 1 ya funcionando y estable, captúrala como AMI propia:</p>
 <ol>
-<li>En el panel de <strong>Instancias</strong>, selecciona (marca la casilla) tu instancia con el catálogo desplegado.</li>
+<li>En el panel de <strong>Instancias</strong>, selecciona (marca la casilla) tu instancia con el panel de reservas desplegado.</li>
 <li>Ve a <strong>Acciones → Imagen y plantillas → Crear imagen</strong>.</li>
-<li>Dale un nombre que la identifique como tuya, por ejemplo <code>turnos-app-&lt;tu-identificador&gt;</code>.</li>
+<li>Dale un nombre que la identifique como tuya, por ejemplo <code>pistas-panel-&lt;tu-identificador&gt;</code>.</li>
 <li>Deja el resto de opciones por defecto y haz clic en <strong>Crear imagen</strong>.</li>
 <li>Ve al menú lateral, a <strong>AMIs</strong> (dentro de Imágenes), y espera a que el estado pase de <code>pending</code> a <code>available</code> — tarda unos minutos.</li>
 </ol>
-<p><img alt="La AMI propia en estado available, con su nombre y tamaño" src="img/actividad_2_3_paso2.png">
+<p><img alt="El diálogo Crear imagen relleno, antes de confirmar" src="../img/actividad_2_3_paso2.png">
 <em>🖼️ Captura de referencia del profesor — guardar como <code>img/actividad_2_3_paso2.png</code></em></p>
-<p><strong>Comprueba</strong>: que la imagen aparece como disponible (<code>available</code>) al cabo de unos minutos, y que su tamaño y descripción tienen sentido.</p>
-<p><strong>Captura</strong>: tu propia AMI en estado <code>available</code>, con su nombre y tamaño visibles.</p>
+<p><strong>Comprueba</strong>: que la imagen aparece como disponible (<code>available</code>) al cabo de unos minutos, y que su nombre y descripción tienen sentido.</p>
+<p><strong>Captura</strong>: tu propia AMI en estado <code>available</code>, con su nombre y su ID de AMI visibles.</p>
+<h3 id="paso-3-empaqueta-tu-ami-en-una-plantilla-de-lanzamiento">Paso 3 — Empaqueta tu AMI en una plantilla de lanzamiento<a class="headerlink" href="#paso-3-empaqueta-tu-ami-en-una-plantilla-de-lanzamiento" title="Permanent link">¶</a></h3>
+<p>Con la imagen ya disponible, empaquétala en una plantilla de lanzamiento básica.</p>
+<ol>
+<li>Busca "EC2" → menú lateral, <strong>Plantillas de lanzamiento</strong> → <strong>Crear plantilla de lanzamiento</strong>.</li>
+<li>Dale un nombre (por ejemplo <code>pistas-panel-lt-&lt;tu-identificador&gt;</code>).</li>
+<li>En <strong>Imagen de la aplicación y el SO (Amazon Machine Image)</strong>, pestaña <strong>Mis AMIs</strong>, elige la que has creado en el Paso 2 — no una AMI pública.</li>
+<li>En <strong>Tipo de instancia</strong>, <code>t3.micro</code>.</li>
+<li>En <strong>Par de claves (inicio de sesión)</strong>, <strong>No incluir en la plantilla de lanzamiento</strong> — sigues sin necesitarlo, como en el Paso 1.</li>
+<li>En <strong>Configuraciones de red</strong>, elige tu subred pública (no hay un campo aparte para elegir la VPC — se fija sola al elegir la subred, que ya pertenece a ella). En <strong>Firewall (grupos de seguridad)</strong>, elige <strong>Seleccionar un grupo de seguridad existente</strong> y marca el que creaste en el Paso 1 (<code>pistas-panel-sg-&lt;tu-identificador&gt;</code>).</li>
+<li>Despliega <strong>Configuración de red avanzada</strong> (queda colapsada por defecto) y busca el campo para asignar automáticamente una dirección IP pública — actívalo. Igual que en cada actividad anterior, la subred no la asigna por su cuenta: sin este paso, las instancias que lances desde la plantilla no tendrían IP pública y no podrías llegar a ellas.</li>
+<li>No hace falta rellenar <strong>Datos de usuario</strong>: tu AMI ya lleva el panel instalado y arrancando solo — es justo la diferencia frente al Paso 1, donde el user data hacía ese trabajo sobre una imagen genérica.</li>
+<li>Crea la plantilla.</li>
+</ol>
+<p><img alt="La pestaña Mis AMIs seleccionada al elegir la imagen, con tu AMI propia marcada — no la pestaña de AMIs públicas" src="../img/actividad_2_3_paso3.png">
+<em>🖼️ Captura de referencia del profesor — guardar como <code>img/actividad_2_3_paso3.png</code></em></p>
+<p><strong>Comprueba</strong>: que la plantilla aparece creada, con tu AMI propia y el resto de parámetros (tipo, red, grupo de seguridad) visibles en su resumen.</p>
+<p><strong>Captura</strong>: el resumen de tu plantilla de lanzamiento, con la AMI propia seleccionada y el resto de parámetros visibles.</p>
+<h3 id="paso-4-lanza-instancias-identicas-desde-tu-plantilla">Paso 4 — Lanza instancias idénticas desde tu plantilla<a class="headerlink" href="#paso-4-lanza-instancias-identicas-desde-tu-plantilla" title="Permanent link">¶</a></h3>
+<p>Dos instancias idénticas, sin nada todavía que reparta tráfico entre ellas ni las use a la vez, no te sirven de nada por sí solas — y es normal que ahora mismo no le veas la utilidad práctica. Lo que demuestra este paso no es "para qué sirven dos copias", sino que la plantilla es de verdad reutilizable sin tocar ni un parámetro a mano: es exactamente la pieza que necesita el grupo de escalado automático del Tema 4 para añadir instancias cuando el tráfico lo justifique y quitarlas cuando no. Hoy compruebas que la pieza suelta funciona; el motivo real de tener varias lo ves en el Tema 4.</p>
+<p><strong>Antes de lanzar nada, predice</strong>: si arrancas una instancia desde tu plantilla —con tu propia AMI ya lista, sin user data que instalar—, ¿cuánto crees que va a tardar en estar respondiendo, comparado con el tiempo que tardó la instancia del Paso 1 (que instalaba el servidor desde cero vía user data sobre una imagen genérica)? Escribe tu predicción y por qué crees eso.</p>
+<ol>
+<li>En el panel de <strong>Plantillas de lanzamiento</strong>, selecciona la tuya → <strong>Acciones → Lanzar instancia desde plantilla</strong>.</li>
+<li>En <strong>Número de instancias</strong>, escribe <code>2</code> — el resto de campos ya vienen rellenos desde la plantilla, no los toques.</li>
+<li>Lanza, y cronometra de verdad desde que pulsas lanzar hasta que cada instancia responde con el panel en el navegador.</li>
+</ol>
+<p><img alt="El diálogo Lanzar instancia desde plantilla, con Número de instancias puesto a 2" src="../img/actividad_2_3_paso4.png">
+<em>🖼️ Captura de referencia del profesor — guardar como <code>img/actividad_2_3_paso4.png</code></em></p>
+<p><strong>Comprueba</strong>: que las dos instancias responden con el panel de reservas sin ninguna configuración adicional, exactamente igual que la instancia original del Paso 1, y que tu predicción de tiempo se ajusta (o no) a lo que has cronometrado de verdad.</p>
+<p><strong>Captura</strong>: las dos instancias respondiendo en el navegador, el cronómetro real de arranque, y tu predicción escrita de antemano.</p>
 <hr>
-<h2 id="parte-b-plantilla-de-lanzamiento-y-comparacion-de-coste-reto">Parte B — Plantilla de lanzamiento y comparación de coste (reto)<a class="headerlink" href="#parte-b-plantilla-de-lanzamiento-y-comparacion-de-coste-reto" title="Permanent link">¶</a></h2>
-<p><strong>Antes de construir nada, predice</strong>: si empaquetas tu propia AMI en una plantilla de lanzamiento y arrancas una instancia desde ella, ¿cuánto crees que va a tardar en estar respondiendo, comparado con el tiempo que tardó la instancia de la Actividad 2.2 (que instalaba el servidor desde cero vía user data sobre una imagen genérica)? Escribe tu predicción y por qué crees eso.</p>
-<p>El reto: construye una plantilla de lanzamiento parametrizada con tu propia imagen, lánzale dos instancias idénticas desde ella y demuestra, cronometrando de verdad, si tu predicción se ha cumplido. No hay comandos dados — decide tú qué parámetros lleva la plantilla y cómo mides el tiempo de arranque de forma justa.</p>
-<p>Con eso hecho, compara el coste mensual estimado de mantener esta misma carga (una instancia sirviendo la app de turnos, tráfico moderado) en tres familias distintas de instancia, usando la calculadora oficial de AWS, y justifica cuál elegirías para producción y cuál para clase.</p>
-<p><strong>Comprueba</strong>: que las dos instancias lanzadas desde la plantilla responden con la app de turnos sin ninguna configuración adicional, exactamente igual que la instancia original.</p>
-<p><strong>Captura</strong>: el cronómetro real de arranque de las dos instancias, tu predicción escrita de antemano, y la tabla comparativa de coste mensual de las tres familias con su justificación.</p>
+<h2 id="parte-b-reto-la-misma-receta-con-otra-aplicacion-distinta">Parte B — Reto: la misma receta, con otra aplicación distinta<a class="headerlink" href="#parte-b-reto-la-misma-receta-con-otra-aplicacion-distinta" title="Permanent link">¶</a></h2>
+<p>Todo lo de la Parte A demuestra que el mecanismo AMI + plantilla funciona para el panel de reservas — pero el mecanismo en sí no sabe nada de pistas deportivas, sirve para cualquier aplicación. Demuéstralo tú: monta una <strong>segunda plantilla de lanzamiento</strong>, completa desde cero (instancia base → instala algo distinto → captura tu AMI → empaquétala en plantilla nueva), con una aplicación distinta a tu elección — un WordPress con su propia base de datos, un blog estático distinto, un servicio propio tuyo... lo que quieras, siempre que no sea el panel de reservas. No hay comandos dados ni pasos numerados: aplica exactamente el mismo proceso del Paso 1 al Paso 3, con la instalación que tú decidas.</p>
+<p>Con la segunda plantilla funcionando, compara el coste mensual estimado de mantener esta misma carga (una instancia sirviendo tu aplicación, tráfico moderado) en tres familias distintas de instancia, usando la calculadora oficial de AWS, y justifica cuál elegirías para producción y cuál para clase.</p>
+<p><strong>Comprueba</strong>: que una instancia lanzada desde tu segunda plantilla responde con tu aplicación elegida, sin ninguna configuración adicional.</p>
+<p><strong>Captura</strong>: tu aplicación distinta funcionando en el navegador, el resumen de tu segunda plantilla de lanzamiento, y la tabla comparativa de coste mensual de las tres familias con su justificación.</p>
 <hr>
 <h2 id="criterios-de-evaluacion">Criterios de evaluación<a class="headerlink" href="#criterios-de-evaluacion" title="Permanent link">¶</a></h2>
 <p><strong>Parte A — hasta 7 puntos</strong></p>
@@ -2577,12 +2704,20 @@
 </thead>
 <tbody>
 <tr>
-<td>App de turnos desplegada automáticamente con user data, puertos mínimos</td>
-<td>3</td>
+<td>Panel de reservas desplegado automáticamente con user data, puertos mínimos</td>
+<td>2</td>
 </tr>
 <tr>
 <td>Imagen propia creada a partir de la instancia</td>
-<td>4</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Plantilla de lanzamiento creada a partir de tu AMI propia</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Dos instancias lanzadas desde la plantilla, tiempos medidos y predicción comparada</td>
+<td>2</td>
 </tr>
 </tbody>
 </table>
@@ -2596,21 +2731,21 @@
 </thead>
 <tbody>
 <tr>
-<td>Plantilla de lanzamiento funcionando, dos instancias idénticas lanzadas</td>
+<td>Segunda plantilla funcionando, con una aplicación distinta instalada</td>
 <td>2</td>
 </tr>
 <tr>
-<td>Comparación de tiempos y de coste entre tres familias, con predicción previa</td>
+<td>Comparación de coste entre tres familias, con justificación</td>
 <td>1</td>
 </tr>
 </tbody>
 </table>
 <hr>
 <h2 id="cierre">✅ Cierre<a class="headerlink" href="#cierre" title="Permanent link">¶</a></h2>
-<p>Ya tienes una imagen propia y una plantilla parametrizada — puedes lanzar tantas copias idénticas del catálogo como necesites, sin repetir la instalación ni un solo parámetro a mano. Con esto se cierra el Tema 2: tienes la red, la seguridad y las instancias resueltas. En el Tema 3 vas a decidir dónde guardar los datos de verdad — objetos, ficheros compartidos y una base de datos gestionada— y a montar la primera arquitectura completa de tres capas.</p>
+<p>Ya tienes una imagen propia y una plantilla parametrizada — puedes lanzar tantas copias idénticas del panel de reservas como necesites, sin repetir la instalación ni un solo parámetro a mano. Con esto se cierra el Tema 2: tienes la red, la seguridad y las instancias resueltas. En el Tema 3 vas a decidir dónde guardar los datos de verdad — objetos, ficheros compartidos y una base de datos gestionada— y a montar la primera arquitectura completa de tres capas.</p>
 <div class="admonition danger">
-<p class="admonition-title">Antes de salir: borra las instancias, no la imagen ni la VPC</p>
-<p>Termina la instancia del Paso 1 y, si has hecho la Parte B, las dos que has lanzado desde la plantilla — ninguna le sirve a otra actividad después de hoy. Tu AMI propia y la plantilla de lanzamiento puedes dejarlas, apenas tienen coste. <strong>No borres la VPC ni las subredes</strong> — las sigue necesitando el resto del módulo.</p>
+<p class="admonition-title">Antes de salir: borra las instancias, no las imágenes ni la VPC</p>
+<p>Termina la instancia del Paso 1, las dos que has lanzado desde la plantilla en el Paso 4 y, si has hecho la Parte B, la instancia de tu segunda plantilla — ninguna le sirve a otra actividad después de hoy. Tus AMIs propias y las plantillas de lanzamiento puedes dejarlas, apenas tienen coste. <strong>No borres la VPC ni las subredes</strong> — las sigue necesitando el resto del módulo.</p>
 </div></div>
 
 

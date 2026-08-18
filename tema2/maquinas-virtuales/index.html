@@ -2440,10 +2440,10 @@
 <div><p><a id="maquinas-virtuales"></a></p>
 <h1 id="3-maquinas-virtuales">🧩 3. Máquinas virtuales<a class="headerlink" href="#3-maquinas-virtuales" title="Permanent link">¶</a></h1>
 <hr>
-<p>En las dos sesiones anteriores has lanzado instancias sueltas, una a una, cada vez con los mismos parámetros repetidos a mano: la imagen, el tipo, la subred, el grupo de seguridad. Funciona para dos instancias de prueba, pero no escala — y hoy es el día en que dejas de repetir ese proceso manualmente. Vas a entender qué decide realmente el rendimiento y el precio de una instancia, cómo se empaqueta un servidor entero en una imagen reutilizable, y cómo se guarda toda esa receta en una plantilla que vas a lanzar tantas veces como haga falta, sin volver a teclear los mismos parámetros.</p>
+<p>Ya sabes que una instancia es una <strong>máquina virtual</strong> — lo viste en «Diseño de la red virtual». En las dos sesiones anteriores has lanzado instancias sueltas, una a una, repitiendo a mano los mismos parámetros: la imagen, el tipo, la subred, el grupo de seguridad. Funciona para dos instancias de prueba, pero no escala — hoy dejas de repetir ese proceso a mano: entiendes qué decide su rendimiento y precio, cómo se empaqueta en una imagen reutilizable, y cómo se guarda esa receta en una plantilla que lanzas tantas veces como haga falta.</p>
 <hr>
 <h2 id="familias-y-tamanos-de-instancia">🧭 Familias y tamaños de instancia<a class="headerlink" href="#familias-y-tamanos-de-instancia" title="Permanent link">¶</a></h2>
-<p>Cuando lanzas una instancia EC2 eliges un <strong>tipo</strong>, con un nombre como <code>t3.micro</code> o <code>m5.large</code>. Ese nombre no es arbitrario: la letra inicial indica la <strong>familia</strong> (para qué está optimizada), y el número final indica el <strong>tamaño</strong> (cuánta CPU y memoria trae).</p>
+<p>Cuando lanzas una instancia EC2 eliges un <strong>tipo</strong>, con un nombre como <code>t3.micro</code> o <code>m5.large</code>. Ese nombre tiene tres partes, no dos: la letra inicial es la <strong>familia</strong> (para qué está optimizada), el número que sigue es la <strong>generación</strong> (una versión más nueva del mismo hardware, normalmente más eficiente que la anterior — cuanto más alto, más reciente), y la palabra final es el <strong>tamaño</strong> (cuánta CPU y memoria trae) — es esta última la que de verdad decide cuánto pagas.</p>
 <table>
 <thead>
 <tr>
@@ -2475,11 +2475,54 @@
 </tr>
 </tbody>
 </table>
+<p>Dentro de cada familia, el tamaño sigue siempre la misma escalera de palabras: <code>nano → micro → small → medium → large → xlarge → 2xlarge → 4xlarge...</code>. Pero ojo, es un error frecuente pensar que la letra decide la CPU y el tamaño decide la memoria — no es así: <strong>los dos números, vCPU y memoria, dependen de la combinación de las dos partes del nombre.</strong> Lo que decide la letra es la proporción entre ambos y cómo se comporta esa CPU; lo que decide el tamaño es cuánto de esa proporción recibes. Con números reales de la familia <code>t3</code>, la que vas a usar en este módulo (<strong>vCPU</strong>, <em>virtual CPU</em>: el número de núcleos de procesamiento virtuales que trae la instancia — no la velocidad de cada uno, que depende del procesador físico de esa generación, no del tamaño que elijas):</p>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>vCPU</th>
+<th>Memoria RAM</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>t3.nano</code></td>
+<td>2</td>
+<td>0,5 GiB</td>
+</tr>
+<tr>
+<td><code>t3.micro</code></td>
+<td>2</td>
+<td>1 GiB</td>
+</tr>
+<tr>
+<td><code>t3.small</code></td>
+<td>2</td>
+<td>2 GiB</td>
+</tr>
+<tr>
+<td><code>t3.medium</code></td>
+<td>2</td>
+<td>4 GiB</td>
+</tr>
+<tr>
+<td><code>t3.large</code></td>
+<td>2</td>
+<td>8 GiB</td>
+</tr>
+<tr>
+<td><code>t3.xlarge</code></td>
+<td>4</td>
+<td>16 GiB</td>
+</tr>
+</tbody>
+</table>
+<p>Fíjate en que, dentro de la familia <code>t3</code>, subir de <code>nano</code> a <code>large</code> multiplica por 16 la memoria mientras el número de vCPU se mantiene igual — solo a partir de <code>xlarge</code> empieza a subir también la CPU. No es una regla universal para todas las familias (cada una reparte CPU y memoria a su manera según para qué está pensada), pero sí confirma la idea central: el tamaño no es "solo memoria", es todo el paquete de recursos que trae la instancia.</p>
 <div class="admonition example">
-<p class="admonition-title">Elegir tamaño no es "cuanto más grande, mejor"</p>
-<p>Una <code>t3.micro</code> cuesta una fracción de lo que cuesta una <code>m5.large</code>, y para servir el front estático de una aplicación web durante una clase de treinta alumnos es más que suficiente. Sobredimensionar una instancia es tirar presupuesto del laboratorio a la basura sin ninguna mejora perceptible — vas a comparar el coste real de tres familias en la Actividad 2.3.</p>
+<p class="admonition-title">El coste de sobredimensionar una instancia</p>
+<p>Una <code>t3.micro</code> cuesta una fracción de lo que cuesta una <code>t3.large</code> —tres peldaños por encima, con ocho veces más memoria—, y para servir el front estático de una aplicación web durante una clase de treinta alumnos es más que suficiente. Sobredimensionar una instancia es tirar presupuesto del laboratorio a la basura sin ninguna mejora perceptible — vas a comparar el coste real de tres familias en la Actividad 2.3.</p>
 </div>
-<p>El propio nombre <code>t3.micro</code> te dice ya el 80 % de lo que necesitas: familia de uso general con ráfagas, tamaño mínimo. No hace falta memorizar el catálogo entero — elige la familia según qué exige la carga, y el tamaño según cuánto tráfico esperas de verdad.</p>
+<p>El propio nombre <code>t3.micro</code> te dice ya el 80 % de lo que necesitas: familia de uso general con ráfagas, tercera generación, tamaño mínimo de la escalera. No hace falta memorizar el catálogo entero — elige la familia según qué exige la carga, y sube en la escalera de tamaños solo hasta donde el tráfico real lo justifique.</p>
 <hr>
 <h2 id="imagenes-de-maquina">🧩 Imágenes de máquina<a class="headerlink" href="#imagenes-de-maquina" title="Permanent link">¶</a></h2>
 <p>Una <strong>AMI</strong> (<em>Amazon Machine Image</em>) es la fotografía completa de un disco de arranque: sistema operativo, paquetes instalados, configuración — todo lo que hace falta para que una instancia nueva arranque ya lista, sin repetir la instalación desde cero. AWS te ofrece AMIs públicas (Amazon Linux, Ubuntu...) como punto de partida, pero también puedes crear las tuyas propias a partir de una instancia que ya has configurado.</p>
@@ -2538,6 +2581,10 @@
 <div class="admonition tip">
 <p class="admonition-title">Por qué esto es la base de todo lo que viene después</p>
 <p>Una plantilla de lanzamiento parametrizada es exactamente lo que va a usar el grupo de escalado automático del Tema 4 para decidir "necesito una instancia más, ¿con qué características la lanzo?" — sin plantilla, no hay escalado automático posible. Lo que hoy parece solo una comodidad para no repetir parámetros a mano es, en dos sesiones, el mecanismo que sostiene la alta disponibilidad de cualquier aplicación en producción.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Una plantilla no crea infraestructura, solo la reutiliza</p>
+<p>La plantilla no guarda una copia de tu subred o tu grupo de seguridad — guarda sus <strong>ID</strong>, que solo existen dentro de tu cuenta y tu región. Si le pasas tu plantilla a otra persona con otra cuenta de AWS, no le funciona: esos <code>subnet-...</code> y <code>sg-...</code> no existen ahí, así que el lanzamiento falla. Para replicar toda una infraestructura de una cuenta a otra —VPC, subredes y todo lo demás incluido, no solo el lanzamiento de instancias sobre una red que ya existe— hace falta otra herramienta distinta: <strong>infraestructura como código</strong> (CloudFormation, en AWS), que verás en el Tema 6.</p>
 </div>
 <hr>
 <h2 id="ideas-clave">✅ Ideas clave<a class="headerlink" href="#ideas-clave" title="Permanent link">¶</a></h2>
