@@ -165,9 +165,9 @@ Todo lo de la Parte A demuestra que el mecanismo AMI + plantilla funciona para e
 
 Con la segunda plantilla funcionando, compara el coste mensual estimado de mantener esta misma carga (una instancia sirviendo tu aplicación, tráfico moderado) en tres familias distintas de instancia, usando la calculadora oficial de AWS, y justifica cuál elegirías para producción y cuál para clase.
 
-**Comprueba**: que una instancia lanzada desde tu segunda plantilla responde con tu aplicación elegida, sin ninguna configuración adicional.
+**Comprueba**: que una instancia lanzada desde tu segunda plantilla responde con tu aplicación elegida, sin ninguna configuración adicional, y que puedes demostrar que viene de verdad de esa plantilla y no de un lanzamiento manual aparte.
 
-**Captura**: tu aplicación distinta funcionando en el navegador, el resumen de tu segunda plantilla de lanzamiento, y la tabla comparativa de coste mensual de las tres familias con su justificación.
+**Captura**: tu aplicación distinta funcionando en el navegador; el resumen de tu segunda plantilla de lanzamiento; la instancia ya lanzada, con su pestaña **Detalles** mostrando el campo **Plantilla de lanzamiento de origen** (el ID de tu plantilla y la versión usada) — es la prueba de que ha salido de la plantilla, no de un lanzamiento aparte; y la tabla comparativa de coste mensual de las tres familias con su justificación.
 
 ---
 
