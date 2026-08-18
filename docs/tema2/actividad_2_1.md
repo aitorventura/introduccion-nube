@@ -94,7 +94,7 @@ La forma más clara de comprobarlo no es mirar las tablas sueltas, es mirar cada
 
 El diseño de los pasos anteriores queda sobre el papel hasta que lo pones a prueba de verdad.
 
-Para probarlo vas a lanzar dos instancias mínimas —una en tu subred pública, otra en la privada—, usándolas solo como herramienta de prueba: no hace falta que entiendas todavía cómo funcionan por dentro, eso lo ves en el próximo apunte.
+Para probarlo vas a lanzar dos instancias mínimas —una en tu subred pública, otra en la privada—, usándolas solo como herramienta de prueba: no hace falta que entiendas todavía cómo funcionan por dentro, eso lo ves con detalle en el apunte de «Máquinas virtuales», más adelante en este tema.
 
 Para entrar en cada una y ejecutar comandos dentro, usas **SSH** (*Secure Shell*): un protocolo que abre una terminal remota sobre la máquina, como si estuvieras sentado delante de ella. Tu instancia privada no tiene IP pública, así que nadie de fuera de la VPC puede llegar a ella directamente por SSH — ni siquiera tú, desde la consola de AWS. La única forma de entrar es la que ya conoces de la teoría: saltar primero a un recurso que sí está dentro de la VPC —tu instancia pública— y, desde ahí, alcanzar la privada. Es el mismo patrón «recepción → sala de servidores» del apunte, aplicado a SSH.
 
