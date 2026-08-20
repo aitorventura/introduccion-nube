@@ -2744,8 +2744,15 @@
 <h2 id="cierre">✅ Cierre<a class="headerlink" href="#cierre" title="Permanent link">¶</a></h2>
 <p>Ya tienes una imagen propia y una plantilla parametrizada — puedes lanzar tantas copias idénticas del panel de reservas como necesites, sin repetir la instalación ni un solo parámetro a mano. Con esto se cierra el Tema 2: tienes la red, la seguridad y las instancias resueltas. En el Tema 3 vas a decidir dónde guardar los datos de verdad — objetos, ficheros compartidos y una base de datos gestionada— y a montar la primera arquitectura completa de tres capas.</p>
 <div class="admonition danger">
-<p class="admonition-title">Antes de salir: borra las instancias, no las imágenes ni la VPC</p>
-<p>Termina la instancia del Paso 1, las dos que has lanzado desde la plantilla en el Paso 4 y, si has hecho la Parte B, la instancia de tu segunda plantilla — ninguna le sirve a otra actividad después de hoy. Tus AMIs propias y las plantillas de lanzamiento puedes dejarlas, apenas tienen coste. <strong>No borres la VPC ni las subredes</strong> — las sigue necesitando el resto del módulo.</p>
+<p class="admonition-title">Antes de salir: hoy se borra todo, sin dejar nada suelto</p>
+<p>Termina la instancia del Paso 1, las dos que has lanzado desde la plantilla en el Paso 4 y, si has hecho la Parte B, la instancia de tu segunda plantilla.</p>
+<p>Esta vez no dejes ni las AMIs ni las plantillas de lanzamiento: la plantilla lleva grabado el ID de tu subred y de tu grupo de seguridad, y en cuanto borres la VPC (siguiente párrafo) esos IDs dejan de existir — la plantilla se queda inservible, no reutilizable. Bórralo en este orden:</p>
+<ol>
+<li><strong>EC2 → Plantillas de lanzamiento</strong>, selecciona la del Paso 3 (y la de la Parte B si la has hecho) → <strong>Acciones → Eliminar plantilla de lanzamiento</strong>.</li>
+<li><strong>EC2 → AMIs</strong>, selecciona tu AMI propia (y la segunda, si la has hecho) → <strong>Acciones → Anular el registro de la AMI</strong>. Anota el ID de snapshot que te muestra el diálogo — anular el registro de una AMI no borra el snapshot que hay detrás, solo desvincula la imagen.</li>
+<li><strong>EC2 → Instantáneas</strong>, busca esos mismos IDs de snapshot → <strong>Acciones → Eliminar snapshot</strong>. Es el paso que de verdad libera el espacio; si te lo saltas, sigues pagando por un disco que ya no sirve para nada.</li>
+</ol>
+<p>Con eso ya no queda nada que dependa de la red, así que hoy sí toca borrar también la VPC entera: ya no la vas a necesitar — el Tema 3 arranca con su propia red, creada con Terraform, para que todo el mundo parta exactamente de lo mismo. Ve a <strong>VPC → Sus VPC</strong>, selecciona tu VPC → <strong>Acciones → Eliminar VPC</strong>: el asistente te lista todo lo que va a borrar de un tirón (las cuatro subredes, la tabla de rutas, la puerta de enlace de internet) antes de confirmar.</p>
 </div></div>
 
 

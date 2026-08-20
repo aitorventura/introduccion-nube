@@ -922,6 +922,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#ampliar-un-volumen-ebs-dos-partes-no-una" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔧 Ampliar un volumen EBS: dos partes, no una
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#durabilidad-frente-a-disponibilidad" class="md-nav__link">
     <span class="md-ellipsis">
       🧩 Durabilidad frente a disponibilidad
@@ -2377,6 +2386,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#ampliar-un-volumen-ebs-dos-partes-no-una" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔧 Ampliar un volumen EBS: dos partes, no una
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#durabilidad-frente-a-disponibilidad" class="md-nav__link">
     <span class="md-ellipsis">
       🧩 Durabilidad frente a disponibilidad
@@ -2440,58 +2458,91 @@
 <div><p><a id="almacenamiento"></a></p>
 <h1 id="1-servicios-de-almacenamiento">🧩 1. Servicios de almacenamiento<a class="headerlink" href="#1-servicios-de-almacenamiento" title="Permanent link">¶</a></h1>
 <hr>
-<p>Ya usaste S3 en la primera sesión, sin detenerte a pensar en qué tipo de almacenamiento era ni por qué encajaba con un front estático. Hoy tocas las tres familias completas y aprendes a elegir entre ellas según lo que de verdad necesites guardar — porque a partir de esta sesión empiezas a tener necesidades de almacenamiento que ya no encajan solo en S3: el disco de una instancia, y una carpeta de ficheros que varias instancias necesitan ver a la vez.</p>
+<p>Ya usaste S3 en la primera sesión, sin detenerte a pensar en qué tipo de almacenamiento era ni por qué encajaba con un front estático. Hoy vas a trabajar con la plataforma de gestión de un festival de música, cuyas necesidades ya no encajan todas en S3: las fotos que suben los asistentes durante el evento, el disco de una instancia cuyo espacio se ha quedado corto, y una carpeta que dos instancias necesitan ver a la vez. Tres problemas de almacenamiento distintos, en la misma sesión — vas a resolverlos de verdad en la Actividad 3.1.</p>
 <hr>
 <h2 id="tres-familias-tres-formas-de-guardar-datos">🧭 Tres familias, tres formas de guardar datos<a class="headerlink" href="#tres-familias-tres-formas-de-guardar-datos" title="Permanent link">¶</a></h2>
-<p>No existe "el almacenamiento en la nube" en singular — existen tres familias distintas, cada una pensada para un patrón de acceso diferente. Una de ellas se accede "por <strong>HTTP</strong>" (<em>HyperText Transfer Protocol</em>): el mismo protocolo que usa tu navegador para pedir cualquier página web, con sus operaciones típicas de leer y escribir un recurso a través de una URL — no hace falta tener el disco "conectado" a nada, cualquier cliente que hable HTTP puede pedir el objeto.</p>
+<p>No existe "el almacenamiento en la nube" en singular — existen tres familias distintas, y cada una guarda y sirve los datos de una forma físicamente distinta por debajo, no solo con un nombre distinto.</p>
+<p><img alt="Tres familias de almacenamiento: bloque conectado a una sola instancia, objetos accesibles por HTTP desde cualquier cliente, archivos compartidos montados por varias instancias a la vez" src="../img/diagrama_tres_familias_almacenamiento.png"></p>
+<p><strong>Bloque</strong> (EBS, <em>Elastic Block Store</em>): un espacio dividido en bloques de tamaño fijo, sin estructura de ficheros por sí solo — es el sistema operativo de la instancia el que lo formatea (con <code>ext4</code>, por ejemplo) y organiza carpetas encima. Por eso solo lo puede usar <strong>una</strong> instancia a la vez: está conectado a ella igual que un disco duro atornillado a una torre.</p>
+<p><strong>Objetos</strong> (S3): no hay disco que conectar a nada. Ya viste en la primera sesión que un <strong>objeto</strong> es cada fichero agrupado dentro de un <strong>bucket</strong> — lo que no viste entonces es que el bucket no tiene carpetas de verdad por dentro, es un espacio plano (<code>fotos/asistentes/img1.jpg</code> es un único nombre, no tres niveles). Cada objeto se pide por <strong>HTTP</strong> (<em>HyperText Transfer Protocol</em>, el mismo protocolo que usa tu navegador), así que cualquier cliente que hable HTTP puede leerlo o escribirlo.</p>
+<p><strong>Archivos compartidos</strong> (EFS, <em>Elastic File System</em>): el punto intermedio. Varias instancias montan la misma carpeta remota y la ven como si fuera su propio disco, con carpetas y ficheros de verdad. El protocolo que lo hace posible es <strong>NFS</strong> (<em>Network File System</em>): tu instancia trata una ubicación de red como si fuera local, y cualquier cambio se ve al instante desde cualquier otra instancia que la tenga montada.</p>
+<p>Resumen de las tres, ya con los términos explicados:</p>
 <table>
 <thead>
 <tr>
 <th>Familia</th>
 <th>Cómo se accede</th>
-<th>Para qué encaja</th>
+<th>Cuántas instancias a la vez</th>
 <th>Ejemplo típico</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><strong>Bloque</strong> (EBS)</td>
-<td>Como un disco duro, conectado a una única instancia</td>
-<td>Sistema operativo, ficheros de la aplicación en ejecución</td>
+<td>Como un disco duro, conectado directamente</td>
+<td>Solo una</td>
 <td>El disco raíz de tu instancia</td>
 </tr>
 <tr>
 <td><strong>Objetos</strong> (S3)</td>
-<td>Por HTTP, sin límite práctico de instancias que lo lean a la vez</td>
-<td>Contenido web, copias de seguridad, datos masivos</td>
+<td>Por HTTP, a través de una URL</td>
+<td>Sin límite práctico</td>
 <td>Un sitio estático publicado en un bucket</td>
 </tr>
 <tr>
 <td><strong>Archivos compartidos</strong> (EFS)</td>
-<td>Como una carpeta de red, montable por varias instancias simultáneamente</td>
-<td>Datos que varias máquinas necesitan ver y escribir a la vez</td>
+<td>Como una carpeta de red, por NFS</td>
+<td>Varias, en tiempo real</td>
 <td>Ficheros que varias instancias de una misma aplicación necesitan ver y escribir a la vez</td>
 </tr>
 </tbody>
 </table>
 <div class="admonition example">
-<p class="admonition-title">El mismo fichero, tres respuestas distintas a "¿dónde lo guardo?"</p>
-<p>Imagina una foto que forma parte del contenido de tu aplicación. Si solo la sirve una instancia, podría vivir en su disco (bloque) — pero si esa instancia se cae, la foto se va con ella. Si la publicas como parte de un sitio estático, S3 (objetos) es perfecto. Si tienes varias instancias sirviendo la misma aplicación a la vez y todas necesitan ver la misma foto recién subida, ni el disco de una sola instancia ni S3 puro resuelven bien ese "verla todas a la vez, en tiempo real" — ahí es donde entra EFS.</p>
+<p class="admonition-title">El festival de música, tres respuestas distintas a "¿dónde lo guardo?"</p>
+<p>La plataforma del festival tiene las tres necesidades a la vez, y cada una pide una familia distinta. El espacio de logs de una de sus instancias se ha quedado corto — eso es el disco de esa máquina en concreto, bloque. Los asistentes suben fotos durante el evento, y quieres publicarlas para que cualquiera las vea desde su navegador — eso es objetos, S3. Y esas mismas fotos las tienen que servir dos instancias distintas a la vez, viendo ambas los mismos ficheros en tiempo real, sin que una tenga que copiárselos a la otra a mano — eso es archivos compartidos, EFS.</p>
+</div>
+<hr>
+<h2 id="ampliar-un-volumen-ebs-dos-partes-no-una">🔧 Ampliar un volumen EBS: dos partes, no una<a class="headerlink" href="#ampliar-un-volumen-ebs-dos-partes-no-una" title="Permanent link">¶</a></h2>
+<p>Cuando el disco de bloque de una instancia (su volumen EBS) se queda corto de espacio —como el de logs del festival—, cambiar su tamaño en AWS no es todo el trabajo: es solo la mitad. Cuando se creó el volumen, AWS grabó una <strong>tabla de particiones</strong> (la estructura que dice "el disco mide X y está dividido así") en el propio disco, y el sistema operativo la leyó una vez al arrancar y se quedó con ese dato en memoria. Si amplías el volumen por fuera, esa tabla y esa memoria no se actualizan solas — el sistema operativo sigue creyendo que el disco mide lo que medía antes, aunque AWS ya le haya dado más espacio físico de verdad.</p>
+<pre class="mermaid"><code>flowchart LR
+    A["📏 Amplías el volumen&lt;br/&gt;(lado AWS)"] --&gt; B{"¿El sistema operativo&lt;br/&gt;ya ve el nuevo tamaño?"}
+    B --&gt;|Todavía no| C["🔧 Extiendes la partición&lt;br/&gt;y el sistema de ficheros&lt;br/&gt;(lado instancia)"]
+    C --&gt; D["✅ Espacio disponible&lt;br/&gt;para escribir de verdad"]</code></pre>
+<div class="admonition warning">
+<p class="admonition-title">Un error habitual: dar por hecho que ya está</p>
+<p>Es fácil ampliar el volumen en la consola, ver el nuevo tamaño reflejado ahí, y pensar que ya has terminado. Dentro de la instancia, un comando como <code>df -h</code> te seguiría mostrando el tamaño antiguo hasta que extiendas la partición y el sistema de ficheros — un par de comandos más, ejecutados dentro de la propia instancia, sin necesidad de reiniciarla ni cortar el servicio. Vas a hacer exactamente este proceso completo sobre el disco de logs del festival en la Actividad 3.1.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">El tipo de volumen también existe, aunque hoy no lo elijas</p>
+<p>Además del tamaño, un volumen EBS tiene un <strong>tipo</strong> que decide su rendimiento (<code>gp3</code> es el de propósito general, el que usarás por defecto en este módulo; existen otros pensados para bases de datos con mucha carga). No hace falta que profundices en esto ahora — igual que con los tipos de instancia, no hace falta memorizar el catálogo entero, solo saber que existe la opción si algún día la necesitas.</p>
 </div>
 <hr>
 <h2 id="durabilidad-frente-a-disponibilidad">🧩 Durabilidad frente a disponibilidad<a class="headerlink" href="#durabilidad-frente-a-disponibilidad" title="Permanent link">¶</a></h2>
 <p>Dos palabras que se confunden constantemente, y no significan lo mismo:</p>
 <ul>
-<li><strong>Durabilidad</strong>: la probabilidad de que tus datos sobrevivan con el tiempo, sin corromperse ni perderse. S3, por ejemplo, replica automáticamente cada objeto en varias zonas de disponibilidad.</li>
+<li><strong>Durabilidad</strong>: la probabilidad de que tus datos sobrevivan con el tiempo, sin corromperse ni perderse. S3 la anuncia como un 99,999999999 % anual (once nueves) — para hacerte una idea de lo que significa ese número: si guardaras diez millones de objetos en S3, de media perderías uno cada diez mil años.</li>
 <li><strong>Disponibilidad</strong>: la probabilidad de que puedas <em>acceder</em> a tus datos en un momento dado. Un servicio puede tener datos perfectamente duraderos y aun así estar temporalmente inaccesible por una caída puntual.</li>
 </ul>
+<pre class="mermaid"><code>flowchart LR
+    subgraph Tiempo["📅 A lo largo del tiempo"]
+        direction LR
+        T1["Año 1"] --&gt; T2["Año 2"] --&gt; T3["Año 3"] --&gt; T4["..."]
+    end
+    Tiempo -.-&gt;|"Durabilidad:&lt;br/&gt;¿siguen ahí los datos?"| Dur["✅ Sí, con altísima probabilidad"]
+    Momento["⏱️ En un instante concreto"] -.-&gt;|"Disponibilidad:&lt;br/&gt;¿puedo acceder ahora mismo?"| Disp["⚠️ Casi siempre, pero puede fallar puntualmente"]</code></pre>
 <div class="admonition tip">
 <p class="admonition-title">Un objeto puede sobrevivir a un fallo que sí te deja sin acceso un rato</p>
-<p>Que tus datos en S3 tengan una durabilidad altísima no significa que el servicio nunca vaya a tener una interrupción momentánea. Son dos garantías distintas, y las arquitecturas que vas a construir a partir del Tema 4 se preocupan de las dos por separado.</p>
+<p>Que las fotos del festival en S3 tengan una durabilidad altísima no significa que el servicio nunca vaya a tener una interrupción momentánea. Son dos garantías distintas, y las arquitecturas que vas a construir a partir del Tema 4 se preocupan de las dos por separado.</p>
 </div>
 <hr>
 <h2 id="clases-de-acceso-y-ciclo-de-vida">🔧 Clases de acceso y ciclo de vida<a class="headerlink" href="#clases-de-acceso-y-ciclo-de-vida" title="Permanent link">¶</a></h2>
-<p>No todos los datos se acceden con la misma frecuencia, y S3 te deja elegir una <strong>clase de almacenamiento</strong> que ajusta el precio a ese patrón de uso.</p>
+<p>No todos los datos se acceden con la misma frecuencia, y S3 te deja elegir una <strong>clase de almacenamiento</strong> que ajusta el precio a ese patrón de uso. Las fotos del festival son el ejemplo perfecto: durante el fin de semana del evento se consultan constantemente, y un mes después casi nadie vuelve a mirarlas — salvo que haya una reclamación puntual.</p>
+<p>El ahorro no sale de la nada: cuanto más barata la clase, menos preparado está el dato para devolvértelo al instante — es un intercambio, no una clase "mejor" y otras "peores".</p>
+<ul>
+<li><strong>Estándar</strong> vive en el nivel más rápido de S3: cualquier petición se sirve al momento, y por eso es la que más cobra por GB guardado.</li>
+<li><strong>Acceso infrecuente</strong> sigue siendo de lectura inmediata —no esperas nada—, pero te cobra una pequeña tarifa extra cada vez que recuperas un objeto, precisamente porque está pensada para que lo hagas poco. Guardar sale más barato; leer, un poco más caro.</li>
+<li><strong>Archivo</strong> (Glacier) va más allá: el objeto no está listo para leerse tal cual. Tienes que pedir explícitamente una <strong>restauración</strong> y esperar —desde unos minutos hasta un día entero, según la urgencia que pagues— hasta que vuelve a estar disponible para descargar. No es que "tarde en cargar": hasta que no restauras, ni siquiera puedes empezar la descarga.</li>
+</ul>
 <table>
 <thead>
 <tr>
@@ -2506,34 +2557,43 @@
 <td>Estándar</td>
 <td>Alto</td>
 <td>Ninguno, acceso inmediato</td>
-<td>Contenido que se lee constantemente (tu front estático)</td>
+<td>Contenido que se lee constantemente (las fotos, durante el propio festival)</td>
 </tr>
 <tr>
 <td>Acceso infrecuente</td>
 <td>Medio</td>
-<td>Bajo, por recuperación</td>
-<td>Copias de seguridad recientes</td>
+<td>Bajo, pero acceso igual de inmediato</td>
+<td>Copias de seguridad recientes, o las fotos ya pasadas unas semanas del evento</td>
 </tr>
 <tr>
 <td>Archivo (Glacier)</td>
 <td>Muy bajo</td>
-<td>Alto, y con retardo de horas</td>
-<td>Datos que casi nunca se tocan pero hay que conservar</td>
+<td>Alto, y hay que restaurar antes de poder leer</td>
+<td>Datos que casi nunca se tocan pero hay que conservar, como las fotos meses después</td>
 </tr>
 </tbody>
 </table>
+<div class="admonition warning">
+<p class="admonition-title">Glacier no vale para nada que puedas necesitar sin avisar</p>
+<p>Si alguien te pide una foto del festival de hace seis meses y la tienes en Glacier, no se la puedes enviar en el momento — primero tienes que restaurarla y esperar. Es la contrapartida real de pagar céntimos por GB: perfecto para lo que sabes que no vas a tocar en mucho tiempo, inservible para cualquier cosa que puedan pedirte de un día para otro.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Hay más clases de las que ves aquí</p>
+<p>Si abres el desplegable real de S3, vas a ver más opciones de las que hay en esta tabla — una que mueve el objeto sola entre clases según lo uses o no, una restringida a una sola zona de disponibilidad, y hasta tres variantes distintas con el nombre "Glacier" en vez de una sola. No las vas a necesitar en este módulo — con las tres de la tabla te sobra para razonar cualquier caso que te vayas a encontrar aquí —, pero un aviso importante: no todo lo que se llama "Glacier" exige restauración. Hay una variante ("Recuperación instantánea") con acceso en milisegundos, igual que Acceso infrecuente. El "Archivo" de esta tabla es la otra clase de Glacier, la que sí exige restaurar y esperar — es la que de verdad importa entender, porque es la que cambia cómo diseñas el acceso a un dato.</p>
+</div>
 <p>Cambiar de clase a mano, objeto a objeto, no escala. Para eso existen las <strong>reglas de ciclo de vida</strong>: políticas que mueven automáticamente un objeto de una clase a otra —o lo eliminan— pasado cierto tiempo, sin que tengas que vigilarlo.</p>
 <pre class="mermaid"><code>flowchart LR
-    A["📄 Objeto nuevo&lt;br/&gt;Estándar"] --&gt;|30 días| B["📦 Acceso infrecuente"]
+    A["📄 Foto recién subida&lt;br/&gt;Estándar"] --&gt;|30 días| B["📦 Acceso infrecuente"]
     B --&gt;|90 días| C["🧊 Archivo"]
-    C --&gt;|365 días| D["🗑️ Eliminado"]</code></pre>
+    C --&gt;|365 días| D["🗑️ Eliminada"]</code></pre>
 <hr>
 <h2 id="versionado-y-cifrado">⚙️ Versionado y cifrado<a class="headerlink" href="#versionado-y-cifrado" title="Permanent link">¶</a></h2>
-<p>Dos protecciones más que S3 ofrece por configuración, no por trabajo extra tuyo:</p>
-<ul>
-<li><strong>Versionado</strong>: en vez de sobrescribir un objeto al subir uno nuevo con el mismo nombre, S3 conserva ambas versiones. Si borras un objeto "por accidente", no desaparece — solo se marca como borrado, y puedes recuperar la versión anterior. Lo vas a necesitar en la Actividad 3.1.</li>
-<li><strong>Cifrado</strong>: los datos se guardan cifrados en disco por defecto, sin que tengas que gestionar tú las claves en la mayoría de los casos. Es otra pieza de la responsabilidad compartida: AWS cifra el disco físico, tú decides quién tiene permiso para leer el contenido.</li>
-</ul>
+<p>Dos protecciones más que S3 ofrece por configuración, no por trabajo extra tuyo.</p>
+<p><strong>Versionado</strong>: con el versionado desactivado (el comportamiento por defecto), subir un objeto con el mismo nombre que uno ya existente lo sobrescribe sin más — el anterior desaparece de verdad. Con el versionado activado, cada vez que subes un objeto con un nombre que ya existe, S3 no sobrescribe nada: le asigna un <strong>ID de versión</strong> nuevo y conserva las dos. Si alguien borra un objeto, tampoco desaparece de verdad — S3 le añade un <strong>marcador de eliminación</strong> (<em>delete marker</em>) que hace que deje de verse en el listado normal, pero la versión anterior sigue ahí debajo, recuperable.</p>
+<pre class="mermaid"><code>flowchart TD
+    V1["Versión 1&lt;br/&gt;(la original)"] --&gt; V2["Versión 2&lt;br/&gt;(sustituye a la 1 en el listado,&lt;br/&gt;pero la 1 sigue guardada)"]
+    V2 --&gt; V3["🗑️ Marcador de eliminación&lt;br/&gt;(el objeto 'desaparece' del listado,&lt;br/&gt;pero V1 y V2 siguen recuperables)"]</code></pre>
+<p><strong>Cifrado</strong>: los datos se guardan cifrados en disco por defecto, sin que tengas que gestionar tú las claves en la mayoría de los casos. Es otra pieza de la responsabilidad compartida: AWS cifra el disco físico, tú decides quién tiene permiso para leer el contenido.</p>
 <div class="admonition warning">
 <p class="admonition-title">El versionado no es una copia de seguridad completa</p>
 <p>Versionar protege contra un borrado o una sobrescritura accidental de un objeto concreto, pero no sustituye a una estrategia de copias real si necesitas recuperar el estado completo de un bucket en un momento dado. Para lo que vas a hacer en este módulo, con versionado te sobra.</p>
@@ -2546,16 +2606,47 @@
     Q1 --&gt;|Una sola| Bloque["💾 Bloque (EBS)"]
     Q1 --&gt;|Varias, en tiempo real| EFS["📁 Archivos compartidos (EFS)"]
     Q1 --&gt;|Cualquier cliente por HTTP| S3["🗄️ Objetos (S3)"]</code></pre>
-<p>Vas a aplicar exactamente este criterio en la Actividad 3.1: tres necesidades de almacenamiento distintas, cada una resuelta con la familia que le corresponde — no la misma familia para todo por comodidad.</p>
+<table>
+<thead>
+<tr>
+<th>Necesidad del festival</th>
+<th>Cuántas instancias lo ven</th>
+<th>Familia</th>
+<th>Por qué</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Espacio de logs de una instancia</td>
+<td>Una sola</td>
+<td>Bloque (EBS)</td>
+<td>Nadie más necesita leer ese disco</td>
+</tr>
+<tr>
+<td>Fotos publicadas para los asistentes</td>
+<td>Cualquier navegador</td>
+<td>Objetos (S3)</td>
+<td>Acceso por HTTP, sin límite de clientes</td>
+</tr>
+<tr>
+<td>Fotos que sirven dos instancias a la vez</td>
+<td>Varias, en tiempo real</td>
+<td>Archivos compartidos (EFS)</td>
+<td>Las dos necesitan ver el mismo contenido al instante</td>
+</tr>
+</tbody>
+</table>
+<p>Vas a aplicar exactamente este criterio en la Actividad 3.1, sobre estas mismas tres necesidades del festival — cada una con la familia que le corresponde, no la misma para todo por comodidad.</p>
 <hr>
 <h2 id="ideas-clave">✅ Ideas clave<a class="headerlink" href="#ideas-clave" title="Permanent link">¶</a></h2>
 <details class="tip">
 <summary>Abrir resumen</summary>
 <ul>
-<li>Tres familias de almacenamiento: bloque (una instancia), objetos (por HTTP, cualquier cliente), archivos compartidos (varias instancias a la vez).</li>
-<li>Durabilidad (que los datos sobrevivan) y disponibilidad (que puedas acceder a ellos ahora) son garantías distintas, no la misma cosa con dos nombres.</li>
+<li>Tres familias de almacenamiento, cada una con un mecanismo físico distinto por debajo: bloque (disco conectado a una sola instancia, sin sistema de ficheros propio), objetos (espacio plano accesible por HTTP, sin límite de clientes), archivos compartidos (carpeta de red por NFS, varias instancias a la vez).</li>
+<li>Ampliar un volumen EBS son dos pasos: el tamaño en AWS, y la extensión de la partición y el sistema de ficheros dentro de la instancia — el segundo no ocurre solo, porque el sistema operativo cachea el tamaño del disco.</li>
+<li>Durabilidad (que los datos sobrevivan con el tiempo) y disponibilidad (que puedas acceder a ellos ahora mismo) son garantías distintas, no la misma cosa con dos nombres.</li>
 <li>Las clases de acceso ajustan precio a frecuencia de uso; las reglas de ciclo de vida mueven objetos entre clases automáticamente con el tiempo.</li>
-<li>El versionado protege contra borrados y sobrescrituras accidentales de un objeto concreto — no es una copia de seguridad completa.</li>
+<li>El versionado no sobrescribe ni borra de verdad: asigna IDs de versión nuevos y usa marcadores de eliminación — protege contra accidentes, pero no es una copia de seguridad completa.</li>
 <li>La familia correcta depende de una sola pregunta: ¿cuántas instancias necesitan ver este dato a la vez, y cómo acceden a él?</li>
 </ul>
 </details>

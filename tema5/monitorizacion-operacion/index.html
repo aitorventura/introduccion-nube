@@ -2473,7 +2473,7 @@
     M["📊 Todo lo que se puede medir"] --&gt; Filtro{"¿Este dato predice&lt;br/&gt;un problema real?"}
     Filtro --&gt;|Sí| Alarma["🔔 Alarma útil"]
     Filtro --&gt;|No| Ruido["🔇 Ruido — descartar"]</code></pre>
-<p>Vas a diseñar exactamente tres alarmas útiles en la Actividad 5.1, no veinte — la disciplina de elegir pocas y que importen es la parte difícil de este apunte, más que el mecanismo técnico de crearlas.</p>
+<p>Vas a diseñar exactamente tres alarmas útiles en la Actividad 5.1, no veinte — la disciplina de elegir pocas y que importen es la parte difícil de estos apuntes, más que el mecanismo técnico de crearlas.</p>
 <hr>
 <h2 id="capa-a-capa-de-la-arquitectura">🔧 Capa a capa de la arquitectura<a class="headerlink" href="#capa-a-capa-de-la-arquitectura" title="Permanent link">¶</a></h2>
 <p>Cada capa de una arquitectura necesita un tipo de señal distinto, porque cada una falla de forma distinta. Un detalle que vas a usar mucho a partir de aquí: cada respuesta HTTP lleva un <strong>código de estado</strong> de tres cifras, y la primera cifra agrupa el tipo de resultado — los que empiezan por 2 significan éxito, los que empiezan por 4 son error del cliente (por ejemplo, pedir algo que no existe), y los que empiezan por 5 —los <strong>errores 5xx</strong>— son error del propio servidor, la señal de que algo se ha roto por dentro.</p>
