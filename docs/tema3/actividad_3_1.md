@@ -10,6 +10,8 @@
 
 La plataforma de gestión de un festival de música tiene ahora mismo tres necesidades de almacenamiento distintas, y cada una pide una familia diferente: guardar las fotos que suben los asistentes durante el evento, ampliar el disco de una instancia cuyo espacio de logs se ha quedado corto, y compartir esas mismas fotos entre las dos instancias que sirven contenido durante el festival. Hoy resuelves las tres, cada una con la herramienta que le corresponde.
 
+![Arquitectura de la sesión: dos instancias EC2 (una por zona de disponibilidad) sobre la red desplegada con Terraform, cada una con su propio volumen EBS, ambas montando el mismo sistema de archivos EFS y subiendo/descargando fotos de un bucket S3 versionado](img/actividad_3_1_arquitectura.png)
+
 ## Qué vas a practicar
 
 - Crear un bucket S3 y activar versionado y una regla de ciclo de vida sobre él.
@@ -19,37 +21,59 @@ La plataforma de gestión de un festival de música tiene ahora mismo tres neces
 
 ## Requisitos previos
 
-No necesitas ningún proyecto previo: hoy creas desde cero, en el Paso 1, el bucket y las instancias sobre los que vas a trabajar. Si ya tienes alguna instancia mínima en marcha de una sesión anterior, puedes reutilizarla — no es obligatorio, el Paso 1 también te indica cómo lanzar una nueva. Los apuntes de esta sesión — [«Servicios de almacenamiento»](almacenamiento.md).
+El Tema 2 ha terminado sin dejar ninguna red montada — al cerrar la Actividad 2.3 has borrado la VPC entera. Hoy no la reconstruyes a mano: el Paso 1 arranca desplegando una red idéntica para todo el mundo con **Terraform**, la herramienta de infraestructura como código que verás en detalle en el Tema 6. De momento la usas como una herramienta ya hecha — ejecutas dos comandos y en unos segundos tienes la VPC, las cuatro subredes y el grupo de seguridad listos, exactamente igual que los que ya conoces del Tema 2. Los apuntes de esta sesión — [«Servicios de almacenamiento»](almacenamiento.md).
 
-!!! info "Recurso de apoyo"
-    En `recursos/tema3/actividad_3_1/generar_fotos_ejemplo.sh` (dentro del zip que has descargado arriba) tienes un script que genera 5-6 ficheros de ejemplo con extensión `.jpg` (contenido aleatorio, no fotos reales) para que tengas algo que subir a S3 y a EFS sin tener que buscar imágenes por tu cuenta.
+!!! info "Recursos de apoyo"
+    Dentro del zip que has descargado arriba tienes dos carpetas: `recursos/tema3/actividad_3_1/generar_fotos_ejemplo.sh`, un script que genera 5-6 ficheros de ejemplo con extensión `.jpg` (contenido aleatorio, no fotos reales) para que tengas algo que subir a S3 y a EFS sin buscar imágenes por tu cuenta; y `recursos/tema3/red-base/`, la configuración Terraform que despliega la red de esta sesión.
 
 ---
 
 ## Parte A — Resuelve las tres necesidades de almacenamiento (guiada)
 
-### Paso 1 — Prepara el escenario: bucket nuevo e instancias del festival
+### Paso 1 — Despliega la red y prepara el escenario
 
-1. Busca "S3" en el buscador de servicios → **Crear bucket**. Dale un nombre único (por ejemplo `festival-fotos-<tu-identificador>`) y dejalo con la configuración por defecto (bloqueo de acceso público activado — este bucket no necesita ser público).
+1. Desde tu **CloudShell** (Tema 1): sube `actividad_3_1_recursos.zip` con **Actions → Upload file** y descomprímelo (`unzip actividad_3_1_recursos.zip`).
+2. Terraform no viene instalado por defecto en CloudShell — instálalo tú mismo, es un único binario y no hace falta ser administrador:
 
-    ![Bucket S3 creado para las fotos del festival](img/actividad_3_1_paso1_a.png)
+    ```bash
+    curl -O https://releases.hashicorp.com/terraform/1.9.0/terraform_1.9.0_linux_amd64.zip
+    unzip terraform_1.9.0_linux_amd64.zip
+    export PATH=$PATH:$(pwd)
+    terraform -version
+    ```
+
+3. Entra en la carpeta de la red (`cd recursos/tema3/red-base`) y despliégala:
+
+    ```bash
+    terraform init
+    terraform apply -var="identificador=<tu-identificador>"
+    ```
+
+    Terraform te lista los recursos que va a crear (VPC, cuatro subredes, tabla de rutas, grupo de seguridad) y pide confirmación — escribe `yes`. Al terminar, imprime los IDs que necesitas para el resto de la actividad (`vpc_id`, `subnet_publica_a_id`, `subnet_privada_a_id`, `subnet_publica_b_id`, `subnet_privada_b_id`, `security_group_id`): guárdalos, los vas a usar varias veces.
+
+    !!! tip "Por qué esto no es hacer trampa"
+        Terraform no está resolviendo ningún problema de almacenamiento por ti — solo te ahorra reconstruir a mano, otra vez, la misma red que ya montaste y entendiste en el Tema 2. El objetivo de hoy son S3, EBS y EFS, no las subredes.
+
+4. Busca "S3" en el buscador de servicios → **Crear bucket**. Dale un nombre único (por ejemplo `festival-fotos-<tu-identificador>`) y dejalo con la configuración por defecto (bloqueo de acceso público activado — este bucket no necesita ser público).
+
+    ![El asistente de creación del bucket, con el bloqueo de acceso público en su valor por defecto (activado)](img/actividad_3_1_paso1_a.png)
     *🖼️ Captura de referencia del profesor — guardar como `img/actividad_3_1_paso1_a.png`*
 
-2. Entra en el bucket recién creado → pestaña **Propiedades** → busca **Versionado del bucket** → **Editar** → **Habilitar** → **Guardar cambios**.
-3. En el menú lateral del bucket, entra en **Administración** → **Reglas de ciclo de vida** → **Crear regla de ciclo de vida**.
-4. Dale un nombre a la regla, y en su ámbito elige aplicarla a todos los objetos del bucket.
-5. En las acciones, marca **Mover versiones no actuales a otra clase de almacenamiento**, elige la clase de acceso infrecuente, y define tras cuántos días se aplica (por ejemplo, 30).
-6. Crea la regla.
+5. Entra en el bucket recién creado → pestaña **Propiedades** → busca **Versionado del bucket** → **Editar** → **Habilitar** → **Guardar cambios**.
+6. En el menú lateral del bucket, entra en **Administración** → **Reglas de ciclo de vida** → **Crear regla de ciclo de vida**.
+7. Dale un nombre a la regla, y en su ámbito elige aplicarla a todos los objetos del bucket.
+8. En las acciones, marca **Mover versiones no actuales a otra clase de almacenamiento**, elige la clase de acceso infrecuente, y define tras cuántos días se aplica (por ejemplo, 30).
+9. Crea la regla.
 
-    ![Regla de ciclo de vida configurada, moviendo versiones antiguas a acceso infrecuente](img/actividad_3_1_paso1_b.png)
+    ![El paso de Acciones del asistente, con la casilla "Mover versiones no actuales a otra clase de almacenamiento" marcada — es fácil marcar otra casilla parecida por error](img/actividad_3_1_paso1_b.png)
     *🖼️ Captura de referencia del profesor — guardar como `img/actividad_3_1_paso1_b.png`*
 
-7. Lanza (o reutiliza, si ya tienes) dos instancias mínimas — Amazon Linux, el tipo más pequeño disponible. No hace falta que sirvan ninguna aplicación web: para esta actividad son solo el punto desde el que vas a operar sobre el almacenamiento.
-8. Desde tu **CloudShell** (Tema 1): sube `actividad_3_1_recursos.zip` con **Actions → Upload file**, descomprímelo (`unzip actividad_3_1_recursos.zip`), ejecuta `recursos/tema3/actividad_3_1/generar_fotos_ejemplo.sh`, y sube las fotos generadas al bucket con `aws s3 cp`.
-9. Cambia el contenido de una de las fotos (por ejemplo, regenerándola) y vuelve a subirla con el mismo nombre.
-10. En el bucket, activa el interruptor **Mostrar versiones** para comprobar que la versión anterior sigue existiendo, no se ha sobrescrito de verdad.
+10. Lanza dos instancias mínimas — Amazon Linux, el tipo más pequeño disponible, cada una en una subred **pública** distinta (`subnet_publica_a_id` y `subnet_publica_b_id`) y con el `security_group_id` que ha impreso Terraform. No hace falta que sirvan ninguna aplicación web: para esta actividad son solo el punto desde el que vas a operar sobre el almacenamiento.
+11. Desde tu CloudShell, ejecuta `recursos/tema3/actividad_3_1/generar_fotos_ejemplo.sh` y sube las fotos generadas al bucket con `aws s3 cp`.
+12. Cambia el contenido de una de las fotos (por ejemplo, regenerándola) y vuelve a subirla con el mismo nombre.
+13. En el bucket, activa el interruptor **Mostrar versiones** para comprobar que la versión anterior sigue existiendo, no se ha sobrescrito de verdad.
 
-![Listado de versiones del fichero, mostrando al menos dos](img/actividad_3_1_paso1_c.png)
+![El interruptor "Mostrar versiones" del bucket, antes de activarlo — sin él activado, las versiones antiguas no aparecen en el listado aunque existan](img/actividad_3_1_paso1_c.png)
 *🖼️ Captura de referencia del profesor — guardar como `img/actividad_3_1_paso1_c.png`*
 
 **Comprueba**: en el panel de versiones del bucket, que ves al menos dos versiones del mismo fichero.
@@ -64,6 +88,9 @@ El disco de logs de una de las dos instancias del festival se ha quedado corto d
 aws ec2 modify-volume --volume-id <volume-id> --size <nuevo-tamaño-gb>
 ```
 
+![El diálogo Modificar volumen en consola, con el campo Tamaño editable — el resto de campos (tipo, IOPS) se dejan tal cual](img/actividad_3_1_paso2_a.png)
+*🖼️ Captura de referencia del profesor — guardar como `img/actividad_3_1_paso2_a.png`*
+
 **Comprueba**: que `aws ec2 describe-volumes-modifications --volume-id <volume-id>` muestra el cambio en estado `optimizing` o `completed`.
 
 **Captura**: la salida de `describe-volumes-modifications`.
@@ -71,19 +98,19 @@ aws ec2 modify-volume --volume-id <volume-id> --size <nuevo-tamaño-gb>
 ### Paso 3 — Comparte las fotos entre las dos instancias con EFS
 
 1. Busca "EFS" en el buscador de servicios → **Crear sistema de archivos**.
-2. En **Personalizar**, elige tu VPC.
-3. En el paso de puntos de montaje, deja uno por cada zona de disponibilidad de tu VPC (dos), cada uno en su subred correspondiente.
-4. Crea o selecciona un grupo de seguridad que permita el puerto NFS (2049) solo desde el grupo de seguridad de tus instancias — no desde `0.0.0.0/0`.
+2. En **Personalizar**, elige la VPC que ha creado Terraform (`vpc_id` del Paso 1).
+3. En el paso de puntos de montaje, deja uno por cada zona de disponibilidad (dos), cada uno en su subred **pública** correspondiente (`subnet_publica_a_id` y `subnet_publica_b_id`) — son las mismas subredes donde has lanzado tus dos instancias.
+4. En el grupo de seguridad de cada punto de montaje, selecciona el `security_group_id` que ya tienes de Terraform: su regla de tráfico interno ya deja pasar el puerto NFS (2049) entre las instancias del grupo, sin necesidad de abrirlo a `0.0.0.0/0`.
 5. Termina el asistente y crea el sistema de archivos.
 
-    ![Sistema de archivos EFS creado, con sus dos puntos de montaje](img/actividad_3_1_paso3_a.png)
+    ![El paso de puntos de montaje del asistente, con una entrada por cada zona de disponibilidad de tu VPC](img/actividad_3_1_paso3_a.png)
     *🖼️ Captura de referencia del profesor — guardar como `img/actividad_3_1_paso3_a.png`*
 
 6. Desde cada una de las dos instancias, instala el cliente NFS si hace falta y monta el sistema de archivos usando el punto de montaje de su propia zona (la consola te da el comando de montaje exacto en la pestaña **Adjuntar** del sistema de archivos).
-7. Desde la primera instancia, copia una de las fotos generadas al directorio montado.
+7. Desde la primera instancia, descarga una de las fotos del bucket S3 del Paso 1 (`aws s3 cp s3://<tu-bucket>/<foto> .`) y cópiala al directorio montado del EFS.
 8. Desde la segunda instancia, comprueba que la foto ya está ahí, sin haberla copiado tú a mano.
 
-![La misma foto visible desde las dos instancias tras montar el EFS](img/actividad_3_1_paso3_b.png)
+![La pestaña Adjuntar del sistema de archivos, con el comando de montaje exacto que da la consola para cada punto de montaje](img/actividad_3_1_paso3_b.png)
 *🖼️ Captura de referencia del profesor — guardar como `img/actividad_3_1_paso3_b.png`*
 
 **Comprueba**: que la foto subida desde la primera instancia aparece inmediatamente visible desde la segunda, sin ningún paso de sincronización manual.
@@ -99,15 +126,29 @@ aws ec2 modify-volume --volume-id <volume-id> --size <nuevo-tamaño-gb>
 
 Tres retos, cada uno más exigente que su equivalente de la Parte A. No hay comandos dados para ninguno — solo el objetivo.
 
-**Recupera lo irrecuperable**: borra "por accidente" una foto del bucket versionado del Paso 1, y recupérala sin perder ni una versión. Documenta cómo lo has hecho.
+- **Recupera lo irrecuperable**: borra "por accidente" una foto del bucket versionado del Paso 1, y recupérala sin perder ni una versión. Documenta cómo lo has hecho.
 
-**Amplía en caliente de verdad**: en la Parte A ampliaste el tamaño del volumen desde el lado de AWS, pero el sistema de ficheros de dentro de la instancia todavía no lo sabe — el disco del sistema operativo sigue viendo el tamaño antiguo hasta que tú se lo dices. Consíguelo **sin reiniciar la instancia ni cortar el servicio**, y demuestra con un comando dentro de la instancia que el nuevo espacio ya está disponible para escribir.
+    **Comprueba**: que la foto recuperada tiene exactamente el mismo contenido que antes de borrarla.
 
-**Decide por coste, no por costumbre**: para tres casos de uso del festival (las fotos de asistentes ya archivadas tras el evento, que casi nadie vuelve a consultar; el listado de control de acceso, leído constantemente durante las horas del evento; y una copia de seguridad diaria de la base de datos de reservas), elige la familia y la clase de almacenamiento más adecuada, calculando el coste estimado por GB almacenado y por operación de lectura/escritura con la calculadora oficial de AWS. Justifica cada elección — la respuesta "S3 estándar para todo" no vale como justificación.
+    **Captura**: la foto recuperada y su historial de versiones.
 
-**Comprueba**: que la foto recuperada tiene exactamente el mismo contenido que antes de borrarla, y que el nuevo espacio de disco es utilizable de verdad (por ejemplo, escribiendo un fichero de prueba que supere el tamaño original).
+- **Amplía en caliente de verdad**: ya sabes por los apuntes que ampliar el volumen en AWS es solo la mitad del trabajo — consigue tú la otra mitad, **sin reiniciar la instancia ni cortar el servicio**.
 
-**Captura**: la foto recuperada y su historial de versiones; el comando dentro de la instancia mostrando el nuevo tamaño disponible; la tabla de coste por caso de uso con su justificación.
+    **Comprueba**: que el nuevo espacio de disco es utilizable de verdad — por ejemplo, escribiendo un fichero de prueba que supere el tamaño original.
+
+    **Captura**: el comando dentro de la instancia mostrando el nuevo tamaño disponible.
+
+- **Decide por coste, no por costumbre**: elige familia y clase de almacenamiento para estos tres casos de uso del festival, calculando el coste estimado por GB almacenado y por operación de lectura/escritura con la calculadora oficial de AWS:
+
+    - Las fotos de asistentes ya archivadas tras el evento, que casi nadie vuelve a consultar.
+    - El listado de control de acceso, leído constantemente durante las horas del evento.
+    - Una copia de seguridad diaria de la base de datos de reservas.
+
+    Justifica cada elección — la respuesta "S3 estándar para todo" no vale como justificación.
+
+    **Comprueba**: que cada elección tiene un coste estimado real (por GB y por operación) y una justificación propia, no genérica.
+
+    **Captura**: la tabla de coste por caso de uso, con su justificación.
 
 ---
 
@@ -134,5 +175,7 @@ Tres retos, cada uno más exigente que su equivalente de la Parte A. No hay coma
 
 Ya sabes elegir familia de almacenamiento según el patrón de acceso, no por costumbre, y sabes que ampliar un disco en AWS es solo la mitad del trabajo — la otra mitad vive dentro del sistema operativo. La próxima sesión dejas de guardar datos sueltos: montas una base de datos relacional gestionada, y conectas una aplicación a ella sin escribir ni una sola credencial en el código.
 
-!!! danger "Antes de salir: borra las instancias y el sistema de archivos EFS"
-    Termina las dos instancias del festival, y borra el sistema de archivos EFS — factura por GB almacenado cada mes mientras exista, y no le sirve a ninguna actividad posterior. El bucket de fotos puedes dejarlo o vaciarlo y borrarlo, su coste es prácticamente nulo. **No borres la VPC ni las subredes del Tema 2.**
+!!! danger "Antes de salir: borra las instancias, el EFS y la red de Terraform"
+    Termina las dos instancias del festival, y borra el sistema de archivos EFS — factura por GB almacenado cada mes mientras exista, y no le sirve a ninguna actividad posterior. El bucket de fotos puedes dejarlo o vaciarlo y borrarlo, su coste es prácticamente nulo.
+
+    Con las instancias y el EFS ya borrados, vuelve a `recursos/tema3/red-base` en tu CloudShell y ejecuta `terraform destroy -var="identificador=<tu-identificador>"` — es la forma correcta de deshacer exactamente lo que Terraform creó, en el orden correcto, sin dejar nada suelto. Si te lo pide antes de tiempo y falla porque el EFS o las instancias todavía existen dentro de la VPC, es la señal de que te has dejado algo del párrafo anterior sin borrar.

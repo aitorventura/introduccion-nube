@@ -36,7 +36,7 @@ flowchart TD
     Filtro -->|No| Ruido["🔇 Ruido — descartar"]
 ```
 
-Vas a diseñar exactamente tres alarmas útiles en la Actividad 5.1, no veinte — la disciplina de elegir pocas y que importen es la parte difícil de este apunte, más que el mecanismo técnico de crearlas.
+Vas a diseñar exactamente tres alarmas útiles en la Actividad 5.1, no veinte — la disciplina de elegir pocas y que importen es la parte difícil de estos apuntes, más que el mecanismo técnico de crearlas.
 
 ---
 

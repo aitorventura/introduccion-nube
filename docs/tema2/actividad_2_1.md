@@ -94,9 +94,9 @@ La forma más clara de comprobarlo no es mirar las tablas sueltas, es mirar cada
 
 El diseño de los pasos anteriores queda sobre el papel hasta que lo pones a prueba de verdad.
 
-Para probarlo vas a lanzar dos instancias mínimas —una en tu subred pública, otra en la privada—, usándolas solo como herramienta de prueba: no hace falta que entiendas todavía cómo funcionan por dentro, eso lo ves con detalle en el apunte de «Máquinas virtuales», más adelante en este tema.
+Para probarlo vas a lanzar dos instancias mínimas —una en tu subred pública, otra en la privada—, usándolas solo como herramienta de prueba: no hace falta que entiendas todavía cómo funcionan por dentro, eso lo ves con detalle en los apuntes de «Máquinas virtuales», más adelante en este tema.
 
-Para entrar en cada una y ejecutar comandos dentro, usas **SSH** (*Secure Shell*): un protocolo que abre una terminal remota sobre la máquina, como si estuvieras sentado delante de ella. Tu instancia privada no tiene IP pública, así que nadie de fuera de la VPC puede llegar a ella directamente por SSH — ni siquiera tú, desde la consola de AWS. La única forma de entrar es la que ya conoces de la teoría: saltar primero a un recurso que sí está dentro de la VPC —tu instancia pública— y, desde ahí, alcanzar la privada. Es el mismo patrón «recepción → sala de servidores» del apunte, aplicado a SSH.
+Para entrar en cada una y ejecutar comandos dentro, usas **SSH** (*Secure Shell*): un protocolo que abre una terminal remota sobre la máquina, como si estuvieras sentado delante de ella. Tu instancia privada no tiene IP pública, así que nadie de fuera de la VPC puede llegar a ella directamente por SSH — ni siquiera tú, desde la consola de AWS. La única forma de entrar es la que ya conoces de la teoría: saltar primero a un recurso que sí está dentro de la VPC —tu instancia pública— y, desde ahí, alcanzar la privada. Es el mismo patrón «recepción → sala de servidores» de los apuntes, aplicado a SSH.
 
 Antes de comprobar que la subred privada no sale a internet, predice por escrito qué mensaje de error o comportamiento exacto esperas ver.
 
@@ -171,19 +171,19 @@ Cuando tengas la evidencia, documenta el diagrama de red completo (las seis subr
 
 ## Criterios de evaluación
 
-**Parte A — hasta 7 puntos**
+**Parte A — hasta 6 puntos**
 
 | Apartado | Puntos |
 |---|---|
-| VPC y cuatro subredes creadas siguiendo el reparto indicado | 2 |
+| VPC y cuatro subredes creadas siguiendo el reparto indicado | 1 |
 | Subredes públicas y privadas correctamente diferenciadas por tabla de rutas | 2 |
 | Conectividad demostrada con evidencia real (predicción + los tres comportamientos) | 3 |
 
-**Parte B — reto, hasta 3 puntos adicionales (máximo total: 10)**
+**Parte B — reto, hasta 4 puntos adicionales (máximo total: 10)**
 
 | Apartado | Puntos |
 |---|---|
-| Tercera zona calculada y añadida correctamente, sin solapes con las cuatro anteriores | 1 |
+| Tercera zona calculada y añadida correctamente, sin solapes con las cuatro anteriores | 2 |
 | Conectividad de la zona nueva demostrada igual que en el Paso 4 | 1 |
 | Diagrama de red completo (seis subredes) y explicación del cálculo | 1 |
 
@@ -194,4 +194,4 @@ Cuando tengas la evidencia, documenta el diagrama de red completo (las seis subr
 Ya tienes el terreno construido: una VPC con subredes públicas y privadas repartidas en dos zonas, con la separación garantizada por la tabla de rutas y no solo por convención. En la próxima sesión vas a poner grupos de seguridad y NACL sobre esta misma red, y vas a encontrarte —a propósito— con una versión rota de todo esto que tendrás que arreglar contrarreloj.
 
 !!! danger "Antes de salir: borra las instancias, no la VPC"
-    Termina (elimina) las instancias EC2 que has lanzado solo para probar la conectividad en el Paso 4 y en la Parte B — no le sirven a nadie después de hoy y siguen consumiendo crédito de tu laboratorio mientras estén encendidas. **No borres la VPC, las subredes, la pasarela de internet ni las tablas de rutas**: los vas a seguir necesitando durante varias sesiones más —al menos hasta la Actividad 4.1—, no solo en la próxima clase.
+    Termina (elimina) las instancias EC2 que has lanzado solo para probar la conectividad en el Paso 4 y en la Parte B — no le sirven a nadie después de hoy y siguen consumiendo crédito de tu laboratorio mientras estén encendidas. **No borres la VPC, las subredes, la pasarela de internet ni las tablas de rutas**: las vas a seguir necesitando el resto del Tema 2 — hasta la Actividad 2.3, donde sí tocará borrar la red entera.

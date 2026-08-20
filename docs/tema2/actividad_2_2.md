@@ -170,19 +170,19 @@ Cuando tengas tu avería resuelta, **calcula el coste mensual estimado** de la p
 
 ## Criterios de evaluación
 
-**Parte A — hasta 7 puntos**
+**Parte A — hasta 6 puntos**
 
 | Apartado | Puntos |
 |---|---|
 | Instancia pública con servidor web automático (user data) y grupo mínimo | 2 |
 | Instancia privada accesible solo desde la pública | 3 |
-| Pasarela NAT creada, con la ruta de la subred privada apuntando a ella | 2 |
+| Pasarela NAT creada, con la ruta de la subred privada apuntando a ella | 1 |
 
-**Parte B — reto, hasta 3 puntos adicionales (máximo total: 10)**
+**Parte B — reto, hasta 4 puntos adicionales (máximo total: 10)**
 
 | Apartado | Puntos |
 |---|---|
-| Tu avería diagnosticada y corregida, con razonamiento documentado | 2 |
+| Tu avería diagnosticada y corregida, con razonamiento documentado | 3 |
 | Coste mensual de la pasarela NAT calculado y justificado | 1 |
 
 ---
@@ -192,4 +192,4 @@ Cuando tengas tu avería resuelta, **calcula el coste mensual estimado** de la p
 Ya sabes diagnosticar una red de fuera hacia dentro, capa a capa, en vez de cambiar cosas al azar hasta que funcione — es la habilidad que más vas a usar el resto del curso cada vez que algo no responda como esperabas. La próxima sesión dejas de crear instancias a mano, una a una: vas a automatizar su lanzamiento con plantillas, para no repetir este mismo proceso cada vez que necesites una máquina más.
 
 !!! danger "Antes de salir: borra las instancias y la pasarela NAT si la has creado"
-    Termina las dos instancias EC2 de hoy (la pública de pistas y la privada) — la Actividad 2.3 lanza una instancia nueva, no reutiliza estas. Borra también la pasarela NAT que has creado en la Parte A (y su IP elástica asociada): es el recurso más caro de toda la sesión, factura por hora exista o no tráfico, y no le sirve a nadie después de hoy. **No borres la VPC, las subredes ni las tablas de rutas** — quita solo la ruta `0.0.0.0/0` que apuntaba a la NAT, la tabla en sí la sigue necesitando el resto del módulo.
+    Termina las dos instancias EC2 de hoy (la pública de pistas y la privada) — la Actividad 2.3 lanza una instancia nueva, no reutiliza estas. Borra también la pasarela NAT que has creado en la Parte A (y su IP elástica asociada): es el recurso más caro de toda la sesión, factura por hora exista o no tráfico, y no le sirve a nadie después de hoy. **No borres la VPC, las subredes ni las tablas de rutas** — quita solo la ruta `0.0.0.0/0` que apuntaba a la NAT, la tabla en sí la sigue necesitando la Actividad 2.3, la última que la usa: ahí sí se borra la red entera.
