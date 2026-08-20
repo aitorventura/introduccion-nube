@@ -1,5 +1,5 @@
 output "vpc_id" {
-  value = aws_vpc.pistas.id
+  value = aws_vpc.red.id
 }
 
 output "subnet_publica_a_id" {
@@ -19,5 +19,5 @@ output "subnet_privada_b_id" {
 }
 
 output "security_group_id" {
-  value = aws_security_group.pistas_base.id
+  value = aws_security_group.base.id
 }
