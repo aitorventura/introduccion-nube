@@ -61,10 +61,10 @@ El Tema 2 ha terminado sin dejar ninguna red montada — al cerrar la Actividad 
 
 5. En el menú lateral del bucket ya creado, entra en **Administración** → **Reglas de ciclo de vida** → **Crear regla de ciclo de vida**.
 6. Dale un nombre a la regla, y en su ámbito elige aplicarla a todos los objetos del bucket.
-7. En las acciones, marca **Mover versiones no actuales a otra clase de almacenamiento**, elige la clase de acceso infrecuente, y define tras cuántos días se aplica (por ejemplo, 30).
+7. En las acciones, marca **Realizar la transición de las versiones desactualizadas de los objetos entre las clases de almacenamiento** (no la primera casilla, "versiones actuales" — esa movería la versión vigente, no las antiguas), elige la clase de acceso infrecuente, y define tras cuántos días se aplica (por ejemplo, 30). Marca también la casilla de reconocimiento del coste de transición, más abajo — sin ella el asistente no te deja crear la regla.
 8. Crea la regla.
 
-    ![El paso de Acciones del asistente, con la casilla "Mover versiones no actuales a otra clase de almacenamiento" marcada — es fácil marcar otra casilla parecida por error](img/actividad_3_1_paso1_b.png)
+    ![El paso de Acciones del asistente, con la casilla "Realizar la transición de las versiones desactualizadas..." marcada — es fácil marcar por error la casilla de "versiones actuales", justo encima](img/actividad_3_1_paso1_b.png)
     *🖼️ Captura de referencia del profesor — guardar como `img/actividad_3_1_paso1_b.png`*
 
 9. Lanza dos instancias mínimas — Amazon Linux, el tipo más pequeño disponible, cada una en una subred **pública** distinta (`subnet_publica_a_id` y `subnet_publica_b_id`) y con el `security_group_id` que ha impreso Terraform. No hace falta que sirvan ninguna aplicación web: para esta actividad son solo el punto desde el que vas a operar sobre el almacenamiento.
