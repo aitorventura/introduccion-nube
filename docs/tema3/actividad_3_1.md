@@ -54,24 +54,23 @@ El Tema 2 ha terminado sin dejar ninguna red montada — al cerrar la Actividad 
     !!! tip "Por qué esto no es hacer trampa"
         Terraform no está resolviendo ningún problema de almacenamiento por ti — solo te ahorra reconstruir a mano, otra vez, la misma red que ya montaste y entendiste en el Tema 2. El objetivo de hoy son S3, EBS y EFS, no las subredes.
 
-4. Busca "S3" en el buscador de servicios → **Crear bucket**. Dale un nombre único (por ejemplo `festival-fotos-<tu-identificador>`) y dejalo con la configuración por defecto (bloqueo de acceso público activado — este bucket no necesita ser público).
+4. Busca "S3" en el buscador de servicios → **Crear bucket**. Dale un nombre único (por ejemplo `festival-fotos-<tu-identificador>`), deja el bloqueo de acceso público en su valor por defecto (activado — este bucket no necesita ser público), y baja hasta **Control de versiones de buckets** → **Habilitar**: no hace falta activarlo después por separado, el propio asistente de creación ya lo ofrece.
 
     ![El asistente de creación del bucket, con el bloqueo de acceso público en su valor por defecto (activado)](img/actividad_3_1_paso1_a.png)
     *🖼️ Captura de referencia del profesor — guardar como `img/actividad_3_1_paso1_a.png`*
 
-5. Entra en el bucket recién creado → pestaña **Propiedades** → busca **Versionado del bucket** → **Editar** → **Habilitar** → **Guardar cambios**.
-6. En el menú lateral del bucket, entra en **Administración** → **Reglas de ciclo de vida** → **Crear regla de ciclo de vida**.
-7. Dale un nombre a la regla, y en su ámbito elige aplicarla a todos los objetos del bucket.
-8. En las acciones, marca **Mover versiones no actuales a otra clase de almacenamiento**, elige la clase de acceso infrecuente, y define tras cuántos días se aplica (por ejemplo, 30).
-9. Crea la regla.
+5. En el menú lateral del bucket ya creado, entra en **Administración** → **Reglas de ciclo de vida** → **Crear regla de ciclo de vida**.
+6. Dale un nombre a la regla, y en su ámbito elige aplicarla a todos los objetos del bucket.
+7. En las acciones, marca **Mover versiones no actuales a otra clase de almacenamiento**, elige la clase de acceso infrecuente, y define tras cuántos días se aplica (por ejemplo, 30).
+8. Crea la regla.
 
     ![El paso de Acciones del asistente, con la casilla "Mover versiones no actuales a otra clase de almacenamiento" marcada — es fácil marcar otra casilla parecida por error](img/actividad_3_1_paso1_b.png)
     *🖼️ Captura de referencia del profesor — guardar como `img/actividad_3_1_paso1_b.png`*
 
-10. Lanza dos instancias mínimas — Amazon Linux, el tipo más pequeño disponible, cada una en una subred **pública** distinta (`subnet_publica_a_id` y `subnet_publica_b_id`) y con el `security_group_id` que ha impreso Terraform. No hace falta que sirvan ninguna aplicación web: para esta actividad son solo el punto desde el que vas a operar sobre el almacenamiento.
-11. Desde tu CloudShell, ejecuta `recursos/tema3/actividad_3_1/generar_fotos_ejemplo.sh` y sube las fotos generadas al bucket con `aws s3 cp`.
-12. Cambia el contenido de una de las fotos (por ejemplo, regenerándola) y vuelve a subirla con el mismo nombre.
-13. En el bucket, activa el interruptor **Mostrar versiones** para comprobar que la versión anterior sigue existiendo, no se ha sobrescrito de verdad.
+9. Lanza dos instancias mínimas — Amazon Linux, el tipo más pequeño disponible, cada una en una subred **pública** distinta (`subnet_publica_a_id` y `subnet_publica_b_id`) y con el `security_group_id` que ha impreso Terraform. No hace falta que sirvan ninguna aplicación web: para esta actividad son solo el punto desde el que vas a operar sobre el almacenamiento.
+10. Desde tu CloudShell, ejecuta `recursos/tema3/actividad_3_1/generar_fotos_ejemplo.sh` y sube las fotos generadas al bucket con `aws s3 cp`.
+11. Cambia el contenido de una de las fotos (por ejemplo, regenerándola) y vuelve a subirla con el mismo nombre.
+12. En el bucket, activa el interruptor **Mostrar versiones** para comprobar que la versión anterior sigue existiendo, no se ha sobrescrito de verdad.
 
 ![El interruptor "Mostrar versiones" del bucket, antes de activarlo — sin él activado, las versiones antiguas no aparecen en el listado aunque existan](img/actividad_3_1_paso1_c.png)
 *🖼️ Captura de referencia del profesor — guardar como `img/actividad_3_1_paso1_c.png`*
