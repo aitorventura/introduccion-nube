@@ -2350,11 +2350,16 @@
 <div><h1 id="actividad-52-gestion-de-credenciales-y-politicas-iam">🧪 Actividad 5.2: Gestión de credenciales y políticas IAM<a class="headerlink" href="#actividad-52-gestion-de-credenciales-y-politicas-iam" title="Permanent link">¶</a></h1>
 <div class="admonition danger">
 <p class="admonition-title">Pendiente — depende de Escaparate</p>
-<p>Esta actividad depende de <strong>Escaparate</strong>, la aplicación transversal de los temas 3-7, todavía sin definir. No la publiques ni la des en clase tal cual — lo de abajo es el encargo para cuando se escriba de verdad, no contenido listo.</p>
+<p><strong>Escaparate ya existe</strong> (repo clonado en <code>escaparate-app/</code>), pero esta actividad todavía no está escrita paso a paso. No la publiques ni la des en clase tal cual — lo de abajo ya está confirmado contra el código real.</p>
 </div>
 <h2 id="prompt-pendiente">Prompt pendiente<a class="headerlink" href="#prompt-pendiente" title="Permanent link">¶</a></h2>
-<p><strong>Qué usamos</strong>: Escaparate, moviendo sus imágenes de disco/EFS a S3, con acceso desde la instancia mediante un rol de IAM (<code>S3Storage</code> o similar) en vez de claves de acceso estáticas.</p>
-<p><strong>Idea central</strong>: es el momento perfecto para practicar acceso a S3 sin credenciales embebidas — se sustituyen claves estáticas por un rol de instancia con permisos mínimos.</p>
+<p><strong>Qué usamos</strong>: Escaparate, moviendo sus imágenes de EFS a S3 — confirmado, la clase se llama de verdad <code>S3Storage</code> (implementa la misma interfaz <code>AlmacenamientoImagenes</code> que <code>FileSystemStorage</code>, así que el cambio es solo de configuración):</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
+<span class="normal"><a href="#__codelineno-0-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">APP_STORAGE_TYPE</span><span class="o">=</span>s3
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">APP_STORAGE_S3_BUCKET</span><span class="o">=</span>&lt;bucket-privado&gt;
+</code></pre></div></td></tr></table></div>
+<p>El bucket es y sigue siendo <strong>privado</strong> — el navegador nunca habla con S3 directamente, sigue pidiendo <code>GET /api/productos/{id}/imagen</code> como siempre; es la aplicación la que recupera el objeto de S3 y se lo devuelve. Esto es importante para la actividad: da un ejemplo real y verificable de "acceso sin exponer nada al público" que no depende de configurar ACLs ni políticas de bucket público.</p>
+<p><strong>Idea central</strong>: es el momento perfecto para practicar acceso a S3 sin credenciales embebidas — la app ya usa la cadena de credenciales estándar del AWS SDK (nunca hay <code>APP_AWS_ACCESS_KEY</code> en el código ni en <code>application.yml</code>), así que en EC2 basta con darle a la instancia el rol de IAM (<code>LabInstanceProfile</code> en el Learner Lab) para que <code>S3Storage</code> funcione sin ninguna clave estática.</p>
 <p><strong>Referencia de la chuleta original</strong> (revalidar el "hito H8" contra <code>curriculum.md</code>, probablemente RA2 — gestión de accesos con IAM, adaptado a las limitaciones del Learner Lab): fila 5.2.</p>
 <p>Cuando Escaparate esté definido, reescribe esta actividad completa siguiendo el mismo patrón que el resto del módulo: Contexto, Qué vas a practicar, Requisitos previos, Parte A guiada + Parte B reto (a prueba de IA), Criterios de evaluación, Cierre con aviso de limpieza de recursos — y regenera sus plantillas docx.</p></div>
 

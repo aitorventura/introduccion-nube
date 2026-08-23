@@ -2005,9 +2005,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#paso-1-crea-el-bucket-de-fotos-de-dorsal" class="md-nav__link">
+  <a href="#paso-1-localiza-o-crea-el-bucket-de-imagenes-de-escaparate" class="md-nav__link">
     <span class="md-ellipsis">
-      Paso 1 — Crea el bucket de fotos de dorsal
+      Paso 1 — Localiza (o crea) el bucket de imágenes de Escaparate
     </span>
   </a>
   
@@ -2447,9 +2447,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#paso-1-crea-el-bucket-de-fotos-de-dorsal" class="md-nav__link">
+  <a href="#paso-1-localiza-o-crea-el-bucket-de-imagenes-de-escaparate" class="md-nav__link">
     <span class="md-ellipsis">
-      Paso 1 — Crea el bucket de fotos de dorsal
+      Paso 1 — Localiza (o crea) el bucket de imágenes de Escaparate
     </span>
   </a>
   
@@ -2531,7 +2531,7 @@
 <p>📦 <a href="../recursos/actividad_6_2_recursos.zip" rel="noopener" target="_blank">Recursos de la Actividad 6.2</a> — lo vas a subir y descomprimir en el Paso 3 de esta actividad.</p>
 </div>
 <h2 id="contexto">Contexto<a class="headerlink" href="#contexto" title="Permanent link">¶</a></h2>
-<p>En una carrera popular, cada participante sube la foto de su dorsal, y alguien tiene que generar su miniatura y registrar sus metadatos. Hoy esa tarea deja de depender de una instancia tuya: una función se dispara sola cuando llega la imagen, hace su trabajo, y desaparece.</p>
+<p>Desde que Escaparate guarda las fotos de producto en S3 (Actividad 5.2), el listado del catálogo carga la imagen entera de cada producto solo para mostrar una miniatura pequeña — un desperdicio de ancho de banda que se nota según crece el catálogo. Hoy resuelves eso sin tocar el backend de Escaparate: una función se dispara sola en cuanto llega una foto nueva, genera su miniatura y registra sus metadatos, y desaparece — Escaparate ni se entera de que existe.</p>
 <h2 id="que-vas-a-practicar">Qué vas a practicar<a class="headerlink" href="#que-vas-a-practicar" title="Permanent link">¶</a></h2>
 <ul>
 <li>Crear una función Lambda disparada por un evento de S3.</li>
@@ -2539,25 +2539,28 @@
 <li>Montar una mini API con pasarela y función, y compararla con la misma operación servida por una instancia.</li>
 </ul>
 <h2 id="requisitos-previos">Requisitos previos<a class="headerlink" href="#requisitos-previos" title="Permanent link">¶</a></h2>
-<p>Un bucket de S3 nuevo, creado por ti en la Parte A de esta misma actividad. El código base de la función, <code>lambda_function.py</code> (con su <code>requirements.txt</code> y su <code>README.md</code> de empaquetado) — descárgalo del enlace de arriba. Los apuntes de esta sesión — <a href="../serverless/">«Serverless»</a>.</p>
+<p>El bucket de imágenes de Escaparate ya configurado en la Actividad 5.2 (<code>APP_STORAGE_S3_BUCKET</code>, con las fotos de producto bajo el prefijo <code>escaparate/</code>). Si no has hecho esa actividad, crea un bucket nuevo con esa misma estructura de prefijo — el Paso 1 te indica cómo. El código base de la función, <code>lambda_function.py</code> (con su <code>requirements.txt</code> y su <code>README.md</code> de empaquetado) — descárgalo del enlace de arriba. Los apuntes de esta sesión — <a href="../serverless/">«Serverless»</a>.</p>
+<div class="admonition tip">
+<p class="admonition-title">Lambda no forma parte de Escaparate, y es intencionado</p>
+<p>No vas a tocar ni una línea del backend Java de Escaparate. La función vive al lado, como una pieza satélite que observa el bucket — así se demuestra que serverless puede añadir capacidades a una aplicación ya existente sin meterse dentro de su código ni de su ciclo de despliegue.</p>
+</div>
 <hr>
 <h2 id="parte-a-funcion-disparada-por-evento-guiada">Parte A — Función disparada por evento (guiada)<a class="headerlink" href="#parte-a-funcion-disparada-por-evento-guiada" title="Permanent link">¶</a></h2>
-<h3 id="paso-1-crea-el-bucket-de-fotos-de-dorsal">Paso 1 — Crea el bucket de fotos de dorsal<a class="headerlink" href="#paso-1-crea-el-bucket-de-fotos-de-dorsal" title="Permanent link">¶</a></h3>
+<h3 id="paso-1-localiza-o-crea-el-bucket-de-imagenes-de-escaparate">Paso 1 — Localiza (o crea) el bucket de imágenes de Escaparate<a class="headerlink" href="#paso-1-localiza-o-crea-el-bucket-de-imagenes-de-escaparate" title="Permanent link">¶</a></h3>
 <ol>
-<li>Busca "S3" en el buscador de servicios → <strong>Crear bucket</strong>.</li>
-<li>Dale un nombre único a nivel global, por ejemplo <code>carrera-dorsales-&lt;tu-identificador&gt;</code>.</li>
-<li>Deja el resto de opciones por defecto (bloqueo de acceso público activado) y créalo.</li>
+<li>Si ya hiciste la Actividad 5.2, busca "S3" en el buscador de servicios y localiza el bucket que configuraste ahí como <code>APP_STORAGE_S3_BUCKET</code> — reutilízalo, no crees uno nuevo.</li>
+<li>Si no la hiciste, crea un bucket con la misma estructura: <strong>Crear bucket</strong>, nombre único (por ejemplo <code>escaparate-imagenes-&lt;tu-identificador&gt;</code>), resto de opciones por defecto (bloqueo de acceso público activado).</li>
 </ol>
-<p><img alt="Bucket de fotos de dorsal creado, vacío" src="img/actividad_6_2_paso1.png">
-<em>🖼️ Captura de referencia del profesor — guardar como <code>img/actividad_6_2_paso1.png</code></em></p>
-<p><strong>Comprueba</strong>: que el bucket aparece vacío y accesible desde tu cuenta.</p>
-<p><strong>Captura</strong>: tu propio bucket de fotos de dorsal creado, vacío.</p>
+<p><img alt="Bucket de imágenes de Escaparate, con las fotos de producto bajo el prefijo escaparate/" src="img/actividad_6_2_paso1.png">
+<em>🖼️ Captura de referencia del profesor pendiente de recapturar — el escenario ha cambiado (era el bucket de dorsales), sustituir por el bucket de Escaparate</em></p>
+<p><strong>Comprueba</strong>: que el bucket existe y, si vienes de la 5.2, que ya tiene fotos de producto bajo <code>escaparate/</code>.</p>
+<p><strong>Captura</strong>: tu bucket de imágenes de Escaparate, con al menos una foto de producto visible bajo <code>escaparate/</code>.</p>
 <h3 id="paso-2-crea-la-funcion-desde-la-consola">Paso 2 — Crea la función desde la consola<a class="headerlink" href="#paso-2-crea-la-funcion-desde-la-consola" title="Permanent link">¶</a></h3>
 <ol>
 <li>Busca "Lambda" en el buscador de servicios → <strong>Crear función</strong>.</li>
 <li>Elige <strong>Crear desde cero</strong>.</li>
-<li>Dale un nombre (por ejemplo <code>carrera-miniaturas-&lt;tu-identificador&gt;</code>).</li>
-<li>Elige el entorno de ejecución <strong>Python</strong> (es el que usa el código que te entrega el profesor).</li>
+<li>Dale un nombre (por ejemplo <code>escaparate-miniaturas-&lt;tu-identificador&gt;</code>).</li>
+<li>Elige el entorno de ejecución <strong>Python</strong> (es el que usa el código que te entrega el profesor — Lambda no tiene que compartir lenguaje con el backend que complementa).</li>
 <li>En <strong>Permisos de ejecución</strong>, usa el rol existente que te ofrezca el asistente (no puedes crear uno nuevo) y confirma que incluye acceso a S3.</li>
 <li>Crea la función.</li>
 </ol>
@@ -2566,32 +2569,32 @@
 <p><strong>Comprueba</strong>: que la función aparece con estado activo en el panel de Lambda.</p>
 <p><strong>Captura</strong>: tu propia función Lambda creada, con su configuración inicial visible.</p>
 <h3 id="paso-3-sube-el-codigo-y-configura-el-disparador-de-s3">Paso 3 — Sube el código y configura el disparador de S3<a class="headerlink" href="#paso-3-sube-el-codigo-y-configura-el-disparador-de-s3" title="Permanent link">¶</a></h3>
-<p>El profesor te entrega el código ya escrito en <code>recursos/tema6/actividad_6_2/lambda_function.py</code>: recibe el evento de S3, genera una miniatura real con Pillow (redimensionada a 200x200 manteniendo la proporción) bajo el prefijo <code>miniaturas/</code>, y registra un objeto JSON con los metadatos (tamaño original, formato, fecha de subida) bajo el prefijo <code>metadatos/</code>, todo en el mismo bucket.</p>
+<p>El profesor te entrega el código ya escrito en <code>recursos/tema6/actividad_6_2/lambda_function.py</code>: recibe el evento de S3, genera una miniatura real con Pillow (redimensionada a 200x200 manteniendo la proporción) bajo el prefijo <code>miniaturas/</code>, y registra un objeto JSON con los metadatos (tamaño original, formato, fecha de subida) bajo el prefijo <code>metadatos/</code>, todo en el mismo bucket — sin tocar el prefijo <code>escaparate/</code> donde vive la foto original, así que <code>ProductoService</code> sigue encontrando exactamente lo que espera.</p>
 <ol>
 <li>Pillow no viene incluida en el entorno de ejecución de Lambda por defecto, y tiene partes compiladas específicas del sistema operativo — tienes que empaquetarla en un Linux compatible con Lambda, no en Windows ni macOS. Para eso usa tu <strong>CloudShell</strong> (Tema 1), que ya es Amazon Linux: sube <code>actividad_6_2_recursos.zip</code> con <strong>Actions → Upload file</strong>, descomprímelo (<code>unzip actividad_6_2_recursos.zip</code>), y sigue las instrucciones de <code>recursos/tema6/actividad_6_2/README.md</code> para empaquetar el código junto con sus dependencias en un <code>.zip</code> — todo dentro de CloudShell.</li>
 <li>El <code>.zip</code> empaquetado se ha generado dentro de CloudShell, no en tu ordenador — descárgalo primero con <strong>Actions → Download file</strong> (indicando la ruta del <code>.zip</code> dentro de CloudShell). Ahora sí, súbelo como código de la función desde la consola de Lambda (<strong>Cargar desde → archivo .zip</strong>), en vez de escribirlo en el editor integrado.</li>
 <li>Ve a la pestaña <strong>Configuración → Disparadores → Añadir disparador</strong>.</li>
-<li>Selecciona <strong>S3</strong>, elige tu bucket de fotos de dorsal, y como tipo de evento <strong>Todos los eventos de creación de objetos</strong>.</li>
+<li>Selecciona <strong>S3</strong>, elige tu bucket de imágenes de Escaparate, tipo de evento <strong>Todos los eventos de creación de objetos</strong>, y en <strong>Prefijo</strong> escribe <code>escaparate/</code> — así la función solo se dispara para fotos de producto nuevas, no para las miniaturas ni los metadatos que ella misma genera en otros prefijos del mismo bucket.</li>
 <li>
 <p>Guarda el disparador.</p>
-<p><img alt="Disparador de S3 configurado sobre la función" src="img/actividad_6_2_paso3_a.png">
-<em>🖼️ Captura de referencia del profesor — guardar como <code>img/actividad_6_2_paso3_a.png</code></em></p>
+<p><img alt="Disparador de S3 configurado sobre la función, con el prefijo escaparate/ en el filtro" src="img/actividad_6_2_paso3_a.png">
+<em>🖼️ Captura de referencia del profesor pendiente de recapturar — añadir el filtro de prefijo <code>escaparate/</code></em></p>
 </li>
 <li>
-<p>Sube una foto de dorsal nueva a tu bucket (por CLI o por consola) y comprueba que se genera la miniatura sin que tú hayas ejecutado nada más.</p>
+<p>Sube una foto de producto nueva a tu bucket bajo el prefijo <code>escaparate/</code> (por CLI, por consola, o dando de alta un producto en Escaparate si lo tienes desplegado) y comprueba que se genera la miniatura sin que tú hayas ejecutado nada más.</p>
 </li>
 </ol>
 <p><img alt="Miniatura generada automáticamente tras subir la foto original" src="img/actividad_6_2_paso3_b.png">
-<em>🖼️ Captura de referencia del profesor — guardar como <code>img/actividad_6_2_paso3_b.png</code></em></p>
+<em>🖼️ Captura de referencia del profesor pendiente de recapturar — usar una foto de producto real de Escaparate</em></p>
 <p><strong>Comprueba</strong>: que la miniatura aparece en el bucket unos segundos después de subir la foto original, sin intervención tuya, y que el objeto de metadatos aparece bajo <code>metadatos/</code> con los datos correctos.</p>
 <p><strong>Captura</strong>: tu propio disparador de S3 configurado sobre la función, y la miniatura generada automáticamente tras subir la foto original.</p>
 <div class="admonition question">
 <p class="admonition-title">Reflexiona</p>
-<p>Si se subieran cien fotos de dorsal a la vez (por ejemplo, al final de la carrera), ¿qué pasaría con tu función? Compáralo con lo que le pasaría a una única instancia si tuviera que procesar cien peticiones simultáneas de generación de miniaturas.</p>
+<p>Si se subieran cien fotos de producto a la vez (por ejemplo, al cargar un catálogo entero de golpe), ¿qué pasaría con tu función? Compáralo con lo que le pasaría a una única instancia si tuviera que procesar cien peticiones simultáneas de generación de miniaturas.</p>
 </div>
 <hr>
 <h2 id="parte-b-mini-api-y-comparacion-real-reto">Parte B — Mini API y comparación real (reto)<a class="headerlink" href="#parte-b-mini-api-y-comparacion-real-reto" title="Permanent link">¶</a></h2>
-<p>Monta una mini API con una pasarela delante de una función que resuelva una operación sencilla (por ejemplo, devolver los metadatos de un dorsal concreto). No hay procedimiento dado — decide tú cómo conectas la pasarela con la función y cómo la pruebas.</p>
+<p>Monta una mini API con una pasarela delante de una función que resuelva una operación sencilla (por ejemplo, devolver los metadatos de una imagen de producto concreta). No hay procedimiento dado — decide tú cómo conectas la pasarela con la función y cómo la pruebas.</p>
 <p>Con la API funcionando, mide la latencia real de esa operación servida por tu función, y compárala con la latencia de la misma operación servida por una instancia con un servidor sencillo desplegado por ti. Repite la medición varias veces para distinguir el efecto del arranque en frío de una invocación ya "caliente".</p>
 <p>Después, estima el coste mensual de ambas opciones para dos volúmenes de tráfico distintos: uno bajo (pocas peticiones al día) y uno alto (miles de peticiones por minuto de forma sostenida), y decide, con esos números delante, en qué casos elegirías la función y en cuáles la instancia.</p>
 <p><strong>Comprueba</strong>: que tus medidas de latencia distinguen claramente entre una invocación con arranque en frío y una ya caliente, y que tu comparación de coste está basada en cifras reales de la calculadora, no en una estimación aproximada.</p>

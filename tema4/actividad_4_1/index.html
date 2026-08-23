@@ -2350,12 +2350,17 @@
 <div><h1 id="actividad-41-balanceador-de-carga-y-auto-scaling-group">🧪 Actividad 4.1: Balanceador de carga y Auto Scaling Group<a class="headerlink" href="#actividad-41-balanceador-de-carga-y-auto-scaling-group" title="Permanent link">¶</a></h1>
 <div class="admonition danger">
 <p class="admonition-title">Pendiente — depende de Escaparate</p>
-<p>Esta actividad depende de <strong>Escaparate</strong>, la aplicación transversal de los temas 3-7, todavía sin definir. No la publiques ni la des en clase tal cual — lo de abajo es el encargo para cuando se escriba de verdad, no contenido listo.</p>
+<p><strong>Escaparate ya existe</strong> (repo clonado en <code>escaparate-app/</code>, ver <code>MAPA-DOCENTE.md</code>), pero esta actividad todavía no está escrita paso a paso. No la publiques ni la des en clase tal cual — lo de abajo ya está confirmado contra el código real, no es contenido listo.</p>
 </div>
 <h2 id="prompt-pendiente">Prompt pendiente<a class="headerlink" href="#prompt-pendiente" title="Permanent link">¶</a></h2>
-<p><strong>Qué usamos</strong>: el backend de Escaparate, replicado detrás de un balanceador de carga con Auto Scaling Group.</p>
-<p><strong>Idea central</strong>: la aplicación necesita endpoints propios para que el balanceador y el grupo de escalado sepan de verdad si una réplica está sana — <code>/api/instancia</code> (para ver qué instancia concreta responde en cada petición y comprobar el reparto), <code>/salud/listo</code> (health check) y <code>/carga</code> (para forzar y demostrar el escalado automático) son las piezas protagonistas.</p>
-<p><strong>Continuación de almacenamiento (misma sesión)</strong>: las imágenes que antes vivían en el disco local de una sola instancia pasan a EFS, compartido entre todas las réplicas mediante una variable <code>APP_STORAGE_PATH</code> — el código de la aplicación no debería necesitar cambios para leer/escribir ahí. <em>Nota: la chuleta original decía "Java no cambia" — es de antes de la decisión de usar Python + Flask como stack estándar del módulo (ver memoria del proyecto); cuando se defina Escaparate, ajustar esta frase al stack real que se elija.</em></p>
+<p><strong>Qué usamos</strong>: el backend de Escaparate (variante Desacoplada de la 3.3), replicado detrás de un balanceador de carga con Auto Scaling Group.</p>
+<p><strong>Idea central</strong>: la aplicación ya tiene, de fábrica, los endpoints exactos que necesita un balanceador/ASG — no hay que añadir nada:</p>
+<ul>
+<li><code>GET /api/salud/listo</code> — health check del Target Group: <code>200</code> si PostgreSQL responde, <code>503 {"estado":"degradado"}</code> si no. Confirmado como recomendación oficial en <code>soluciones-profesor/07-aws/README.md</code>.</li>
+<li><code>GET /api/instancia</code> — devuelve host, versión y tipo de almacenamiento de la réplica que ha respondido: se usa para comprobar a ojo el reparto entre instancias detrás del balanceador.</li>
+<li><code>GET /api/carga?ms=1000</code> — genera carga de CPU controlada durante ese tiempo, pensada explícitamente para disparar el escalado y observarlo con métricas.</li>
+</ul>
+<p><strong>Continuación de almacenamiento (misma sesión)</strong>: las imágenes viven en <code>FileSystemStorage</code> (disco local de una sola instancia) — con dos o más réplicas detrás del balanceador, un producto subido a una instancia "desaparece" al servirlo otra, un fallo real y observable, no simulado. Se resuelve montando EFS en cada instancia (por ejemplo en <code>/mnt/escaparate/uploads</code>) y apuntando ahí con <code>APP_STORAGE_PATH</code> — confirmado en el propio código: no existe una clase <code>EfsStorage</code>, porque para Java EFS es simplemente un sistema de ficheros montado, sin ningún cambio de código.</p>
 <p><strong>Referencia de la chuleta original</strong> (revalidar el "hito H7" contra <code>curriculum.md</code>, probablemente RA3e — balanceo de carga y escalado automático): filas "4.1" y "4.1, continuación".</p>
 <p>Cuando Escaparate esté definido, reescribe esta actividad completa siguiendo el mismo patrón que el resto del módulo: Contexto, Qué vas a practicar, Requisitos previos, Parte A guiada + Parte B reto (a prueba de IA), Criterios de evaluación, Cierre con aviso de limpieza de recursos — y regenera sus plantillas docx.</p></div>
 

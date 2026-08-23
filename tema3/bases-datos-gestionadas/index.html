@@ -1032,9 +1032,36 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#como-llega-esto-a-tu-aplicacion-en-la-practica" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔌 Cómo llega esto a tu aplicación, en la práctica
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#multi-az-y-replicas-de-lectura" class="md-nav__link">
     <span class="md-ellipsis">
       🔧 Multi-AZ y réplicas de lectura
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#backups-automaticos-frente-a-snapshots-manuales" class="md-nav__link">
+    <span class="md-ellipsis">
+      💾 Backups automáticos frente a snapshots manuales
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cambiar-la-clase-de-instancia-despues-de-crearla" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔧 Cambiar la clase de instancia después de crearla
     </span>
   </a>
   
@@ -2395,9 +2422,36 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#como-llega-esto-a-tu-aplicacion-en-la-practica" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔌 Cómo llega esto a tu aplicación, en la práctica
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#multi-az-y-replicas-de-lectura" class="md-nav__link">
     <span class="md-ellipsis">
       🔧 Multi-AZ y réplicas de lectura
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#backups-automaticos-frente-a-snapshots-manuales" class="md-nav__link">
+    <span class="md-ellipsis">
+      💾 Backups automáticos frente a snapshots manuales
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cambiar-la-clase-de-instancia-despues-de-crearla" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔧 Cambiar la clase de instancia después de crearla
     </span>
   </a>
   
@@ -2444,7 +2498,7 @@
 <p>Ese motor podrías instalarlo tú mismo dentro de una instancia, exactamente igual que instalarías cualquier otro programa. Hoy vas a ver la alternativa: contratarlo como servicio gestionado, y entender exactamente qué te ahorra y qué renuncias a cambio.</p>
 <hr>
 <h2 id="instalar-frente-a-consumir-como-servicio">🧭 Instalar frente a consumir como servicio<a class="headerlink" href="#instalar-frente-a-consumir-como-servicio" title="Permanent link">¶</a></h2>
-<p>Instalar PostgreSQL dentro de una instancia EC2 te da control total: tú decides la versión exacta, tú aplicas los parches, tú configuras las copias de seguridad, tú resuelves qué pasa si el disco se llena a las tres de la mañana. Un servicio de base de datos gestionado —como <strong>RDS</strong> (<em>Relational Database Service</em>)— se queda con buena parte de ese trabajo operativo, a cambio de que renuncies a acceder al sistema operativo por debajo.</p>
+<p>Instalar PostgreSQL dentro de una instancia EC2 te da control total: tú decides la versión exacta, tú aplicas los parches, tú configuras las copias de seguridad, tú resuelves qué pasa si el disco se llena a las tres de la mañana, y si la base de datos principal se cae, tú tienes que montar tú mismo la <strong>conmutación por error</strong> (<em>failover</em>): el proceso de detectar que ha fallado y pasar a una copia de reserva para no quedarte sin servicio. Un servicio de base de datos gestionado —como <strong>RDS</strong> (<em>Relational Database Service</em>)— se queda con buena parte de ese trabajo operativo, a cambio de que renuncies a acceder al sistema operativo por debajo.</p>
 <table>
 <thead>
 <tr>
@@ -2454,6 +2508,11 @@
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>Tamaño de cómputo</td>
+<td>Eliges el tipo de instancia EC2 (<code>t3</code>, <code>m5</code>...)</td>
+<td>Eliges una clase de instancia de base de datos (<code>db.t3</code>, <code>db.m5</code>...) — mismo catálogo de tamaños que ya conoces, con el prefijo <code>db.</code> delante</td>
+</tr>
 <tr>
 <td>Parches del motor</td>
 <td>Los aplicas tú, cuando tú decides</td>
@@ -2481,11 +2540,16 @@
 </tr>
 </tbody>
 </table>
+<p>"Recuperación a un punto en el tiempo" no significa solo volver a la foto de la última copia diaria: RDS guarda también los cambios que ha habido desde entonces, así que puedes restaurar la base de datos a cualquier segundo concreto dentro de la ventana de retención — por ejemplo, a las 10:47 de esta mañana, un minuto antes de que alguien borrara una tabla por error, sin perder todo lo escrito el resto del día.</p>
 <div class="admonition example">
 <p class="admonition-title">El mismo trabajo, en manos distintas</p>
 <p>Piensa en la diferencia entre tener coche propio y usar un servicio de coche con conductor. Con el tuyo decides el mecánico, el taller, cuándo lo llevas a revisar — pero si se avería un domingo, el problema es tuyo. Con el servicio, no eliges el mecánico ni ves el motor por dentro, pero si el coche falla, no es tu problema resolverlo: te mandan otro.</p>
 </div>
 <p>Ninguna opción es "la buena" en abstracto — es la misma decisión de la escalera IaaS→PaaS→SaaS que viste en la sesión 1, aplicada ahora a bases de datos concretas.</p>
+<div class="admonition tip">
+<p class="admonition-title">RDS no es solo PostgreSQL</p>
+<p>A lo largo de esta sesión vas a trabajar con PostgreSQL porque es el motor de la Actividad 3.2, pero RDS gestiona varios motores distintos — MySQL, MariaDB, PostgreSQL, SQL Server, Oracle, e incluso <strong>Aurora</strong>, un motor propio de AWS compatible con MySQL y PostgreSQL pero reescrito por dentro para ir más rápido y tolerar fallos mejor. La decisión de "instalar frente a servicio gestionado" que acabas de ver es la misma sea cual sea el motor que elijas.</p>
+</div>
 <hr>
 <h2 id="subred-privada-y-grupos-de-seguridad-de-datos">🧩 Subred privada y grupos de seguridad de datos<a class="headerlink" href="#subred-privada-y-grupos-de-seguridad-de-datos" title="Permanent link">¶</a></h2>
 <p>La base de datos de tu aplicación va, sin excepción, en subred privada — lo estableciste como regla en el Tema 2, y hoy la aplicas de verdad. RDS, además, no se conecta a cualquiera que se lo pida: necesita su propio grupo de seguridad, con una única regla de entrada — el puerto de la base de datos (5432 para PostgreSQL), y <strong>solo</strong> desde el grupo de seguridad de la instancia de la aplicación, nunca desde <code>0.0.0.0/0</code>.</p>
@@ -2509,6 +2573,35 @@
 <p class="admonition-title">La misma idea que vas a generalizar en el Tema 5</p>
 <p>Hoy lo aplicas solo a la contraseña de la base de datos, pero el principio —ningún secreto escrito en el código ni en el repositorio— se repite con cualquier credencial que uses el resto del módulo. En el Tema 5 vas a verlo formalizado como una regla general de gestión de identidad y accesos.</p>
 </div>
+<hr>
+<h2 id="como-llega-esto-a-tu-aplicacion-en-la-practica">🔌 Cómo llega esto a tu aplicación, en la práctica<a class="headerlink" href="#como-llega-esto-a-tu-aplicacion-en-la-practica" title="Permanent link">¶</a></h2>
+<p>Endpoint, grupo de seguridad, contraseña en Secrets Manager: son piezas sueltas hasta que tu aplicación las junta para conectarse de verdad. El patrón es siempre el mismo, y es el que vas a montar en la Actividad 3.2: en el arranque de la instancia —el mismo mecanismo de <em>user data</em> que ya usaste en la Actividad 2.3— un script pide el endpoint y la contraseña por CLI, y los deja como variables de entorno que la aplicación lee al arrancar, nunca escritos a mano en ningún fichero de configuración:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
+<span class="normal"><a href="#__codelineno-0-2">2</a></span>
+<span class="normal"><a href="#__codelineno-0-3">3</a></span>
+<span class="normal"><a href="#__codelineno-0-4">4</a></span>
+<span class="normal"><a href="#__codelineno-0-5">5</a></span>
+<span class="normal"><a href="#__codelineno-0-6">6</a></span>
+<span class="normal"><a href="#__codelineno-0-7">7</a></span>
+<span class="normal"><a href="#__codelineno-0-8">8</a></span>
+<span class="normal"><a href="#__codelineno-0-9">9</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="c1"># El endpoint de RDS: el nombre que sustituye a la IP fija de siempre</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">DB_HOST</span><span class="o">=</span><span class="k">$(</span>aws<span class="w"> </span>rds<span class="w"> </span>describe-db-instances<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">  </span>--db-instance-identifier<span class="w"> </span>mi-base-de-datos<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">  </span>--query<span class="w"> </span><span class="s2">"DBInstances[0].Endpoint.Address"</span><span class="w"> </span>--output<span class="w"> </span>text<span class="k">)</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5"></a>
+<a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="c1"># La contraseña, tal como la guardó Secrets Manager, sin haberla visto a mano</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7"></a>aws<span class="w"> </span>secretsmanager<span class="w"> </span>get-secret-value<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="w">  </span>--secret-id<span class="w"> </span>mi-base-de-datos-secret<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="w">  </span>--query<span class="w"> </span><span class="s2">"SecretString"</span><span class="w"> </span>--output<span class="w"> </span>text
+</code></pre></div></td></tr></table></div>
+<p>La segunda llamada devuelve un JSON con la contraseña (y algún dato más) dentro — el script de arranque lo extrae de ahí y lo deja en <code>DB_PASSWORD</code>, sin que en ningún momento haya pasado por tus manos ni por un fichero que puedas subir por error a un repositorio.</p>
+<div class="admonition tip">
+<p class="admonition-title">No hace falta ningún permiso nuevo — ya sabes montar esto</p>
+<p>Este script necesita permiso para llamar a <code>describe-db-instances</code> y a <code>get-secret-value</code>, y eso lo da el mismo mecanismo que ya conoces: el perfil de instancia de IAM (<code>LabInstanceProfile</code>) que has usado en el Tema 2 y en la Actividad 3.1 para dar permisos a una instancia sin credenciales fijas.</p>
+</div>
+<p>Con <code>DB_HOST</code> y <code>DB_PASSWORD</code> ya como variables de entorno, la aplicación se conecta igual que se conectaría a cualquier base de datos — el código no sabe ni le importa si esos valores vienen de Secrets Manager o de cualquier otro sitio. Esa separación entre "cómo se configura la infraestructura" y "cómo está escrita la aplicación" es lo que hace posible migrar una aplicación entera de una base de datos a otra sin tocar una sola línea de su código — solo esas dos variables.</p>
+<p>Todas las piezas que has visto hasta aquí —subred privada, grupo de seguridad, endpoint, Secrets Manager— encajan en una sola foto:</p>
+<p><img alt="Diagrama de conexión segura a RDS: la instancia de la aplicación en subred pública se conecta a RDS en subred privada solo por el puerto 5432 y solo desde su grupo de seguridad, Internet no tiene camino directo a RDS, y Secrets Manager genera la contraseña y se la entrega a la aplicación en el arranque" src="../img/diagrama_conexion_segura_rds.png"></p>
 <hr>
 <h2 id="multi-az-y-replicas-de-lectura">🔧 Multi-AZ y réplicas de lectura<a class="headerlink" href="#multi-az-y-replicas-de-lectura" title="Permanent link">¶</a></h2>
 <p>RDS te ofrece dos mecanismos distintos para repartir tu base de datos entre varias zonas de disponibilidad, y resuelven problemas diferentes — otro par de conceptos que se confunden con facilidad.</p>
@@ -2547,6 +2640,53 @@
         P2 --&gt; R2["Réplica 2"]
     end</code></pre>
 <p>Vas a provocar una conmutación por error de verdad en la Actividad 3.2, y a medir cuánto dura la interrupción real — un número mucho más pequeño de lo que la mayoría espera la primera vez.</p>
+<div class="admonition warning">
+<p class="admonition-title">Multi-AZ no es gratis: duplica el coste de cómputo</p>
+<p>La copia en espera de Multi-AZ no es una foto ni un respaldo barato — es una instancia completa, del mismo tamaño que la principal, funcionando en todo momento aunque nunca respondas una consulta contra ella. Activarlo prácticamente dobla lo que pagas por cómputo de esa base de datos. Merece la pena cuando de verdad no puedes permitirte una caída; para una base de datos de desarrollo o de bajo riesgo, es dinero pagado por una garantía que no necesitas.</p>
+</div>
+<hr>
+<h2 id="backups-automaticos-frente-a-snapshots-manuales">💾 Backups automáticos frente a snapshots manuales<a class="headerlink" href="#backups-automaticos-frente-a-snapshots-manuales" title="Permanent link">¶</a></h2>
+<p>La recuperación a un punto en el tiempo que has visto antes depende de los <strong>backups automáticos</strong>: copias que RDS hace solas todos los días, dentro de una <strong>ventana de retención</strong> que tú eliges (por ejemplo, siete días). Son cómodos porque no tienes que acordarte de nada — pero tienen una letra pequeña importante: si borras la instancia de base de datos, esos backups automáticos desaparecen con ella.</p>
+<p>Para lo que quieras conservar más allá de la vida de esa instancia concreta —antes de una migración arriesgada, o simplemente porque quieres un punto de restauración que no caduque— existen los <strong>snapshots manuales</strong>: una copia que pides tú explícitamente, en el momento que decidas, y que sigue existiendo aunque elimines la base de datos que la originó. La diferencia no es técnica, es de quién decide cuándo se crea y cuánto dura.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Backup automático</th>
+<th>Snapshot manual</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>¿Quién lo crea?</td>
+<td>RDS, solo, todos los días</td>
+<td>Tú, cuando lo pides</td>
+</tr>
+<tr>
+<td>¿Cuánto dura?</td>
+<td>Lo que dure la ventana de retención elegida</td>
+<td>Hasta que tú lo borres</td>
+</tr>
+<tr>
+<td>¿Sobrevive a borrar la instancia?</td>
+<td>No</td>
+<td>Sí</td>
+</tr>
+<tr>
+<td>Para qué sirve</td>
+<td>Recuperación a un punto en el tiempo reciente</td>
+<td>Conservar un estado concreto a largo plazo</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="admonition-title">Borrar la base de datos no borra tu snapshot manual</p>
+<p>Es al revés de lo que muchos alumnos esperan la primera vez: si borras una instancia de RDS que solo tiene backups automáticos, esos backups se pierden con ella. Un snapshot manual que hayas creado antes, en cambio, sigue disponible después de borrar la instancia — es precisamente lo que lo hace útil como "punto de seguridad" antes de un cambio arriesgado.</p>
+</div>
+<hr>
+<h2 id="cambiar-la-clase-de-instancia-despues-de-crearla">🔧 Cambiar la clase de instancia después de crearla<a class="headerlink" href="#cambiar-la-clase-de-instancia-despues-de-crearla" title="Permanent link">¶</a></h2>
+<p>La clase <code>db.*</code> que elegiste al crear la base de datos —igual que el tipo de instancia EC2 del Tema 2— no es definitiva. Si la aplicación crece y la base de datos se queda corta de CPU o memoria, puedes cambiarla a una clase mayor sin tener que migrar los datos a mano: es el mismo <strong>escalado vertical</strong> que ya conoces, aplicado ahora a una base de datos.</p>
+<p>El matiz que lo diferencia de cambiar el tamaño de una instancia EC2 cualquiera: el cambio implica un breve reinicio del motor, así que la base de datos deja de responder unos segundos o minutos mientras se aplica — salvo que tengas Multi-AZ activado, en cuyo caso RDS puede aplicar el cambio primero en la copia en espera y conmutar a ella, reduciendo la interrupción real que nota tu aplicación.</p>
 <hr>
 <h2 id="relacional-frente-a-nosql-el-patron-de-acceso-como-criterio">⚙️ Relacional frente a NoSQL: el patrón de acceso como criterio<a class="headerlink" href="#relacional-frente-a-nosql-el-patron-de-acceso-como-criterio" title="Permanent link">¶</a></h2>
 <p>RDS es un motor <strong>relacional</strong>: los datos viven en tablas con relaciones fijas entre ellas, y encajan de maravilla cuando la estructura de los datos es estable y las consultas cruzan varias tablas —por ejemplo, el catálogo de una tienda, con productos, categorías y pedidos relacionados entre sí. Pero no es la única familia de base de datos que existe en la nube.</p>
@@ -2555,6 +2695,8 @@
 <tr>
 <th>Modelo</th>
 <th>Cómo se estructura</th>
+<th>Cómo se consulta</th>
+<th>Servicio en AWS</th>
 <th>Cuándo encaja</th>
 </tr>
 </thead>
@@ -2562,34 +2704,49 @@
 <tr>
 <td>Relacional (RDS)</td>
 <td>Tablas con relaciones fijas, consultas complejas entre ellas</td>
+<td>SQL, con <code>JOIN</code> entre tablas</td>
+<td>RDS</td>
 <td>Datos estructurados con relaciones claras — un catálogo con categorías y pedidos</td>
 </tr>
 <tr>
 <td>Clave-valor</td>
 <td>Un identificador, un valor asociado, sin estructura interna fija</td>
+<td>Por la clave exacta — nada de <code>WHERE</code> sobre cualquier campo</td>
+<td>DynamoDB</td>
 <td>Sesiones de usuario, carritos de compra temporales</td>
 </tr>
 <tr>
 <td>Documental</td>
 <td>Documentos con estructura flexible, puede variar de uno a otro</td>
+<td>Comandos sobre documentos JSON, no SQL</td>
+<td>DocumentDB</td>
 <td>Catálogos con atributos muy distintos entre productos</td>
 </tr>
 </tbody>
 </table>
+<p><strong>DynamoDB, en concreto</strong>: no tiene columnas fijas — cada elemento es un documento con los atributos que tú quieras, y lo único que tienes que decidir de antemano es la <strong>clave de partición</strong> (el campo por el que vas a buscar cada elemento, por ejemplo <code>sesion_id</code>). El resto de atributos puede variar libremente de un elemento a otro, incluso dentro de la misma tabla. El acceso normal es siempre por esa clave —pides "el elemento con esta clave" (<code>get-item</code>), no "los elementos que cumplan esta condición sobre cualquier campo" como haría un <code>SELECT ... WHERE</code> en SQL—; esa segunda operación existe (<code>Scan</code>), pero es mucho más lenta y cara, y no es el uso para el que está pensado DynamoDB. No hay ningún motor que arrancar ni parches que aplicar: se factura por lo que usas, sin ninguna instancia por debajo que tú administres.</p>
+<p><strong>DocumentDB, en concreto</strong>: por debajo usa una arquitectura de clúster parecida a la de Aurora —un clúster no sirve nada hasta que tiene al menos una instancia dentro, con su propia clase de instancia—, pero no se habla con él en SQL: es compatible con el protocolo de MongoDB, así que las consultas son comandos como <code>db.coleccion.find({...})</code> o <code>db.coleccion.insertOne({...})</code> sobre documentos agrupados en colecciones, no en tablas. Cada documento de una misma colección puede tener una estructura distinta, sin que el motor obligue a que todos encajen en el mismo esquema.</p>
+<div class="admonition example">
+<p class="admonition-title">La misma biblioteca, tres preguntas distintas</p>
+<p>Si la aplicación de la biblioteca guardara sus libros y préstamos en RDS, una consulta típica sería "todos los préstamos activos del usuario X, con el título y la categoría de cada libro" — cruza tres tablas relacionadas, el punto fuerte de lo relacional. Si en vez de eso quisieras guardar la sesión de cada usuario mientras navega la web —un simple identificador de sesión y unos datos asociados, sin relación con nada más—, encajaría mejor en DynamoDB. Y si cada libro tuviera una ficha con campos muy distintos según el tipo —número de páginas para uno, duración para un audiolibro, resolución para un cómic digital—, esa variabilidad encaja mejor en un modelo documental como DocumentDB que forzarla dentro de columnas fijas.</p>
+</div>
 <div class="admonition tip">
 <p class="admonition-title">El criterio no es "cuál es más moderno"</p>
-<p>La pregunta correcta no es qué tecnología es más nueva, sino qué forma tienen tus datos y cómo los vas a consultar. Vas a comparar los tres modelos para patrones de acceso concretos en la Actividad 3.2, sin necesidad de montar ninguno de los que no sea relacional.</p>
+<p>La pregunta correcta no es qué tecnología es más nueva, sino qué forma tienen tus datos y cómo los vas a consultar. En la Actividad 3.2 no te quedas solo con la teoría: vas a crear una tabla DynamoDB pequeña para comprobar con tus propias manos que existe y funciona (DocumentDB se queda en razonamiento, sin desplegarlo: el Learner Lab no da permisos para crear la instancia del clúster), y a razonar después para qué patrón de acceso de Escaparate encajaría cada modelo.</p>
 </div>
 <hr>
 <h2 id="ideas-clave">✅ Ideas clave<a class="headerlink" href="#ideas-clave" title="Permanent link">¶</a></h2>
 <details class="tip">
 <summary>Abrir resumen</summary>
 <ul>
-<li>Instalar tu propia base de datos da control total; un servicio gestionado (RDS) asume parches, copias y conmutación por error a cambio de que pierdas el acceso al sistema operativo.</li>
+<li>Instalar tu propia base de datos da control total; un servicio gestionado (RDS) asume parches, copias y conmutación por error a cambio de que pierdas el acceso al sistema operativo — y RDS no es solo PostgreSQL: gestiona también MySQL, MariaDB, SQL Server, Oracle y Aurora.</li>
 <li>La base de datos va siempre en subred privada, con un grupo de seguridad que solo acepta tráfico desde la instancia de la aplicación.</li>
 <li>Secrets Manager guarda la contraseña de la base de datos cifrada y fuera del código, y puede generarla él mismo al crear la instancia — nunca escrita en ningún fichero.</li>
-<li>Multi-AZ resuelve alta disponibilidad (copia pasiva que conmuta sola); una réplica de lectura resuelve rendimiento (copia activa de solo lectura, no conmuta sola).</li>
-<li>Relacional, clave-valor y documental son tres modelos distintos — la elección depende de la forma de los datos y del patrón de consulta, no de la moda.</li>
+<li>La aplicación recibe el endpoint y la contraseña como variables de entorno (<code>DB_HOST</code>, <code>DB_PASSWORD</code>) que un script de arranque rellena por CLI — el código de la aplicación no cambia, solo esas dos variables.</li>
+<li>Multi-AZ resuelve alta disponibilidad (copia pasiva que conmuta sola); una réplica de lectura resuelve rendimiento (copia activa de solo lectura, no conmuta sola) — y Multi-AZ duplica el coste de cómputo, porque la copia en espera es una instancia completa funcionando todo el tiempo.</li>
+<li>La recuperación a un punto en el tiempo restaura a cualquier segundo dentro de la ventana de retención, no solo a la última copia diaria — pero esos backups automáticos desaparecen si borras la instancia; un snapshot manual, no.</li>
+<li>La clase <code>db.*</code> se puede cambiar después de crear la base de datos (escalado vertical), a costa de una breve interrupción salvo que Multi-AZ la amortigüe.</li>
+<li>Relacional (RDS), clave-valor (DynamoDB) y documental (DocumentDB) son tres modelos distintos — la elección depende de la forma de los datos y del patrón de consulta, no de la moda. DynamoDB se consulta siempre por su clave de partición, sin SQL ni servidor que administrar; DocumentDB usa comandos de MongoDB sobre documentos, con una arquitectura de clúster parecida a la de Aurora.</li>
 </ul>
 </details>
 <p>Con esto ya tienes las piezas para la Actividad 3.2 — Migración a base de datos gestionada con RDS.</p></div>

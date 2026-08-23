@@ -2350,11 +2350,11 @@
 <div><h1 id="actividad-51-monitorizacion-y-diagnostico-con-cloudwatch">🧪 Actividad 5.1: Monitorización y diagnóstico con CloudWatch<a class="headerlink" href="#actividad-51-monitorizacion-y-diagnostico-con-cloudwatch" title="Permanent link">¶</a></h1>
 <div class="admonition danger">
 <p class="admonition-title">Pendiente — depende de Escaparate</p>
-<p>Esta actividad depende de <strong>Escaparate</strong>, la aplicación transversal de los temas 3-7, todavía sin definir. No la publiques ni la des en clase tal cual — lo de abajo es el encargo para cuando se escriba de verdad, no contenido listo.</p>
+<p><strong>Escaparate ya existe</strong> (repo clonado en <code>escaparate-app/</code>), pero esta actividad todavía no está escrita paso a paso. No la publiques ni la des en clase tal cual.</p>
 </div>
 <h2 id="prompt-pendiente">Prompt pendiente<a class="headerlink" href="#prompt-pendiente" title="Permanent link">¶</a></h2>
 <p><strong>Qué usamos</strong>: Escaparate ya desplegado (con lo construido en los Temas 3 y 4).</p>
-<p><strong>Idea central</strong>: es mejor observar y diagnosticar una arquitectura real ya existente que montar métricas de cero sobre algo nuevo — la actividad se apoya en todo lo que Escaparate ya tiene funcionando para enseñar CloudWatch (métricas, alarmas, logs) sobre un caso con piezas reales (balanceador, instancias, base de datos).</p>
+<p><strong>Idea central</strong>: es mejor observar y diagnosticar una arquitectura real ya existente que montar métricas de cero sobre algo nuevo. Confirmado en <code>soluciones-profesor/07-aws/README.md</code>: la app no necesita ningún cambio de código para esto — sus logs son simplemente stdout/stderr (los que ya genera el contenedor o el servicio), recogibles como logs de CloudWatch tal cual; y <code>/api/carga?ms=...</code>, <code>/api/salud/*</code> y las métricas propias de ALB/EC2 son las piezas concretas que se correlacionan para ver comportamiento y carga en el dashboard.</p>
 <p><strong>Referencia de la chuleta original</strong> (revalidar el "hito H7" contra <code>curriculum.md</code>): fila 5.1.</p>
 <p>Cuando Escaparate esté definido, reescribe esta actividad completa siguiendo el mismo patrón que el resto del módulo: Contexto, Qué vas a practicar, Requisitos previos, Parte A guiada + Parte B reto (a prueba de IA), Criterios de evaluación, Cierre con aviso de limpieza de recursos — y regenera sus plantillas docx.</p></div>
 

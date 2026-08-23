@@ -2350,10 +2350,18 @@
 <div><h1 id="actividad-63-tu-imagen-sin-servidores">🧪 Actividad 6.3: Tu imagen, sin servidores<a class="headerlink" href="#actividad-63-tu-imagen-sin-servidores" title="Permanent link">¶</a></h1>
 <div class="admonition danger">
 <p class="admonition-title">Pendiente — depende de Escaparate</p>
-<p>Esta actividad depende de <strong>Escaparate</strong>, la aplicación transversal de los temas 3-7, todavía sin definir. No la publiques ni la des en clase tal cual — lo de abajo es el encargo para cuando se escriba de verdad, no contenido listo.</p>
+<p><strong>Escaparate ya existe</strong> (repo clonado en <code>escaparate-app/</code>), pero esta actividad todavía no está escrita paso a paso. No la publiques ni la des en clase tal cual — lo de abajo ya está confirmado contra el código real.</p>
 </div>
 <h2 id="prompt-pendiente">Prompt pendiente<a class="headerlink" href="#prompt-pendiente" title="Permanent link">¶</a></h2>
-<p><strong>Qué usamos</strong>: el backend de Escaparate, empaquetado como imagen de contenedor, publicado en ECR y desplegado en ECS/Fargate.</p>
+<p><strong>Qué usamos</strong>: el backend de Escaparate, la misma imagen Docker de <code>soluciones-profesor/01-docker</code> (ya existe, no hay que crearla de cero), publicada en ECR y desplegada en ECS/Fargate. Hay una plantilla real de referencia en <code>soluciones-profesor/07-aws/ecs-task-definition.template.json</code> — mirar solo esa carpeta, no el resto de <code>soluciones-profesor</code>.</p>
+<p><strong>Variables mínimas del task/container</strong> (confirmadas en <code>soluciones-profesor/07-aws/README.md</code>, ya usadas en 3.2/4.1/5.2 — nada nuevo que aprender aquí):</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Text Only</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
+<span class="normal"><a href="#__codelineno-0-2">2</a></span>
+<span class="normal"><a href="#__codelineno-0-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a>DB_HOST, DB_PORT=5432, DB_NAME, DB_USER, DB_PASSWORD
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a>APP_STORAGE_TYPE=s3, APP_STORAGE_S3_BUCKET
+<a id="__codelineno-0-3" name="__codelineno-0-3"></a>APP_CORS_ALLOWED_ORIGINS
+</code></pre></div></td></tr></table></div>
+<p>La imagen no lleva credenciales AWS dentro — usa el <strong>task role</strong> de ECS para hablar con S3, el mismo principio de "rol en vez de claves" ya practicado en la 5.2 con <code>LabInstanceProfile</code>.</p>
 <p><strong>Idea central</strong>: aquí se reutiliza la misma imagen Docker del backend de Escaparate, pero sin que el alumno administre ningún servidor por debajo — la actividad completa el recorrido del módulo: construir la imagen, publicarla en un registro, desplegarla como servicio gestionado, y comprobar que se puede escalar y actualizar sin cortar el servicio.</p>
 <p><strong>Referencia de la chuleta original</strong> (revalidar el "hito H8" contra <code>curriculum.md</code>): fila 6.3.</p>
 <p>Cuando Escaparate esté definido, reescribe esta actividad completa siguiendo el mismo patrón que el resto del módulo: Contexto, Qué vas a practicar, Requisitos previos, Parte A guiada + Parte B reto (a prueba de IA), Criterios de evaluación, Cierre con aviso de limpieza de recursos — y regenera sus plantillas docx.</p></div>
