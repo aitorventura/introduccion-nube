@@ -126,3 +126,13 @@ resource "aws_security_group_rule" "interno_todo" {
   source_security_group_id = aws_security_group.base.id
   description               = "Trafico interno entre instancias del mismo grupo (incluye NFS/2049 para EFS)"
 }
+
+resource "aws_db_subnet_group" "privado" {
+  name        = "tema3-db-subnets-${var.identificador}"
+  description = "Solo las subredes privadas, para bases de datos RDS que no deben ser accesibles desde fuera de la VPC"
+  subnet_ids  = [aws_subnet.privada_a.id, aws_subnet.privada_b.id]
+
+  tags = {
+    Name = "tema3-db-subnets-${var.identificador}"
+  }
+}

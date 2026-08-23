@@ -1,12 +1,13 @@
 """
-Función Lambda — Carrera Popular: fotos de dorsal
+Función Lambda — Escaparate: miniaturas de fotos de producto
 Actividad 6.2 — Una función por cada imagen
 
-Se dispara con el evento de creación de un objeto en el bucket de fotos de
-dorsal. Genera una miniatura de la foto (200x200 px, manteniendo la
-proporción) y la guarda en el mismo bucket bajo el prefijo `miniaturas/`,
-y además registra un objeto JSON con los metadatos de la foto original bajo
-el prefijo `metadatos/`.
+Se dispara con el evento de creación de un objeto bajo el prefijo `escaparate/`
+del bucket de imágenes de Escaparate (el mismo que usa S3Storage). Genera una
+miniatura de la foto (200x200 px, manteniendo la proporción) y la guarda en el
+mismo bucket bajo el prefijo `miniaturas/`, y además registra un objeto JSON
+con los metadatos de la foto original bajo el prefijo `metadatos/` — sin tocar
+el prefijo `escaparate/` que usa el backend de Escaparate.
 
 Requiere Pillow, que no viene incluido en el runtime de Lambda por defecto
 — ver README.md de esta misma carpeta para empaquetarla antes de subir la

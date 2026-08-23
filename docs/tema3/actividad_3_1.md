@@ -36,11 +36,17 @@ El Tema 2 ha terminado sin dejar ninguna red montada — al cerrar la Actividad 
 2. Terraform no viene instalado por defecto en CloudShell — instálalo tú mismo, es un único binario y no hace falta ser administrador:
 
     ```bash
+    cd ~
     curl -O https://releases.hashicorp.com/terraform/1.9.0/terraform_1.9.0_linux_amd64.zip
     unzip terraform_1.9.0_linux_amd64.zip
-    export PATH=$PATH:$(pwd)
+    rm terraform_1.9.0_linux_amd64.zip
+    echo 'export PATH=$PATH:~' >> ~/.bashrc
+    export PATH=$PATH:~
     terraform -version
     ```
+
+    !!! tip "Por qué añadir la línea a `.bashrc`"
+        CloudShell conserva tu carpeta personal entre sesiones, pero **no** el `PATH` que hayas configurado a mano — cada pestaña nueva arranca sin él. Guardarlo en `~/.bashrc` hace que se aplique solo cada vez que abras CloudShell, sin tener que repetir `export PATH` en sesiones futuras (en la Actividad 3.2 vuelves a necesitar Terraform).
 
 3. Entra en la carpeta de la red (`cd recursos/tema3/red-base`) y despliégala:
 

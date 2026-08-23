@@ -21,3 +21,7 @@ output "subnet_privada_b_id" {
 output "security_group_id" {
   value = aws_security_group.base.id
 }
+
+output "db_subnet_group_name" {
+  value = aws_db_subnet_group.privado.name
+}

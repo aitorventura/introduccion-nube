@@ -1,11 +1,11 @@
 # 🧪 Actividad 5.3: Cuánto cuesta lo que has construido
 
 !!! danger "Pendiente — depende de Escaparate"
-    Esta actividad depende de **Escaparate**, la aplicación transversal de los temas 3-7, todavía sin definir. No la publiques ni la des en clase tal cual — lo de abajo es el encargo para cuando se escriba de verdad, no contenido listo.
+    **Escaparate ya existe** (repo clonado en `escaparate-app/`), pero esta actividad todavía no está escrita paso a paso. No la publiques ni la des en clase tal cual.
 
 ## Prompt pendiente
 
-**Qué usamos**: la arquitectura completa de Escaparate construida hasta ahora (EC2, ALB, RDS, EFS o S3, etc.).
+**Qué usamos**: la arquitectura completa de Escaparate construida hasta ahora (EC2, ALB, RDS, EFS y/o S3 — según qué haya elegido cada alumno en la 5.2).
 
 **Idea central**: poner un número real a la arquitectura concreta que el alumno ha construido —no una arquitectura genérica de ejemplo—, con la calculadora oficial de AWS, desglosada componente a componente.
 

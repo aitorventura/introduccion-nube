@@ -1,7 +1,7 @@
 # 🧪 Actividad 7.1: Auditoría y mejora
 
 !!! danger "Pendiente — depende de Escaparate"
-    Esta actividad depende de **Escaparate**, la aplicación transversal de los temas 3-7, todavía sin definir. No la publiques ni la des en clase tal cual — lo de abajo es el encargo para cuando se escriba de verdad, no contenido listo.
+    **Escaparate ya existe** (repo clonado en `escaparate-app/`), pero esta actividad todavía no está escrita paso a paso. No la publiques ni la des en clase tal cual.
 
 ## Prompt pendiente
 
