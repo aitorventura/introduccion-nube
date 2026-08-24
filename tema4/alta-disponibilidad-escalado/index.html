@@ -1284,6 +1284,24 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#dos-capas-de-comprobacion-de-salud-ec2-y-grupo-de-destino" class="md-nav__link">
+    <span class="md-ellipsis">
+      🩺 Dos capas de comprobación de salud: EC2 y grupo de destino
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#como-repone-el-asg-una-instancia-caida" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔁 Cómo repone el ASG una instancia caída
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#politicas-por-metrica-y-periodo-de-calentamiento" class="md-nav__link">
     <span class="md-ellipsis">
       ⚙️ Políticas por métrica y periodo de calentamiento
@@ -2395,6 +2413,24 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#dos-capas-de-comprobacion-de-salud-ec2-y-grupo-de-destino" class="md-nav__link">
+    <span class="md-ellipsis">
+      🩺 Dos capas de comprobación de salud: EC2 y grupo de destino
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#como-repone-el-asg-una-instancia-caida" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔁 Cómo repone el ASG una instancia caída
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#politicas-por-metrica-y-periodo-de-calentamiento" class="md-nav__link">
     <span class="md-ellipsis">
       ⚙️ Políticas por métrica y periodo de calentamiento
@@ -2443,7 +2479,7 @@
 <p>Cualquier aplicación desplegada sobre una única instancia tiene el mismo punto único de fallo: si esa instancia se cae, se cae la aplicación entera. Hoy resuelves justo ese punto — no añadiendo "una instancia más por si acaso", sino un mecanismo que reparte el tráfico entre varias copias y que repone automáticamente la que falle, sin que tú tengas que estar mirando la pantalla.</p>
 <hr>
 <h2 id="balanceador-de-carga-grupos-de-destino-y-comprobaciones-de-salud">🧭 Balanceador de carga, grupos de destino y comprobaciones de salud<a class="headerlink" href="#balanceador-de-carga-grupos-de-destino-y-comprobaciones-de-salud" title="Permanent link">¶</a></h2>
-<p>Un <strong>balanceador de carga</strong> (<em>Load Balancer</em>) se coloca delante de tus instancias y reparte el tráfico entrante entre ellas, de forma que el cliente nunca habla directamente con una instancia concreta — habla con el balanceador, y es él quien decide a cuál mandar cada petición.</p>
+<p>Un <strong>balanceador de carga</strong> (<em>Load Balancer</em>) se coloca delante de tus instancias y reparte el tráfico entrante entre ellas, de forma que el cliente nunca habla directamente con una instancia concreta — habla con el balanceador, y es él quien decide a cuál mandar cada petición. AWS ofrece varios tipos según el nivel al que operan; el que vas a usar hoy es el <strong>ALB</strong> (<em>Application Load Balancer</em>), pensado justo para tráfico HTTP/HTTPS como el de la API de Escaparate — es la opción que vas a elegir en la consola cuando llegue el momento de crearlo.</p>
 <pre class="mermaid"><code>flowchart LR
     Internet(("🌍 Internet")) --&gt; LB["⚖️ Balanceador de carga"]
     LB --&gt; I1["Instancia A"]
@@ -2454,6 +2490,16 @@
 <p class="admonition-title">Por qué la comprobación de salud importa más de lo que parece</p>
 <p>Imagina una instancia que sigue "encendida" pero cuya aplicación se ha quedado colgada — responde al ping de red, pero no sirve ninguna página. Sin comprobación de salud, el balanceador seguiría mandándole tráfico igualmente, y una parte de tus usuarios vería errores sin que nada en el estado de la instancia lo delatara. Con la comprobación activa, el balanceador la retira del grupo de destino en cuanto deja de responder correctamente, y solo la vuelve a incluir cuando se recupera.</p>
 </div>
+<p>Ahora que hay un balanceador delante, el grupo de seguridad de tus instancias tiene que cambiar con él: ya no tiene sentido que el puerto de la aplicación siga abierto a <code>0.0.0.0/0</code> como en el Tema 3, porque nadie de fuera necesita hablar con una instancia directamente — todo el mundo pasa por el balanceador. La regla correcta es la misma de siempre, aplicada un escalón más: el puerto de la aplicación solo acepta tráfico desde el grupo de seguridad <strong>del propio balanceador</strong>, y es el balanceador el único que tiene su puerto abierto a internet.</p>
+<pre class="mermaid"><code>flowchart LR
+    Internet(("🌍 Internet")) --&gt;|443| LB["⚖️ ALB&lt;br/&gt;SG abierto a internet"]
+    LB --&gt;|solo desde el SG del ALB| I1["Instancia A"]
+    LB --&gt;|solo desde el SG del ALB| I2["Instancia B"]</code></pre>
+<div class="admonition tip">
+<p class="admonition-title">Retirar una instancia no corta las peticiones en marcha, si le das tiempo</p>
+<p>Cuando el balanceador retira una instancia del grupo de destino —porque falla la comprobación de salud o porque el ASG reduce capacidad— no la mata en el acto: durante un tiempo configurable, el <strong>retraso de anulación de registro</strong> (<em>deregistration delay</em>), deja de mandarle peticiones nuevas pero espera a que termine de responder las que ya tenía en curso. Sin ese margen, un usuario que estuviera a mitad de una petición vería la conexión cortada de golpe, aunque la instancia no tuviera ningún problema real hasta ese momento.</p>
+</div>
+<p>Fíjate en un detalle que vas a encontrar en la propia consola al crear el balanceador: AWS no te deja elegir una sola subred, exige al menos dos, en dos zonas de disponibilidad distintas. No es una limitación arbitraria del formulario — el propio ALB es un servicio distribuido, con nodos redundantes repartidos entre esas zonas, precisamente para que el balanceador en sí no se convierta en el nuevo punto único de fallo que hoy estás eliminando de tus instancias. Si una zona entera cae, el ALB sigue funcionando con los nodos de la otra.</p>
 <hr>
 <h2 id="escalado-vertical-frente-a-horizontal">🧩 Escalado vertical frente a horizontal<a class="headerlink" href="#escalado-vertical-frente-a-horizontal" title="Permanent link">¶</a></h2>
 <p>Cuando una instancia se queda corta de capacidad, hay dos formas de responder, y no son intercambiables:</p>
@@ -2516,7 +2562,46 @@
 </table>
 <pre class="mermaid"><code>flowchart LR
     Min["Mínima: 2"] --&gt; Deseada["Deseada: 2"] --&gt; Max["Máxima: 5"]</code></pre>
-<p>Fíjate en algo importante: el grupo de escalado automático necesita una plantilla de lanzamiento como la que viste en el Tema 2 — sin ella, el ASG no sabría con qué imagen, tipo y configuración lanzar una instancia nueva cuando le hiciera falta reponer una.</p>
+<p>Fíjate en algo importante: el grupo de escalado automático necesita una plantilla de lanzamiento como la que has visto en el Tema 2 — sin ella, el ASG no sabría con qué imagen, tipo y configuración lanzar una instancia nueva cuando le hiciera falta reponer una.</p>
+<hr>
+<h2 id="dos-capas-de-comprobacion-de-salud-ec2-y-grupo-de-destino">🩺 Dos capas de comprobación de salud: EC2 y grupo de destino<a class="headerlink" href="#dos-capas-de-comprobacion-de-salud-ec2-y-grupo-de-destino" title="Permanent link">¶</a></h2>
+<p>El grupo de destino del balanceador ya comprueba la salud de cada instancia con una petición HTTP, como has visto antes — pero el grupo de escalado automático trae la suya propia, más básica, activada por defecto: el <strong>estado del sistema EC2</strong> (si la instancia responde a nivel de red y hardware, sin mirar si la aplicación de dentro funciona). Ahí está el problema si solo confías en esa comprobación: una instancia puede estar perfectamente sana a nivel de EC2 —arrancada, con red, sin fallos de host— y aun así tener la aplicación colgada por dentro, sin servir ni una sola petición.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Comprobación EC2 (por defecto)</th>
+<th>Comprobación del grupo de destino</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Qué mira</td>
+<td>Estado del hardware y la red de la instancia</td>
+<td>Respuesta HTTP de la propia aplicación</td>
+</tr>
+<tr>
+<td>Detecta</td>
+<td>Instancia parada, bloqueada o con fallo de host</td>
+<td>Aplicación colgada, aunque la instancia esté "viva"</td>
+</tr>
+<tr>
+<td>Quién la aporta</td>
+<td>El propio servicio EC2</td>
+<td>El balanceador de carga</td>
+</tr>
+</tbody>
+</table>
+<p>Por eso, cuando conectas el ASG a un grupo de destino, se le puede indicar que use <em>también</em> la comprobación de salud del balanceador —la misma petición a <code>/api/salud/listo</code> que ya conoces— para decidir si una instancia sigue sana. Con las dos activas, el ASG detecta y repone tanto una instancia caída de verdad como una que sigue "viva" pero con la aplicación colgada por dentro: dos fallos muy distintos que, sin la comprobación del grupo de destino, pasarían desapercibidos igual.</p>
+<hr>
+<h2 id="como-repone-el-asg-una-instancia-caida">🔁 Cómo repone el ASG una instancia caída<a class="headerlink" href="#como-repone-el-asg-una-instancia-caida" title="Permanent link">¶</a></h2>
+<p>Cuando cualquiera de las dos comprobaciones falla, el ASG no espera a que hagas nada: compara continuamente cuántas instancias sanas tiene contra la capacidad deseada, y en cuanto detecta que faltan, lanza una nueva desde la misma plantilla de lanzamiento —la misma AMI, el mismo tipo de instancia, los mismos datos de usuario— hasta volver al número que le has pedido mantener.</p>
+<pre class="mermaid"><code>flowchart TD
+    Fallo["❌ Una instancia falla&lt;br/&gt;(EC2 o grupo de destino)"] --&gt; Detecta["🔍 El ASG lo detecta"]
+    Detecta --&gt; Compara["⚖️ Compara sanas frente a capacidad deseada"]
+    Compara --&gt; Lanza["🚀 Lanza una instancia nueva&lt;br/&gt;desde la plantilla de lanzamiento"]
+    Lanza --&gt; Repone["✅ Vuelve a la capacidad deseada"]</code></pre>
+<p>Vas a provocar esto tú mismo en el reto de la Actividad 4.1, terminando una instancia a mano y cronometrando cuánto tarda el grupo en reponerla — es exactamente este mecanismo el que vas a ver actuar, sin que tengas que tocar nada más.</p>
 <hr>
 <h2 id="politicas-por-metrica-y-periodo-de-calentamiento">⚙️ Políticas por métrica y periodo de calentamiento<a class="headerlink" href="#politicas-por-metrica-y-periodo-de-calentamiento" title="Permanent link">¶</a></h2>
 <p>El ASG no decide escalar al azar — sigue una <strong>política de escalado</strong>, normalmente basada en una métrica como el uso de CPU: "si la CPU media supera el 70 % durante varios minutos, añade una instancia; si baja del 30 %, quita una". Cada vez que se añade una instancia nueva, hay un <strong>periodo de calentamiento</strong> (<em>warm-up</em> o <em>cooldown</em>) antes de que el ASG vuelva a evaluar si necesita escalar más — le da tiempo a la instancia recién lanzada a arrancar y empezar a servir tráfico de verdad antes de contarla como "ya está ayudando".</p>
@@ -2531,16 +2616,23 @@
     Trafico["📈 Tráfico sube"] --&gt; Escala["ASG añade instancias"] --&gt; Factura["💶 Factura sube esa hora"]
     Trafico2["📉 Tráfico baja"] --&gt; Reduce["ASG retira instancias"] --&gt; Factura2["💶 Factura vuelve a bajar"]</code></pre>
 <p>Vas a medir esto de primera mano en la Actividad 4.1: vas a generar carga real, ver cómo responde el grupo de escalado, y comprobar cuánto tarda de verdad —no en teoría— desde que sube la CPU hasta que una instancia nueva atiende tráfico.</p>
+<div class="admonition tip">
+<p class="admonition-title">El balanceador no escala como las instancias</p>
+<p>Todo lo anterior se aplica a las instancias del grupo de escalado, no al balanceador en sí: el ALB tiene un coste base por hora simplemente por existir, más un cargo adicional según cuánto tráfico procesa —cuántas peticiones nuevas atiende, cuántas conexiones mantiene abiertas y cuántos datos mueve, resumido en una unidad de medida propia llamada <strong>LCU</strong> (<em>Load Balancer Capacity Unit</em>)—, independientemente de cuántas instancias haya detrás en cada momento. Es la pieza fija de esta arquitectura; las instancias son la pieza elástica.</p>
+</div>
 <hr>
 <h2 id="ideas-clave">✅ Ideas clave<a class="headerlink" href="#ideas-clave" title="Permanent link">¶</a></h2>
 <details class="tip">
 <summary>Abrir resumen</summary>
 <ul>
-<li>Un balanceador de carga reparte tráfico entre instancias de un grupo de destino, comprobando su salud antes de mandarles peticiones; un listener define en qué puerto/protocolo escucha y a qué grupo de destino reenvía.</li>
+<li>Un balanceador de carga (hoy, un ALB, pensado para HTTP/HTTPS) reparte tráfico entre instancias de un grupo de destino, comprobando su salud antes de mandarles peticiones; un listener define en qué puerto/protocolo escucha y a qué grupo de destino reenvía. El propio ALB exige al menos dos zonas de disponibilidad, para no ser él mismo un punto único de fallo.</li>
+<li>Con el balanceador delante, el puerto de la aplicación deja de estar abierto a internet: solo acepta tráfico del grupo de seguridad del propio balanceador — el mismo principio de mínimo privilegio del Tema 3, un escalón más.</li>
+<li>El retraso de anulación de registro deja que una instancia retirada termine las peticiones que ya tenía en marcha antes de dejar de recibir tráfico nuevo — evita cortes en seco.</li>
 <li>Escalado vertical (instancia más grande) tiene límite y suele cortar servicio; escalado horizontal (más instancias) es la base de la alta disponibilidad.</li>
 <li>Un grupo de escalado automático se define con capacidad mínima, deseada y máxima, y usa una plantilla de lanzamiento (como la del Tema 2) para saber cómo lanzar instancias nuevas.</li>
+<li>El ASG combina dos comprobaciones de salud —la básica de EC2 (hardware/red) y la del grupo de destino (respuesta HTTP de la aplicación)— para detectar tanto una instancia caída como una que sigue viva pero colgada por dentro; en cuanto detecta que faltan instancias sanas, lanza una nueva desde la plantilla de lanzamiento hasta volver a la capacidad deseada.</li>
 <li>Las políticas de escalado reaccionan a una métrica (típicamente CPU); el periodo de calentamiento evita que el ASG escale en espiral mientras una instancia nueva todavía está arrancando.</li>
-<li>La elasticidad se refleja directamente en la factura: se paga por la capacidad real en marcha, no por una capacidad fija reservada de antemano.</li>
+<li>La elasticidad se refleja directamente en la factura para las instancias: se paga por la capacidad real en marcha, no por una fija reservada de antemano. El balanceador, en cambio, tiene un coste base fijo por existir más un cargo por tráfico (LCU) — es la pieza no elástica de esta arquitectura.</li>
 </ul>
 </details>
 <p>Con esto ya tienes las piezas para la Actividad 4.1 — Balanceador de carga y Auto Scaling Group.</p></div>

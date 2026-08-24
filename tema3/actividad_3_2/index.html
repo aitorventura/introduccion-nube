@@ -2815,8 +2815,7 @@
 <li>
 <p>En la consola de RDS, selecciona tu instancia → <strong>Acciones → Convertir a implementación Multi-AZ</strong> (más directo que pasar por "Modificar", que mezcla esto con el resto de opciones de configuración) → elige <strong>Aplicar inmediatamente</strong> → confirma.</p>
 <p>Esto tarda de verdad — cuenta con <strong>10 a 20 minutos</strong>, a veces más, aunque tu base de datos esté casi vacía: AWS tiene que crear una instancia en espera completa desde cero en otra zona y dejar la réplica síncrona funcionando antes de marcarlo como disponible. No es que se haya quedado colgado — aprovecha la espera para lo que viene, no hace falta quedarte mirando.</p>
-<p><img alt='El diálogo "Convertir a implementación Multi-AZ"' src="../img/actividad_3_2_paso6_a.png">
-<em>🖼️ Captura de referencia del profesor pendiente de capturar</em></p>
+<p><img alt='El diálogo "Convertir a implementación Multi-AZ"' src="../img/actividad_3_2_paso6_a.png"></p>
 </li>
 <li>
 <p>Cuando vuelva a <code>available</code> (compruébalo en la consola, o con <code>aws rds describe-db-instances --db-instance-identifier escaparate-db-&lt;tu-identificador&gt; --query "DBInstances[0].[DBInstanceStatus,MultiAZ]" --output text</code>), desde tu propia <strong>CloudShell</strong> deja corriendo un bucle que mida la respuesta cada segundo, apuntando a la <strong>IP pública</strong> de tu instancia (no <code>localhost</code> — eso apuntaría a la propia CloudShell, no a Escaparate; el puerto 8080 ya lo abriste al mundo en el Paso 5):</p>
