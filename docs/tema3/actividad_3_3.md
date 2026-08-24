@@ -240,12 +240,12 @@ Vas a provocar tú mismo, deliberadamente, dos de los fallos que la separación 
 
 Escaparate ya vive como tres servicios de verdad, cada uno en su sitio, hablando entre sí solo por donde debe. Es el cierre del Tema 3: llevas desde la primera sesión construyendo piezas sueltas — red, cómputo, almacenamiento, datos — y hoy las has visto funcionar juntas, con sus fallos incluidos, no solo en el diagrama de los apuntes. El resto del módulo se construye sobre esta misma arquitectura: en el Tema 4 le añades varias copias de la aplicación y un balanceador para eliminar el primer SPOF de tu tabla del Paso 6.
 
-!!! danger "Antes de salir: esta vez sí, limpia todo"
-    A diferencia de la 3.2, ninguna actividad posterior reutiliza exactamente esta infraestructura tal cual — el Tema 4 la reconstruye con cambios importantes (varias instancias, balanceador). Si no vas a seguir trabajando en las próximas horas, limpia:
+!!! danger "Antes de salir: detén lo que haga falta, pero no borres lo que reutiliza la 4.1"
+    La Actividad 4.1 reutiliza directamente el bucket S3 del frontend y la base de datos RDS —no hace falta reconstruir ninguno de los dos desde cero—, así que borrarlos hoy solo crea trabajo de más mañana. Si no vas a seguir trabajando en las próximas horas:
 
-    1. Vacía y borra el bucket **`escaparate-front-<tu-identificador>`** (S3 no deja borrar un bucket con objetos dentro: **Vaciar** primero, **Eliminar** después).
-    2. Borra tu instancia RDS (**Acciones → Eliminar**) — si quieres conservar un snapshot final, créalo antes de eliminarla.
-    3. Termina la instancia EC2 de Escaparate.
-    4. Destruye la red de Terraform: `terraform destroy -var="identificador=<tu-identificador>"` desde `recursos/tema3/red-base`.
+    1. **No borres el bucket** `escaparate-front-<tu-identificador>` — la 4.1 solo le cambia el `config.js` de dentro, el bucket en sí se queda tal cual está.
+    2. **No borres la instancia RDS: detenla** (**Acciones → Detener temporalmente**) en vez de eliminarla — dejas de pagar el cómputo sin perder los datos ni el modo de credenciales que tenga configurado ahora mismo. Recuerda que se reinicia sola a los 7 días si no la arrancas antes; si además quieres conservar un snapshot, créalo antes de detenerla.
+    3. Termina la instancia EC2 de Escaparate — esta sí puedes borrarla del todo: la 4.1 lanza una instancia nueva desde una imagen propia, no reutiliza esta.
+    4. Destruye la red de Terraform si quieres (`terraform destroy -var="identificador=<tu-identificador>"` desde `recursos/tema3/red-base`) — la 4.1 ya contempla que puede que la hayas destruido y te indica cómo recrearla.
 
-    Si vas a continuar mañana con el mismo entorno, basta con detener (no terminar) la instancia EC2 y la instancia RDS, y dejar la red y el bucket como están — recuerda que la IP pública de EC2 volverá a cambiar al arrancarla de nuevo.
+    Si vas a continuar mañana con el mismo entorno, basta con detener (no terminar) la instancia EC2 además de la RDS, y dejar la red y el bucket como están — recuerda que la IP pública de EC2 volverá a cambiar al arrancarla de nuevo.

@@ -213,7 +213,6 @@ El asistente del Paso 2 ha creado un grupo de seguridad con una regla por defect
     Esto tarda de verdad — cuenta con **10 a 20 minutos**, a veces más, aunque tu base de datos esté casi vacía: AWS tiene que crear una instancia en espera completa desde cero en otra zona y dejar la réplica síncrona funcionando antes de marcarlo como disponible. No es que se haya quedado colgado — aprovecha la espera para lo que viene, no hace falta quedarte mirando.
 
     ![El diálogo "Convertir a implementación Multi-AZ"](img/actividad_3_2_paso6_a.png)
-    *🖼️ Captura de referencia del profesor pendiente de capturar*
 
 2. Cuando vuelva a `available` (compruébalo en la consola, o con `aws rds describe-db-instances --db-instance-identifier escaparate-db-<tu-identificador> --query "DBInstances[0].[DBInstanceStatus,MultiAZ]" --output text`), desde tu propia **CloudShell** deja corriendo un bucle que mida la respuesta cada segundo, apuntando a la **IP pública** de tu instancia (no `localhost` — eso apuntaría a la propia CloudShell, no a Escaparate; el puerto 8080 ya lo abriste al mundo en el Paso 5):
 
