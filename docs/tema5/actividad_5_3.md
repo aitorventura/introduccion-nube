@@ -5,7 +5,7 @@
 
 ## Prompt pendiente
 
-**Qué usamos**: la arquitectura completa de Escaparate construida hasta ahora (EC2, ALB, RDS, EFS y/o S3 — según qué haya elegido cada alumno en la 5.2).
+**Qué usamos**: la arquitectura completa de Escaparate construida hasta ahora (EC2, ALB, RDS, EFS y/o S3 — según qué haya elegido cada alumno en la 5.2). No hace falta desplegar nada nuevo de Escaparate para esta actividad (es solo estimación de coste), pero si se necesitara, la distribución de referencia sería `escaparate-distribuciones/escaparate-cloud.zip` (ver `DISTRIBUCIONES-DOCENTES.md`).
 
 **Idea central**: poner un número real a la arquitectura concreta que el alumno ha construido —no una arquitectura genérica de ejemplo—, con la calculadora oficial de AWS, desglosada componente a componente.
 

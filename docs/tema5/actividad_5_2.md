@@ -5,6 +5,8 @@
 
 ## Prompt pendiente
 
+**Fuente del código**: usa `escaparate-distribuciones/escaparate-cloud.zip` (fuera del repo público, ver `DISTRIBUCIONES-DOCENTES.md` en esa misma carpeta) — ya trae `S3Storage`/`S3Config` y el AWS SDK incluidos, no hace falta clonar/compilar desde `escaparate-app/`. Confirmado: el `pom.xml`, el esquema y los controladores son idénticos a lo ya usado en 3.2/3.3/4.1, esta distribución solo añade la pieza de S3 encima.
+
 **Qué usamos**: Escaparate, moviendo sus imágenes de EFS a S3 — confirmado, la clase se llama de verdad `S3Storage` (implementa la misma interfaz `AlmacenamientoImagenes` que `FileSystemStorage`, así que el cambio es solo de configuración):
 
 ```bash

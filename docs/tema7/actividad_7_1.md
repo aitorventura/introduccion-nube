@@ -5,7 +5,7 @@
 
 ## Prompt pendiente
 
-**Qué usamos**: la arquitectura final de Escaparate, tal como ha quedado construida por el propio alumno al final del módulo (no una arquitectura mal diseñada preparada aparte por el profesor, que era el planteamiento anterior).
+**Qué usamos**: la arquitectura final de Escaparate, tal como ha quedado construida por el propio alumno al final del módulo (no una arquitectura mal diseñada preparada aparte por el profesor, que era el planteamiento anterior). No hace falta desplegar nada nuevo (es auditoría de lo ya construido), pero si hiciera falta algún ejemplo adicional, la distribución de referencia sería `escaparate-distribuciones/escaparate-cloud.zip` (ver `DISTRIBUCIONES-DOCENTES.md`).
 
 **Idea central**: auditoría de su propia arquitectura de Escaparate contra los seis pilares del marco Well-Architected, con propuesta de mejora y coste estimado de aplicarla.
 

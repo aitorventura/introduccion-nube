@@ -5,6 +5,8 @@
 
 ## Prompt pendiente
 
+**Fuente del código**: usa `escaparate-distribuciones/escaparate-cloud.zip` (fuera del repo público, ver `DISTRIBUCIONES-DOCENTES.md`) como base para construir la imagen Docker — es la distribución que recomienda el compañero para esta actividad (backend contenerizado + RDS/S3 + frontend separado).
+
 **Qué usamos**: el backend de Escaparate, la misma imagen Docker de `soluciones-profesor/01-docker` (ya existe, no hay que crearla de cero), publicada en ECR y desplegada en ECS/Fargate. Hay una plantilla real de referencia en `soluciones-profesor/07-aws/ecs-task-definition.template.json` — mirar solo esa carpeta, no el resto de `soluciones-profesor`.
 
 **Variables mínimas del task/container** (confirmadas en `soluciones-profesor/07-aws/README.md`, ya usadas en 3.2/4.1/5.2 — nada nuevo que aprender aquí):

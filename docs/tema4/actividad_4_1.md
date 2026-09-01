@@ -40,6 +40,14 @@ La base de datos RDS de la Actividad 3.2 (el Paso 0 te indica cómo continuar, t
 
 Redespliega la red de Terraform si la has destruido al cerrar la 3.3 (mismo comando de siempre desde `recursos/tema3/red-base`).
 
+!!! warning "Si has recreado la red, se pierde la regla del puerto 8080"
+    La regla que abriste en el `security_group_id` de Terraform para el puerto 8080 (Paso 5 de la 3.2) la añadiste a mano por CLI o consola —Terraform no la gestiona, así que si destruyes y vuelves a desplegar la red, el grupo de seguridad nace limpio, sin ella—. Si más adelante, en el reto de escalado vertical de esta misma actividad, el `curl` contra la instancia suelta del Paso 1 se queda siempre en `000` aunque la aplicación esté arrancada y escuchando por dentro, es casi seguro que sea esto. Compruébalo y vuelve a abrirla si hace falta:
+
+    ```bash
+    aws ec2 authorize-security-group-ingress --group-id <security_group_id> \
+      --protocol tcp --port 8080 --cidr 0.0.0.0/0
+    ```
+
 Con la base de datos RDS, lo que hagas depende de qué dejaste al cerrar la 3.3:
 
 - **Si solo la detuviste** (no la destruiste): arráncala desde la consola (**Acciones → Comenzar**) y sigue con el mismo endpoint y el mismo modo de credenciales que ya tenía. Si en su día hiciste el reto de la réplica de lectura de la 3.2, esta RDS seguirá en modo autoadministrado — tenlo presente para el reto de escalado vertical de esta misma actividad, más adelante.
@@ -108,10 +116,11 @@ Hasta ahora el puerto 8080 de Escaparate estaba abierto a `0.0.0.0/0` (herencia 
 
 1. Crea un grupo de seguridad `escaparate-alb-sg-<tu-identificador>` en tu VPC, con una única regla de entrada: puerto **80**, origen `0.0.0.0/0` — es el único punto de la arquitectura que sigue abierto a cualquiera, y es exactamente lo que un balanceador está pensado para ser.
 2. Crea un segundo grupo de seguridad `escaparate-app-sg-<tu-identificador>`, con una única regla de entrada: puerto **8080**, origen el grupo de seguridad `escaparate-alb-sg-<tu-identificador>` que acabas de crear — no una IP, no `0.0.0.0/0`.
+3. Añade una regla de salida en `escaparate-alb-sg`: puerto **8080**, destino el grupo de seguridad `escaparate-app-sg-<tu-identificador>` que acabas de crear. No des por hecho que la regla de salida por defecto del grupo vale tal cual —dependiendo de cómo lo hayas creado, puede venir ya restringida solo al puerto 80, calcada de la regla de entrada—, así que revísala y añade esta explícitamente si no está. El motivo: el balanceador y su propio grupo de seguridad tienen que poder salir por el puerto **8080**, no solo por el 80: el navegador habla con el ALB por el 80, pero el ALB habla con las instancias por el 8080, y son dos conexiones distintas con dos puertos distintos. Si la salida se queda restringida al 80, el balanceador nunca llega a alcanzar las instancias y el grupo de destino se queda en `Target.Timeout` para siempre, aunque todo lo demás esté bien configurado.
 
-**Comprueba**: que `escaparate-app-sg` tiene como origen de su única regla el propio `escaparate-alb-sg`, no un rango de IPs.
+**Comprueba**: que `escaparate-app-sg` tiene como origen de su única regla el propio `escaparate-alb-sg`, no un rango de IPs; y que `escaparate-alb-sg` tiene una regla de salida explícita al puerto 8080 con destino `escaparate-app-sg`.
 
-**Captura**: las dos reglas de entrada, cada una en su grupo de seguridad, mostrando el origen exacto de cada una.
+**Captura**: las dos reglas de entrada, cada una en su grupo de seguridad, mostrando el origen exacto de cada una, y la regla de salida de `escaparate-alb-sg`.
 
 ### Paso 4 — Crea el grupo de destino y el balanceador
 
@@ -131,8 +140,17 @@ Abre `recursos/tema4/actividad_4_1/arranque-instancia.sh` de los recursos de hoy
 2. **Imagen de la aplicación y el SO**, pestaña **Mis AMIs** → tu `escaparate-ami-<tu-identificador>` del Paso 1.
 3. Tipo de instancia `t3.small` (Spring Boot, misma razón que en la 3.2).
 4. **Par de claves**: no incluir.
-5. **Configuraciones de red**: no fijes subred aquí (el ASG la asigna él mismo en el Paso 6) — en **Firewall (grupos de seguridad)**, elige **Seleccionar grupos de seguridad existentes** y marca **los dos**: `security_group_id` de Terraform (SSH + EFS) y `escaparate-app-sg-<tu-identificador>` (8080 desde el ALB).
-6. Despliega **Detalles avanzados**: en **Perfil de instancia de IAM**, `LabInstanceProfile` — lo necesitas para que el script de arranque pueda leer el endpoint de RDS y la contraseña por CLI. Activa la asignación automática de IP pública.
+5. **Configuraciones de red**: esta sección del asistente tiene dos partes independientes, y solo rellenas una:
+
+    - **Subred**: déjalo como está (**No hay preferencia**, o el desplegable vacío) — no elijas ninguna subred concreta aquí. El motivo: la plantilla no lanza instancias por sí sola, es el grupo de escalado automático quien la usa para lanzarlas, y es **él** quien decide en qué subred va cada una (lo configurarás en el Paso 6). Si fijaras aquí una subred, todas las instancias nacerían siempre en la misma zona, y perderías el reparto entre dos zonas que necesitas.
+    - **Firewall (grupos de seguridad)**: aquí sí tienes que elegir. Marca **Seleccionar grupos de seguridad existentes** y activa **los dos** grupos siguientes a la vez:
+        - el `security_group_id` de Terraform (el que trae las reglas de SSH y del puerto 2049 de EFS entre instancias del mismo grupo — sin él, la instancia no podría montar el sistema de archivos del Paso 2);
+        - `escaparate-app-sg-<tu-identificador>` del Paso 3 (el que abre el puerto 8080 solo desde el ALB).
+
+        Puedes marcar los dos porque los grupos de seguridad en AWS son **acumulativos**: una instancia puede llevar varios a la vez, y las reglas de todos se suman — no se sustituyen entre sí. Si solo marcaras uno de los dos, a la instancia le faltaría la mitad de los permisos que necesita (o EFS, o el tráfico del balanceador).
+    - **IP pública**: como no has fijado subred, el interruptor simple de "Asignación automática de IP pública" que aparece arriba **no es fiable** — a veces no se aplica. Despliega **Interfaces de red** (dentro de esta misma sección) → **Añadir interfaz de red** → deja la subred vacía igual que antes, y en **IP pública automática** elige explícitamente **Habilitar**. Sin esto, las instancias arrancan sin salida a internet, y el script de datos de usuario falla en la primera llamada a `aws` (no puede leer el endpoint de RDS) — Escaparate nunca llega a arrancar, y el grupo de destino nunca muestra ninguna instancia `healthy`, por mucho que esperes.
+
+6. Despliega **Detalles avanzados**: en **Perfil de instancia de IAM**, `LabInstanceProfile` — lo necesitas para que el script de arranque pueda leer el endpoint de RDS y la contraseña por CLI.
 7. En **Datos de usuario**, pega el contenido ya editado de `arranque-instancia.sh`.
 8. Crea la plantilla.
 
@@ -195,11 +213,11 @@ Abre la URL del bucket en el navegador y recarga varias veces.
 
 ### Paso 9 — Sube una imagen y compruébala desde otra réplica
 
-Da de alta un producto nuevo con foto desde el catálogo. Sin volver a subir nada, recarga varias veces hasta que el `curl` de comprobación (o las herramientas de desarrollador) confirme que una petición distinta ha respondido otra instancia.
+Da de alta un producto nuevo con foto desde el catálogo. El propio frontend trae un panel "Información de la instancia" que muestra el `Instancia: i-...` de la réplica que ha respondido esa carga de página —anota el identificador que aparece justo después de subir el producto—. Sin volver a subir nada, recarga la página varias veces (`F5`) mirando ese mismo panel, hasta que el identificador cambie al de la otra instancia.
 
 **Comprueba**: que la foto del producto se ve igual sea cual sea la réplica que responda — es la prueba de que EFS soluciona de verdad el problema que tenía `FileSystemStorage` con varias copias.
 
-**Captura**: el producto con su foto visible en el catálogo, tras confirmar (por `/api/instancia`) que la petición la ha servido una réplica distinta a la que ha recibido la subida.
+**Captura**: el producto con su foto visible en el catálogo, con el panel "Información de la instancia" mostrando un identificador distinto al que anotaste tras la subida.
 
 !!! question "Reflexiona"
     Antes de esta sesión, cualquiera con la IP pública de tu instancia de la 3.3 podía llegar directamente a Escaparate. Ahora esa IP ya ni siquiera existe de forma estable — cada instancia del ASG puede desaparecer y ser reemplazada por otra con una IP distinta. ¿Qué le pasaría a un usuario que se hubiera guardado esa IP antigua, y qué te dice eso sobre por qué a un usuario nunca se le debe dar una dirección que apunte directamente a una instancia?
@@ -216,14 +234,18 @@ Da de alta un producto nuevo con foto desde el catálogo. Sin volver a subir nad
 
 - **Genera carga real y mide el escalado**: antes de lanzar nada, **predice** cuánto tiempo crees que va a pasar desde que la CPU media supera el 50 % hasta que una instancia nueva empieza a responder tráfico de verdad. Después, genera carga de verdad contra el endpoint pensado para esto:
 
+    Una sola tanda de peticiones dura apenas un segundo — CloudWatch calcula la CPU media sobre una ventana de varios minutos, así que un pico de un segundo se diluye a casi nada en la media y nunca cruza el 50 %. Necesitas carga sostenida, no un golpe suelto: mantén el bucle disparando tandas seguidas durante varios minutos, con peticiones más largas y más concurrencia —lanzar muchos `curl` en paralelo también cuesta CPU en tu propia terminal, así que subir la duración de cada petición (`ms`) sostiene la carga sin depender de arrancar procesos nuevos sin parar—:
+
     ```bash
-    for i in {1..50}; do
-      curl -s "http://<dns-del-balanceador>/api/carga?ms=1000" &
+    for tanda in {1..45}; do
+      for i in {1..80}; do
+        curl -s "http://<dns-del-balanceador>/api/carga?ms=4000" &
+      done
+      wait
     done
-    wait
     ```
 
-    Repite la llamada en un bucle mientras vigilas la métrica de CPU del grupo de destino (**EC2 → Grupos de Auto Scaling → tu grupo → pestaña Monitorización**) y el número de instancias.
+    Déjalo corriendo (unos 3 minutos, puedes cortarlo antes con `Ctrl+C` en cuanto veas que ha escalado). Para vigilar la CPU en tiempo real: **EC2 → panel izquierdo, sección Auto Scaling → Grupos de Auto Scaling → clic en el nombre de tu grupo → pestaña Monitorización → Detalles de monitoreo de CloudWatch**. Ahí verás dos bloques de gráficos, uno por **Auto Scaling** y otro por **EC2** — el que necesitas es el del bloque **EC2**, llamado **Utilización de la CPU (Porcentaje)**: es la media real de todas las instancias del grupo, con la línea del 50 % marcada. La pestaña **Actividad** del mismo grupo, al lado de Monitorización, te muestra cada lanzamiento con su hora exacta en cuanto ocurra.
 
     **Comprueba**: que el ASG añade al menos una instancia nueva por encima de la capacidad deseada mientras dura la carga, y que tu predicción se acerca (o no) al tiempo real medido desde que la métrica cruza el 50 % hasta que la instancia nueva aparece `healthy`.
 
@@ -262,7 +284,7 @@ Da de alta un producto nuevo con foto desde el catálogo. Sin volver a subir nad
     1. Anota el tipo de instancia actual (**Instancias** → columna **Tipo de instancia**, debería ser `t3.small`).
     2. **Predice**: ¿cuántos minutos crees que va a estar caído el servicio mientras cambias el tipo de instancia?
     3. Detén la instancia (**Estado de la instancia → Detener instancia**) — anota la hora exacta.
-    4. Con la instancia ya `Detenida`: **Acciones → Configuración de la instancia → Cambiar tipo de instancia** → elige `t3.xlarge` (así se nota también el salto de vCPU, no solo el de memoria) → **Aplicar**.
+    4. Con la instancia ya `Detenida`: **Acciones → Configuración de la instancia → Cambiar tipo de instancia** → elige `t3.large` → **Aplicar**.
     5. Arranca la instancia de nuevo (**Estado de la instancia → Iniciar instancia**) y anota su nueva IP pública (recuerda: cambia).
     6. Conéctate y ejecuta el script que has dejado guardado: `bash ~/reiniciar-escaparate.sh`.
     7. Desde CloudShell, comprueba en bucle cuándo vuelve a responder:
@@ -270,17 +292,22 @@ Da de alta un producto nuevo con foto desde el catálogo. Sin volver a subir nad
         ```bash
         while true; do
           date
-          curl -s -o /dev/null -w "%{http_code}\n" http://<ip-nueva>:8080/api/salud/listo
+          curl -s -o /dev/null -w "%{http_code}\n" --connect-timeout 2 --max-time 3 http://<ip-nueva>:8080/api/salud/listo
           sleep 2
         done
         ```
 
+        Los timeouts (`--connect-timeout`, `--max-time`) son necesarios: sin ellos, `curl` se queda colgado sin límite de tiempo si la instancia todavía no acepta conexiones, y el bucle deja de repetirse cada 2 segundos —parece bloqueado, pero solo está esperando a un `curl` que nunca vuelve—. Con los timeouts verás `000` (sin respuesta) cada pocos segundos hasta que la instancia esté lista de verdad.
+
     8. En cuanto veas el primer `200`, para el bucle (Ctrl+C) y calcula el tiempo real transcurrido desde que has detenido la instancia en el punto 3.
-    9. Confirma que el recurso ha cambiado de verdad, no solo que ha tardado: `nproc` (antes 2, ahora debería mostrar 4) y `free -h` (memoria muy por encima de antes).
+    9. Confirma que el recurso ha cambiado de verdad, no solo que ha tardado: `free -h` (memoria muy por encima de antes, de unos 2 GiB a unos 8 GiB).
 
-    **Comprueba**: que la columna **Tipo de instancia** en el listado de EC2 muestra ya `t3.xlarge` (la confirmación más directa: es el propio dato de AWS, no una inferencia tuya), y que `nproc`/`free -h` lo confirman también desde dentro del sistema operativo.
+    !!! warning "Por qué `t3.large` y no `t3.xlarge`"
+        Un tipo de instancia `.xlarge` (o superior) sería el candidato más claro para notar también el salto de vCPU, no solo el de memoria —dentro de la familia `t3`, todos los tamaños hasta `large` llevan 2 vCPU por igual, y no es hasta `xlarge` que pasan a 4—. Pero el Learner Lab deniega por política cualquier tipo de instancia `.xlarge` o superior, con un `explicit deny` que ni siquiera el rol del laboratorio puede saltarse: si lo intentas, `Iniciar instancia` falla con un error de autorización. Por eso te quedas en `t3.large`: verás el salto real de memoria, pero `nproc` seguirá mostrando 2 vCPU antes y después —es una limitación del propio laboratorio, no un error tuyo ni una limitación de AWS en general.
 
-    **Captura**: el listado de instancias mostrando el cambio de tipo (`t3.small` → `t3.xlarge`), la hora de detención y la hora del primer `200` tras el cambio, y la salida de `nproc`/`free -h` después del cambio.
+    **Comprueba**: que la columna **Tipo de instancia** en el listado de EC2 muestra ya `t3.large` (la confirmación más directa: es el propio dato de AWS, no una inferencia tuya), y que `free -h` lo confirma también desde dentro del sistema operativo.
+
+    **Captura**: el listado de instancias mostrando el cambio de tipo (`t3.small` → `t3.large`), la hora de detención y la hora del primer `200` tras el cambio, y la salida de `free -h` después del cambio.
 
 **Entrega**: los tres incidentes documentados con sus capturas, y una frase por cada uno explicando qué mecanismo concreto ha respondido (comprobación de salud + reposición automática en el primero; política de escalado por CPU en el segundo; cambio manual de tipo de instancia, sin disparador automático, en el tercero).
 
@@ -316,7 +343,7 @@ Escaparate ya no depende de ninguna instancia concreta: el balanceador reparte, 
 !!! danger "No borres el balanceador, el ASG ni el EFS: la Actividad 4.2 los reutiliza tal cual"
     La 4.2 le pone dominio propio, HTTPS y una CDN a esta misma arquitectura — necesita el balanceador, el grupo de escalado, la plantilla de lanzamiento, el EFS, la base de datos y la red exactamente como están ahora. Solo hay una pieza que ya no hace falta:
 
-    1. Termina la instancia suelta del Paso 1 (la que has usado para preparar la AMI, y para el reto de escalado vertical si lo has hecho) si sigue encendida — ya cumplió su función, la AMI ya la tienes capturada y no forma parte del grupo de escalado. Si la has dejado en `t3.xlarge` tras el reto, más razón para no dejarla encendida sin necesidad.
+    1. Termina la instancia suelta del Paso 1 (la que has usado para preparar la AMI, y para el reto de escalado vertical si lo has hecho) si sigue encendida — ya cumplió su función, la AMI ya la tienes capturada y no forma parte del grupo de escalado. Si la has dejado en `t3.large` tras el reto, más razón para no dejarla encendida sin necesidad.
     2. Si no vas a continuar en las próximas horas, puedes bajar la capacidad del ASG a mínima 1, deseada 1 (Editar el grupo de Auto Scaling) para reducir el gasto sin perder la configuración — recuerda volver a subirla a 2 antes de medir nada en el futuro, porque con una sola instancia no hay balanceo real que observar.
 
     No toques el balanceador, el grupo de destino, la plantilla de lanzamiento, el EFS, la instancia RDS ni la red de Terraform — todo eso sigue en pie hasta el cierre de la Actividad 4.2.

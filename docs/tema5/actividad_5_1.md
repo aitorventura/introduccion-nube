@@ -7,6 +7,8 @@
 
 **Qué usamos**: Escaparate ya desplegado (con lo construido en los Temas 3 y 4).
 
+**Fuente del código**: ya no hace falta clonar/compilar desde `escaparate-app/` — usa `escaparate-distribuciones/escaparate-desacoplado.zip` (fuera del repo público, ver `DISTRIBUCIONES-DOCENTES.md` en esa misma carpeta), que es la distribución que recomienda el compañero para esta actividad. Es funcionalmente idéntica a lo que ya usamos en 3.3/4.1, solo que empaquetada como distribución fija en vez de clonada del repo completo.
+
 **Idea central**: es mejor observar y diagnosticar una arquitectura real ya existente que montar métricas de cero sobre algo nuevo. Confirmado en `soluciones-profesor/07-aws/README.md`: la app no necesita ningún cambio de código para esto — sus logs son simplemente stdout/stderr (los que ya genera el contenedor o el servicio), recogibles como logs de CloudWatch tal cual; y `/api/carga?ms=...`, `/api/salud/*` y las métricas propias de ALB/EC2 son las piezas concretas que se correlacionan para ver comportamiento y carga en el dashboard.
 
 **Referencia de la chuleta original** (revalidar el "hito H7" contra `curriculum.md`): fila 5.1.
