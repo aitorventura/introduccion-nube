@@ -12,7 +12,47 @@ Una aplicación con balanceador y escalado automático ya se repone sola si una 
 
 Cuando escribes `miapp.tudominio.com` en el navegador, tu ordenador no sabe hablar con un nombre — necesita una dirección IP. El **DNS** (*Domain Name System*) es el sistema que hace esa traducción: una especie de agenda de contactos gigante y repartida por todo internet, donde cada nombre de dominio tiene asociada la dirección real a la que hay que conectarse. Sin DNS, tendrías que memorizar y escribir directamente la dirección IP de cada sitio que quisieras visitar.
 
-Un servicio de DNS gestionado —como **Route 53**— te permite alojar tu propia **zona** (el conjunto de registros DNS de un dominio) sin tener que montar y mantener tú un servidor de nombres. Dentro de esa zona defines **registros**: entradas que traducen un nombre legible en algo que un ordenador puede usar para conectar.
+Esa agenda de contactos no la lleva un único servidor, sino que está repartida entre muchísimos servidores distintos, cada uno responsable de una porción del nombre. Para tu propio dominio, esa porción la puedes alojar tú mismo con **Route 53**, el servicio de AWS pensado para esto: en vez de montar y mantener tu propio servidor de nombres, usas el de AWS. Ese conjunto de registros de tu dominio, alojado en Route 53, es lo que se llama una **zona**.
+
+Resolver un nombre no es preguntarle a un único servidor, sino a varios, cada uno con un papel distinto:
+
+| Quién | Qué papel tiene |
+|---|---|
+| Resolver recursivo | Hace todas las preguntas siguientes en tu lugar, saltando de servidor en servidor hasta conseguir la respuesta final. No guarda ningún registro propio — normalmente es el de tu operador de internet, o el que trae configurado tu sistema operativo. |
+| Servidor raíz | La cima de todo el sistema DNS mundial —hay solo unos pocos, repartidos por el planeta—. No conoce ninguna dirección, pero sabe qué servidor lleva cada terminación de dominio (`.com`, `.org`, `.es`...). |
+| Servidor de `.com` (servidor TLD, *Top Level Domain*) | Responsable de todo un dominio de primer nivel como `.com`. Tampoco conoce la dirección final, pero sabe qué servidor concreto es responsable de cada dominio registrado bajo él, como `tudominio.com`. |
+| Servidor autoritativo | El único de la cadena que guarda de verdad los registros de un dominio concreto, y por tanto el único capaz de responder con la dirección definitiva. Es justo el papel que cumple Route 53 para las zonas que alojas en él. |
+
+Con estos cuatro papeles ya claros, mira cómo encajan en la cadena completa de preguntas que hace falta para resolver un nombre:
+
+```mermaid
+sequenceDiagram
+    participant Tú as Tu ordenador
+    participant R as Resolver recursivo
+    participant Raiz as Servidor raíz
+    participant TLD as Servidor .com
+    participant Auth as Servidor autoritativo (Route 53)
+
+    Tú->>R: ¿Dirección de miapp.tudominio.com?
+    R->>Raiz: ¿Quién sabe de .com?
+    Raiz-->>R: Pregunta al servidor de .com
+    R->>TLD: ¿Quién sabe de tudominio.com?
+    TLD-->>R: Pregunta a Route 53
+    R->>Auth: ¿Dirección de miapp.tudominio.com?
+    Auth-->>R: Aquí está
+    R-->>Tú: Dirección (y la guarda en caché el tiempo que marque el TTL)
+```
+
+Sigue las flechas en orden: tu ordenador solo le habla al resolver recursivo, nunca directamente a los demás. Es el resolver quien va subiendo la cadena —raíz, luego `.com`, luego el autoritativo— y cada escalón, salvo el último, no contesta la pregunta: solo indica a quién preguntar después. Solo el servidor autoritativo —Route 53, en este caso— conoce de verdad la dirección y se la devuelve.
+
+La buena noticia es que casi nunca ves esta cadena completa: tu proveedor de internet o tu propio sistema operativo ya guardan en caché las respuestas más frecuentes, así que la mayoría de las veces la resolución termina mucho antes de llegar al servidor autoritativo.
+
+Dentro de tu zona en Route 53 defines **registros**: entradas que traducen un nombre legible en algo que un ordenador puede usar para conectar.
+
+!!! note "Alojar la zona no es lo mismo que ser dueño del dominio"
+    Son dos servicios independientes, aunque mucha gente los contrate juntos en el mismo sitio por comodidad. El **registrador** es la empresa donde compras `tudominio.com` —por ejemplo GoDaddy, o el propio Route 53— y certifica que ese nombre es tuyo, sin más. Alojar la **zona** es otra cosa: es dónde viven de verdad los registros DNS de ese dominio, y lo puede hacer un proveedor completamente distinto al registrador —podrías comprar el dominio en GoDaddy y alojar la zona en Route 53, por ejemplo—. En este módulo das por hecho que el dominio ya está comprado; te centras solo en la zona.
+
+Dos de los tipos de registro de la tabla mencionan una **CDN** —una red que guarda copias de tu contenido cerca de cada visitante, para no tener que servirlo siempre desde tu región—; la explico con detalle un poco más abajo, en su propia sección, así que de momento quédate solo con que es "otro recurso más al que un registro puede apuntar".
 
 | Tipo de registro | Traduce a | Cuándo lo usas |
 |---|---|---|
@@ -62,10 +102,22 @@ Fíjate en el diagrama: el certificado se instala en el balanceador, no en cada 
 
 ## ⚙️ CDN: caché en el borde, TTL e invalidación
 
-Una **CDN** (*Content Delivery Network*, como CloudFront) guarda copias de tu contenido estático en ubicaciones de borde repartidas por el mundo —las mismas que viste en la sesión 1—, para que un visitante lejano de tu región no tenga que esperar a que la petición viaje hasta allí y vuelva.
+Una **CDN** (*Content Delivery Network*, como CloudFront) guarda copias de tu contenido estático en ubicaciones de borde repartidas por el mundo —las mismas que has visto en la sesión 1—, para que un visitante lejano de tu región no tenga que esperar a que la petición viaje hasta allí y vuelva.
+
+![Una CDN acerca el contenido al visitante: cada usuario se sirve desde su ubicación de borde más cercana, no desde la región de origen](img/diagrama_cdn_borde.png)
+
+El diagrama de arriba es la otra cara del que ya has visto en la sesión 1: allí las ubicaciones de borde aparecían como parte de la infraestructura global; aquí es donde entra en juego la distancia real — el visitante cercano a la región apenas nota la CDN, y el visitante lejano es quien más gana con ella.
+
+AWS ofrece su propia CDN gestionada bajo el nombre **CloudFront**: le indicas qué origen tiene que copiar —un bucket S3, un balanceador de carga, prácticamente cualquier servidor HTTP— y CloudFront se encarga de todo lo demás: replica el contenido en sus ubicaciones de borde, gestiona el TTL y la invalidación desde la consola o por CLI, y añade HTTPS automático con su propio dominio y certificado, sin que tengas que aportar ni configurar nada tú. Es el mismo concepto que ya conoces del balanceador de carga: un servicio completamente gestionado, tú decides las reglas y AWS opera la infraestructura de detrás.
+
+!!! tip "CloudFront en el Learner Lab"
+    Algunos Learner Labs bloquean CloudFront por política, como medida de control de coste en una cuenta compartida por muchos alumnos a la vez —lo puedes comprobar tú mismo con `aws cloudfront list-distributions`, que devuelve un error de autorización explícito si está bloqueado, distinto de una lista vacía—. Si es tu caso, la Actividad 4.2 te lo dice claramente y te enseña a construir la misma mecánica de caché (TTL, acierto/fallo de caché, invalidación) con un proxy propio en vez de con el servicio gestionado: los conceptos de esta página no cambian, solo quién opera la infraestructura.
 
 - **TTL** (*Time To Live*): cuánto tiempo guarda la CDN una copia antes de volver a pedirla al origen. Un TTL alto reduce peticiones al origen, pero también retrasa que los visitantes vean un cambio de contenido.
 - **Invalidación**: forzar a la CDN a descartar una copia en caché antes de que expire su TTL, para que la próxima petición sí vaya a buscar la versión nueva al origen.
+
+!!! example "El mismo TTL, dos escenarios muy distintos"
+    Un TTL de **300 segundos** (5 minutos) en el logo de una tienda significa, como mucho, 5 minutos de retraso si lo cambias — asumible. Ese mismo TTL de 300 segundos en el precio de un producto en oferta relámpago ya no lo es: durante esos 5 minutos, una CDN puede seguir sirviendo un precio que ya no es válido. Un TTL de **86400 segundos** (24 horas) en cambio tiene sentido para algo que casi nunca cambia, como una imagen de fondo. El TTL correcto no es un número fijo — depende de cuánto te cuesta que alguien vea una versión antigua.
 
 ```mermaid
 sequenceDiagram
@@ -105,10 +157,11 @@ No todo el contenido de una aplicación se beneficia igual de una CDN. La regla 
 
 ??? tip "Abrir resumen"
 
-    - Una zona DNS gestionada aloja registros que traducen nombres a recursos; un registro Alias es la forma recomendada de apuntar a un balanceador dentro de AWS.
+    - Resolver un nombre de dominio es una cadena de preguntas (resolver → raíz → TLD → autoritativo); una zona DNS gestionada aloja los registros que responden en el último paso, y alojar la zona no es lo mismo que ser dueño del dominio.
+    - Un registro Alias es la forma recomendada de apuntar a un balanceador dentro de AWS, porque su dirección puede cambiar.
     - Las políticas de enrutamiento deciden a qué destino responder: simple, por latencia, por geolocalización, o con conmutación por error entre principal y secundario.
     - Un certificado gestionado (ACM) habilita HTTPS en el borde — se instala en el balanceador, no en cada instancia, y el tramo interno puede seguir siendo HTTP.
-    - Una CDN guarda copias en ubicaciones de borde; el TTL decide cuánto dura la copia, y la invalidación fuerza a descartarla antes de tiempo.
+    - Una CDN guarda copias en ubicaciones de borde; el TTL decide cuánto dura la copia (un TTL corto tolera menos desactualización, uno largo reduce peticiones al origen), y la invalidación fuerza a descartarla antes de tiempo.
     - Solo merece la pena poner detrás de una CDN contenido igual para todos los visitantes — nunca datos que deban ser distintos para cada usuario.
 
 Con esto ya tienes las piezas para la Actividad 4.2 — Dominio propio y caché en el borde.

@@ -5,7 +5,10 @@
 
 ## Prompt pendiente
 
-**Qué usamos**: Escaparate ya desplegado (con lo construido en los Temas 3 y 4).
+**Qué usamos**: Escaparate ya desplegado (con lo construido en los Temas 3 y 4). El Cierre de la 4.2 borra el balanceador y el grupo de destino (es la única pieza de la 4.1 sin estado de pausa barato) y deja el ASG a capacidad 0 y la RDS detenida — como primer paso de esta actividad, hay que arrancar la RDS, recrear el balanceador y el grupo de destino, y subir el ASG de nuevo a mínima/deseada 2 antes de montar ninguna métrica.
+
+!!! note "Al escribir esta actividad: mueve el script de recreación del ALB aquí"
+    El script vive de momento en `recursos/tema4/actividad_4_1/recrear-alb.sh` (lo usa también el Cierre de la 4.2 para dejar constancia de dónde está). Cuando escribas esta actividad de verdad, cópialo (o muévelo) a `recursos/tema5/actividad_5_1/recrear-alb.sh` y empaquétalo en el zip de recursos de la 5.1, como primer paso explícito de un "Paso 0" — así el alumno lo tiene ya descargado junto con el resto de recursos de la sesión, sin ir a buscarlo a la carpeta de la 4.1.
 
 **Fuente del código**: ya no hace falta clonar/compilar desde `escaparate-app/` — usa `escaparate-distribuciones/escaparate-desacoplado.zip` (fuera del repo público, ver `DISTRIBUCIONES-DOCENTES.md` en esa misma carpeta), que es la distribución que recomienda el compañero para esta actividad. Es funcionalmente idéntica a lo que ya usamos en 3.3/4.1, solo que empaquetada como distribución fija en vez de clonada del repo completo.
 

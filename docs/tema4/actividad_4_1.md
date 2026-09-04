@@ -11,7 +11,6 @@
 Escaparate ha vivido hasta ahora sobre una única instancia: si se caía, se caía el catálogo entero — es justo el primer punto único de fallo que has anotado en la tabla de la Actividad 3.3. Hoy lo eliminas de verdad: conviertes esa instancia suelta en una imagen propia, la empaquetas en una plantilla de lanzamiento, y pones un grupo de escalado automático detrás de un balanceador para que Escaparate viva en varias copias a la vez, repuestas solas si una falla.
 
 ![Escaparate con ALB delante de un Auto Scaling Group de dos o más instancias, EFS compartido para las imágenes y RDS sin cambios](img/actividad_4_1_arquitectura.png)
-*🖼️ Captura de referencia del profesor pendiente de capturar*
 
 Con varias réplicas a la vez aparece un problema nuevo que con una sola instancia no existía: las imágenes de producto se guardaban en el disco local de esa única instancia (`FileSystemStorage`), así que un producto subido a una réplica "desaparece" cuando lo sirve otra. Hoy lo resuelves montando **EFS** en todas las instancias, sin cambiar una sola línea de Escaparate — para Java, EFS es simplemente una carpeta más.
 
@@ -344,6 +343,9 @@ Escaparate ya no depende de ninguna instancia concreta: el balanceador reparte, 
     La 4.2 le pone dominio propio, HTTPS y una CDN a esta misma arquitectura — necesita el balanceador, el grupo de escalado, la plantilla de lanzamiento, el EFS, la base de datos y la red exactamente como están ahora. Solo hay una pieza que ya no hace falta:
 
     1. Termina la instancia suelta del Paso 1 (la que has usado para preparar la AMI, y para el reto de escalado vertical si lo has hecho) si sigue encendida — ya cumplió su función, la AMI ya la tienes capturada y no forma parte del grupo de escalado. Si la has dejado en `t3.large` tras el reto, más razón para no dejarla encendida sin necesidad.
-    2. Si no vas a continuar en las próximas horas, puedes bajar la capacidad del ASG a mínima 1, deseada 1 (Editar el grupo de Auto Scaling) para reducir el gasto sin perder la configuración — recuerda volver a subirla a 2 antes de medir nada en el futuro, porque con una sola instancia no hay balanceo real que observar.
+    2. Si no vas a continuar en las próximas horas y el consumo de créditos te preocupa, puedes pausar sin destruir nada:
+        - **RDS**: **Acciones → Detener temporalmente** — se apaga el cómputo, no pierdes datos ni el modo de credenciales. Se reinicia sola a los 7 días si no la arrancas antes.
+        - **Grupo de Auto Scaling**: **Editar** → capacidad mínima **0**, deseada **0** (no hace falta dejarla en 1, el ASG termina las dos instancias solas sin lanzar reemplazos). La plantilla de lanzamiento, el grupo de destino y el propio ASG se quedan configurados tal cual.
+    3. **Antes de continuar con la Actividad 4.2** (o de volver a medir nada del escalado), si has pausado algo de lo anterior: arranca primero la RDS y espera a que esté `available`, y solo entonces sube el ASG de nuevo a mínima 2, deseada 2 — el orden importa, porque las instancias nuevas necesitan la base de datos ya arrancada para conseguir arrancar Escaparate.
 
-    No toques el balanceador, el grupo de destino, la plantilla de lanzamiento, el EFS, la instancia RDS ni la red de Terraform — todo eso sigue en pie hasta el cierre de la Actividad 4.2.
+    No borres el balanceador, el grupo de destino, la plantilla de lanzamiento, el EFS, la instancia RDS ni la red de Terraform — pausar no es lo mismo que destruir, y todo esto sigue haciendo falta hasta el cierre de la Actividad 4.2.
