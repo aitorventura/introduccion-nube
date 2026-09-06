@@ -2421,6 +2421,11 @@
 
 <div><p><a id="seguridad-red"></a></p>
 <h1 id="2-seguridad-de-red">🧩 2. Seguridad de red<a class="headerlink" href="#2-seguridad-de-red" title="Permanent link">¶</a></h1>
+<p><embed alt="Diapositivas" src="../diapositivas/seguridad-red.pdf" style="width:100%;min-height:80vh" type="application/pdf"></embed></p>
+<div class="admonition info">
+<p class="admonition-title">Descarga de diapositivas</p>
+<p><a href="../diapositivas/seguridad-red.pptx" rel="noopener" target="_blank">Descarga las diapositivas</a></p>
+</div>
 <hr>
 <p>Ya tienes una VPC con subredes públicas y privadas bien repartidas — la sesión pasada construiste el terreno. Pero una subred pública sin ningún filtro más es solo una puerta abierta de par en par: cualquier instancia que lances ahí queda expuesta a todo internet, en todos sus <strong>puertos</strong> (un puerto es un número que identifica, dentro de una misma máquina, a qué servicio concreto va dirigida una conexión — el puerto 80, por ejemplo, es el que usa un servidor web para atender peticiones), salvo que añadas algo que decida quién entra y quién no.</p>
 <p>Hoy añades dos piezas para eso: dos capas de filtrado que se confunden constantemente entre sí, y el hábito de administrar una instancia sin dejar su puerto de <strong>SSH</strong> —el mismo que usaste en la Actividad 2.1— abierto al mundo entero. Hay un problema distinto, del lado de las subredes privadas: a veces también necesitan salir a internet, sin por eso dejar de ser inalcanzables desde fuera. Esa tercera pieza también la resuelves hoy.</p>
