@@ -2,6 +2,11 @@
 
 # 🧩 1. Servicios de almacenamiento
 
+![Diapositivas](diapositivas/almacenamiento.pdf){ type=application/pdf style="width:100%;min-height:80vh" }
+
+!!!info "Descarga de diapositivas"
+    [Descarga las diapositivas](diapositivas/almacenamiento.pptx){target="_blank" rel="noopener"}
+
 ---
 
 Ya usaste S3 en la primera sesión, sin detenerte a pensar en qué tipo de almacenamiento era ni por qué encajaba con un front estático. Hoy vas a trabajar con la plataforma de gestión de un festival de música, cuyas necesidades ya no encajan todas en S3: las fotos que suben los asistentes durante el evento, el disco de una instancia cuyo espacio se ha quedado corto, y una carpeta que dos instancias necesitan ver a la vez. Tres problemas de almacenamiento distintos, en la misma sesión — vas a resolverlos de verdad en la Actividad 3.1.

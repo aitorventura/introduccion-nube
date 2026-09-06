@@ -2,6 +2,11 @@
 
 # 🧩 2. Seguridad de red
 
+![Diapositivas](diapositivas/seguridad-red.pdf){ type=application/pdf style="width:100%;min-height:80vh" }
+
+!!!info "Descarga de diapositivas"
+    [Descarga las diapositivas](diapositivas/seguridad-red.pptx){target="_blank" rel="noopener"}
+
 ---
 
 Ya tienes una VPC con subredes públicas y privadas bien repartidas — la sesión pasada construiste el terreno. Pero una subred pública sin ningún filtro más es solo una puerta abierta de par en par: cualquier instancia que lances ahí queda expuesta a todo internet, en todos sus **puertos** (un puerto es un número que identifica, dentro de una misma máquina, a qué servicio concreto va dirigida una conexión — el puerto 80, por ejemplo, es el que usa un servidor web para atender peticiones), salvo que añadas algo que decida quién entra y quién no.

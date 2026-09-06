@@ -2,6 +2,11 @@
 
 # 🧩 1. Balanceo de carga y escalado automático
 
+![Diapositivas](diapositivas/alta-disponibilidad-escalado.pdf){ type=application/pdf style="width:100%;min-height:80vh" }
+
+!!!info "Descarga de diapositivas"
+    [Descarga las diapositivas](diapositivas/alta-disponibilidad-escalado.pptx){target="_blank" rel="noopener"}
+
 ---
 
 Cualquier aplicación desplegada sobre una única instancia tiene el mismo punto único de fallo: si esa instancia se cae, se cae la aplicación entera. Hoy resuelves justo ese punto — no añadiendo "una instancia más por si acaso", sino un mecanismo que reparte el tráfico entre varias copias y que repone automáticamente la que falle, sin que tú tengas que estar mirando la pantalla.

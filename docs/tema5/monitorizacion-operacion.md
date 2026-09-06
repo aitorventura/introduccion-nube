@@ -2,6 +2,11 @@
 
 # 🧩 1. Monitorización y operación
 
+![Diapositivas](diapositivas/monitorizacion-operacion.pdf){ type=application/pdf style="width:100%;min-height:80vh" }
+
+!!!info "Descarga de diapositivas"
+    [Descarga las diapositivas](diapositivas/monitorizacion-operacion.pptx){target="_blank" rel="noopener"}
+
 ---
 
 Cualquier servidor en producción tiene el mismo problema de fondo: nadie lo va a estar mirando constantemente. Si algo falla a las tres de la madrugada, nadie está delante de una pantalla viéndolo en directo. Necesitas que el propio sistema te avise, y necesitas saber diagnosticar una incidencia sin la comodidad de conectarte por SSH a mirar qué pasa por dentro — porque en una arquitectura gestionada, esa comodidad cada vez existe menos.

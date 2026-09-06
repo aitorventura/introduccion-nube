@@ -2,6 +2,11 @@
 
 # 🧩 1. Primer contacto profesional con AWS
 
+![Diapositivas](diapositivas/primer-contacto-aws.pdf){ type=application/pdf style="width:100%;min-height:80vh" }
+
+!!!info "Descarga de diapositivas"
+    [Descarga las diapositivas](diapositivas/primer-contacto-aws.pptx){target="_blank" rel="noopener"}
+
 ---
 
 Llevas años usando la nube sin pensarlo: cada vez que abres el correo, ves una serie o guardas una foto en el móvil, hay máquinas de otra empresa haciendo el trabajo por ti. Lo que cambia hoy es el punto de vista — hasta ahora has sido cliente de la nube; a partir de esta sesión eres tú quien la pone en marcha para otra persona. Vas a moverte por AWS por primera vez, entender qué tipo de servicio estás usando en cada momento, y terminar la sesión con algo tuyo publicado en internet, con dirección propia y accesible para cualquiera: el sitio estático de un taller de bicicletas de barrio, una página informativa sencilla (HTML, CSS y JavaScript) que vas a alojar directamente en AWS.

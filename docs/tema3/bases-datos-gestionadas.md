@@ -2,6 +2,11 @@
 
 # 🧩 2. Bases de datos gestionadas
 
+![Diapositivas](diapositivas/bases-datos-gestionadas.pdf){ type=application/pdf style="width:100%;min-height:80vh" }
+
+!!!info "Descarga de diapositivas"
+    [Descarga las diapositivas](diapositivas/bases-datos-gestionadas.pptx){target="_blank" rel="noopener"}
+
 ---
 
 Hasta ahora, los datos con los que has trabajado en este módulo han vivido en ficheros: un front en S3, unas imágenes en EFS. Hoy llega la primera pieza que necesita algo más estructurado — una base de datos de verdad, con sus filas y sus relaciones. Una **base de datos relacional** guarda esa información en tablas con filas y columnas, relacionadas entre sí (un libro pertenece a una categoría, aparece en varios préstamos...), y un **motor de base de datos** (como PostgreSQL) es el programa que la gestiona: guarda los datos en disco, responde a las consultas y se asegura de que nada se corrompa aunque varias peticiones lleguen a la vez.

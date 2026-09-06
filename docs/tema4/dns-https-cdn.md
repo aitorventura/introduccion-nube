@@ -2,6 +2,11 @@
 
 # 🧩 2. DNS, HTTPS y distribución de contenido
 
+![Diapositivas](diapositivas/dns-https-cdn.pdf){ type=application/pdf style="width:100%;min-height:80vh" }
+
+!!!info "Descarga de diapositivas"
+    [Descarga las diapositivas](diapositivas/dns-https-cdn.pptx){target="_blank" rel="noopener"}
+
 ---
 
 Una aplicación con balanceador y escalado automático ya se repone sola si una instancia falla y escala si sube el tráfico, pero puede seguir viviendo detrás de una URL genérica de AWS, larga y sin HTTPS propio — nada que le pondrías a un cliente real. Hoy le das una dirección con nombre propio, un certificado que garantiza la conexión cifrada, y una red que acerca el contenido estático al visitante en vez de servirlo siempre desde la misma región. Con esto se cierra otro punto único de fallo habitual: depender de una única forma de entrar al sistema, sin nombre, sin cifrado y sin acercamiento al usuario.

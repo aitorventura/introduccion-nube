@@ -2,6 +2,11 @@
 
 # 🧩 3. Máquinas virtuales
 
+![Diapositivas](diapositivas/maquinas-virtuales.pdf){ type=application/pdf style="width:100%;min-height:80vh" }
+
+!!!info "Descarga de diapositivas"
+    [Descarga las diapositivas](diapositivas/maquinas-virtuales.pptx){target="_blank" rel="noopener"}
+
 ---
 
 Ya sabes que una instancia es una **máquina virtual** — lo viste en «Diseño de la red virtual». En las dos sesiones anteriores has lanzado instancias sueltas, una a una, repitiendo a mano los mismos parámetros: la imagen, el tipo, la subred, el grupo de seguridad. Funciona para dos instancias de prueba, pero no escala — hoy dejas de repetir ese proceso a mano: entiendes qué decide su rendimiento y precio, cómo se empaqueta en una imagen reutilizable, y cómo se guarda esa receta en una plantilla que lanzas tantas veces como haga falta.

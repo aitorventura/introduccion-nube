@@ -2,6 +2,11 @@
 
 # 🧩 1. Diseño de la red virtual
 
+![Diapositivas](diapositivas/vpc-diseno.pdf){ type=application/pdf style="width:100%;min-height:80vh" }
+
+!!!info "Descarga de diapositivas"
+    [Descarga las diapositivas](diapositivas/vpc-diseno.pptx){target="_blank" rel="noopener"}
+
 ---
 
 El front que publicaste la sesión pasada no necesitó ni una decisión de red: S3 ya viene con su propia conectividad puesta. Eso ha sido la excepción, no la norma. Casi todo lo demás que vas a construir en este módulo va a vivir dentro de un espacio con reglas propias, con partes abiertas a internet y partes que no lo están nunca. Hoy diseñas ese espacio: primero en papel, después en consola, repartido en dos zonas de disponibilidad. En la Actividad 2.1 lo construyes tú mismo, siguiendo tu propio diseño.

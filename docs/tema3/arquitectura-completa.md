@@ -2,6 +2,11 @@
 
 # 🧩 3. Primera arquitectura cloud completa
 
+![Diapositivas](diapositivas/arquitectura-completa.pdf){ type=application/pdf style="width:100%;min-height:80vh" }
+
+!!!info "Descarga de diapositivas"
+    [Descarga las diapositivas](diapositivas/arquitectura-completa.pptx){target="_blank" rel="noopener"}
+
 ---
 
 Tienes ya todas las piezas sueltas: red con capas públicas y privadas, instancias, almacenamiento de objetos y compartido, y una base de datos gestionada sin credenciales en el código. Hoy no aprendes ningún servicio nuevo — hoy las juntas todas en una sola arquitectura y ves, por primera vez, el conjunto completo funcionando como un solo sistema. Es el cierre natural de todo lo construido desde la primera sesión, y el punto de partida de todo lo que viene: alta disponibilidad, monitorización, coste, automatización — todo lo del resto del módulo se construye encima de esto.
