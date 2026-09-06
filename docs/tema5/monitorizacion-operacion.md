@@ -20,6 +20,8 @@ AWS te da cinco tipos de señal distintos para saber qué está pasando en tu ar
 | **Eventos** | ¿Qué cambio de estado ha ocurrido en un recurso? | Una instancia ha pasado de `running` a `terminated` |
 | **Auditoría** | ¿Quién ha hecho qué, y cuándo? | Quién ha modificado un grupo de seguridad esta mañana |
 
+Cada una de estas señales tiene un servicio de AWS detrás: **CloudWatch** recoge tanto las métricas como las alarmas que se disparan sobre ellas; **CloudWatch Logs** guarda los registros; **EventBridge** es quien reacciona a los eventos de cambio de estado; y **CloudTrail** es el registro de auditoría, con quién ha hecho cada llamada a la API de AWS y cuándo. Vas a usar los cuatro en la Actividad 5.1: CloudWatch para las métricas y alarmas, CloudWatch Logs para centralizar los registros de Escaparate, CloudTrail para investigar quién ha cambiado algo, y EventBridge para reaccionar tú mismo a un cambio de estado real, capturando el momento exacto en que una instancia pasa a `terminated`.
+
 !!! example "Las cinco señales sobre el mismo incidente"
     Imagina que una instancia se queda sin memoria y deja de responder. La **métrica** de memoria te mostraría la subida antes de que pasara nada grave. El **registro** de la aplicación diría el error concreto en el momento del fallo. La **alarma** te habría avisado en cuanto la métrica cruzó el umbral. El **evento** registraría que el grupo de escalado ha terminado esa instancia y lanzado otra. Y la **auditoría** confirmaría que nadie ha tocado nada manualmente — el sistema ha reaccionado solo.
 
@@ -38,6 +40,8 @@ flowchart TD
 
 Vas a diseñar exactamente tres alarmas útiles en la Actividad 5.1, no veinte — la disciplina de elegir pocas y que importen es la parte difícil de estos apuntes, más que el mecanismo técnico de crearlas.
 
+Para no tener que ir métrica por métrica cada vez que diagnosticas algo, CloudWatch permite agrupar varias en una sola pantalla: un **dashboard**, con las gráficas que de verdad consultas a menudo ya montadas y una junto a otra. En la Actividad 5.1 vas a montar el tuyo con las métricas de las tres capas que ves más abajo, precisamente para poder mirarlas todas juntas en el mismo golpe de vista en vez de saltar de una pantalla a otra.
+
 ---
 
 ## 🔧 Capa a capa de la arquitectura
@@ -50,7 +54,7 @@ flowchart LR
     App --> Datos["🗄️ Datos<br/>conexiones activas, espacio en disco"]
 ```
 
-Un fallo en el borde (por ejemplo, muchos errores 5xx del balanceador) apunta a algo distinto que un fallo de CPU en la aplicación, y ese a su vez es distinto de un fallo de espacio en la base de datos. Diagnosticar rápido significa saber, según el síntoma, en qué capa mirar primero — el mismo principio de "fuera hacia dentro" que ya aplicaste con las averías de red del Tema 2.
+Un fallo en el borde (por ejemplo, muchos errores 5xx del balanceador) apunta a algo distinto que un fallo de CPU en la aplicación, y ese a su vez es distinto de un fallo de espacio en la base de datos. Diagnosticar rápido significa saber, según el síntoma, en qué capa mirar primero — el mismo principio de "fuera hacia dentro" que ya has aplicado con las averías de red del Tema 2.
 
 ---
 
@@ -68,15 +72,20 @@ En una arquitectura con escalado automático, la instancia que estaba fallando p
 !!! warning "El orden importa: empieza siempre por cuándo, no por qué"
     Ir directamente a leer registros sin haber acotado antes la ventana de tiempo con las métricas es buscar una aguja en un pajar entero en vez de en el rincón donde de verdad cayó. Vas a diagnosticar una incidencia real siguiendo exactamente este orden en la Actividad 5.1.
 
+!!! tip "Los registros no se guardan gratis ni para siempre"
+    Cada registro que se genera ocupa espacio, y ese espacio cuesta dinero mientras lo conservas. Dejar la retención de logs "para siempre" por defecto es una forma silenciosa de acumular coste sin darte cuenta — normalmente conviene fijar cuánto tiempo de verdad necesitas conservarlos. Vuelves a esta misma idea, pero con números reales, en el siguiente apartado, Economía de la nube.
+
 ---
 
 ## ✅ Ideas clave
 
 ??? tip "Abrir resumen"
 
-    - Cinco señales distintas: métricas (cuánto), registros (qué ha pasado con detalle), alarmas (cuándo cruza un umbral), eventos (cambio de estado de un recurso), auditoría (quién ha hecho qué).
+    - Cinco señales distintas, cada una con su servicio detrás: métricas y alarmas (CloudWatch), registros (CloudWatch Logs), eventos (EventBridge), auditoría (CloudTrail).
+    - Un dashboard de CloudWatch agrupa las métricas que consultas a menudo en una sola pantalla, en vez de ir saltando de una en una.
     - Monitorizar todo sin criterio genera ruido y hace que dejes de prestar atención a las alarmas que sí importan.
     - Cada capa de la arquitectura falla de forma distinta y necesita su propia señal: borde (errores, latencia), aplicación (CPU, memoria, registros), datos (conexiones, espacio).
     - Sin acceso directo al servidor, el diagnóstico se apoya en lo ya registrado: primero acota cuándo con las métricas, luego busca qué con los registros, y confirma con la auditoría si alguien cambió algo antes.
+    - Los registros tienen coste mientras se conservan — fijar una retención razonable evita un gasto silencioso.
 
 Con esto ya tienes las piezas para la Actividad 5.1 — Monitorización y diagnóstico con CloudWatch.

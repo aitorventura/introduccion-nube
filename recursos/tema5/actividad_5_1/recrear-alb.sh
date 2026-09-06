@@ -69,6 +69,18 @@ aws elbv2 create-listener \
   --protocol HTTP --port 80 \
   --default-actions Type=forward,TargetGroupArn="$TG_ARN" > /dev/null
 
+echo "Comprobando si el ASG tiene grupos de destino antiguos enganchados..."
+OLD_TG_ARNS=$(aws autoscaling describe-auto-scaling-groups \
+  --auto-scaling-group-names "$ASG_NAME" \
+  --query "AutoScalingGroups[0].TargetGroupARNs" --output text)
+
+if [ -n "$OLD_TG_ARNS" ]; then
+  echo "Desenganchando referencias antiguas (si no se hace, el ASG falla al lanzar instancias con 'target group not found'): $OLD_TG_ARNS"
+  aws autoscaling detach-load-balancer-target-groups \
+    --auto-scaling-group-name "$ASG_NAME" \
+    --target-group-arns $OLD_TG_ARNS
+fi
+
 echo "Enganchando el grupo de Auto Scaling ($ASG_NAME) al nuevo grupo de destino..."
 aws autoscaling attach-load-balancer-target-groups \
   --auto-scaling-group-name "$ASG_NAME" \
