@@ -19,8 +19,14 @@ IAM (*Identity and Access Management*) tiene varias piezas que conviene distingu
 | Política | Un documento que dice qué acciones están permitidas o denegadas | Puedes leerlas, analizarlas y corregirlas — no crear roles nuevos para adjuntarlas |
 | Credenciales temporales | Claves de acceso con caducidad, generadas al asumir un rol | Es lo que usa tu sesión del Learner Lab ahora mismo |
 
-!!! tip "Por qué un rol y no un usuario, para una instancia"
-    Si una instancia necesitara las credenciales fijas de un usuario para acceder a S3, esas credenciales tendrían que vivir en algún sitio dentro de la instancia — exactamente el problema de "credenciales en el código" que ya evitaste en el Tema 3 con Secrets Manager. Un rol asignado a la instancia resuelve esto de raíz: AWS genera credenciales temporales automáticamente, sin que tú tengas que guardar ni rotar nada.
+Toda llamada a la API de AWS —tu código pidiendo a S3 que guarde una foto, por ejemplo— tiene que ir firmada con una credencial: un par de claves, una pública y una secreta, que le dicen a AWS *quién* está llamando antes de comprobar si tiene permiso. La pregunta es de dónde sale esa credencial, y ahí es donde un rol resuelve algo que un usuario no puede.
+
+Si una instancia necesitara las claves fijas de un usuario para acceder a S3, esas claves tendrían que vivir guardadas en algún sitio dentro de la instancia (una variable de entorno, un fichero de configuración) — exactamente el problema de "credenciales en el código" que ya evitaste en el Tema 3 con Secrets Manager: no caducan solas, y si alguien las consigue, tiene acceso indefinido hasta que tú te des cuenta y las revoques a mano.
+
+Un rol asignado a la instancia evita ese problema de raíz, sin que tú guardes ni rotes nada: AWS publica unas credenciales temporales —caducan solas al cabo de unas horas y se renuevan solas— en una dirección de red interna especial, `169.254.169.254` (el **servicio de metadatos de la instancia**, la misma dirección que ya usas en tus scripts para leer el `instance-id`). El SDK de AWS que usa tu aplicación ya sabe mirar ahí por defecto, así que tu código nunca necesita saber dónde están esas claves ni pedirlas explícitamente.
+
+!!! example "Por qué S3Storage no tiene ninguna clave de acceso"
+    En la Actividad 5.2, la clase que guarda las fotos de Escaparate en S3 crea su cliente así: `S3Client.builder().build()`, sin pasarle ninguna credencial. Eso funciona porque el SDK, al no recibir ninguna clave explícita, pregunta solo al servicio de metadatos qué credenciales temporales tiene la instancia ahora mismo, y las usa. Si mañana esa instancia se termina y otra la sustituye, la nueva pregunta lo mismo y recibe sus propias credenciales — nadie ha tenido que copiar ni rotar ninguna clave a mano.
 
 ---
 
@@ -31,10 +37,10 @@ Una política IAM es un documento en el mismo formato JSON que ya viste en la se
 ```json
 {
   "Effect": "Allow",
-  "Action": "s3:GetObject",
-  "Resource": "arn:aws:s3:::inventario-*/*",
+  "Action": ["s3:GetObject", "s3:PutObject"],
+  "Resource": "arn:aws:s3:::escaparate-imagenes-<tu-identificador>/*",
   "Condition": {
-    "IpAddress": { "aws:SourceIp": "203.0.113.0/24" }
+    "Bool": { "aws:SecureTransport": "true" }
   }
 }
 ```
@@ -42,14 +48,33 @@ Una política IAM es un documento en el mismo formato JSON que ya viste en la se
 | Campo | Responde a | En el ejemplo |
 |---|---|---|
 | `Effect` | ¿Permite o deniega? | `Allow` |
-| `Action` | ¿Qué operación? | `s3:GetObject` (leer un objeto) |
-| `Resource` | ¿Sobre qué recurso concreto? | Los objetos de los buckets que empiecen por `inventario-` |
-| `Condition` | ¿Bajo qué circunstancia adicional? | Solo si la petición viene de un rango de IP concreto |
+| `Action` | ¿Qué operación? | `s3:GetObject` y `s3:PutObject` (leer y escribir un objeto) |
+| `Resource` | ¿Sobre qué recurso concreto? | Los objetos dentro del bucket `escaparate-imagenes-<tu-identificador>` |
+| `Condition` | ¿Bajo qué circunstancia adicional? | Solo si la petición viaja cifrada (HTTPS) |
 
 !!! example "Leer una política, frase por frase"
-    Este ejemplo completo se lee así: "Permite la acción de leer un objeto, sobre cualquier objeto dentro de un bucket cuyo nombre empiece por `inventario-`, pero solo si la petición viene de esa red concreta." Cuatro campos, una frase — cuando te enfrentes a una política más larga en la Actividad 5.2, sigue leyéndola exactamente así, campo a campo.
+    Este ejemplo completo se lee así: "Permite leer y escribir objetos dentro del bucket de imágenes de Escaparate, pero solo si la conexión va cifrada." Cuatro campos, una frase — cuando te enfrentes a la política real de tu rol en la Actividad 5.2 (moviendo las imágenes de Escaparate a S3), sigue leyéndola exactamente así, campo a campo.
 
 Leer una política te dice qué *debería* permitir sobre el papel, pero con varias líneas y comodines de por medio es fácil equivocarse. El **simulador de políticas de IAM** te deja elegir una política, una acción y un recurso concretos, y te responde directamente "permitido" o "denegado" — sin ejecutar nada de verdad contra tu cuenta. Es la forma de comprobar si tu lectura de una política era correcta antes de fiarte de ella.
+
+!!! example "Probar el simulador con la política de arriba"
+    Si eligieras esta política, la acción `s3:GetObject` y como recurso un objeto dentro de `escaparate-imagenes-<tu-identificador>`, el simulador respondería **Permitido**. Si en cambio probaras `s3:DeleteObject` sobre ese mismo recurso, respondería **Denegado** — esta política nunca menciona esa acción, así que no la concede. Vas a hacer exactamente esta comprobación, con la política real de tu rol, en la Actividad 5.2.
+
+---
+
+## 🧭 Cómo se evalúa una política: quién gana cuando hay varias en juego
+
+Cuando una petición llega a AWS, casi nunca hay una sola política de por medio — pueden aplicar a la vez la del rol, la del propio recurso (como un bucket de S3) y, en una cuenta dentro de una organización, otras por encima que tú ni siquiera puedes ver. El resultado nunca se decide "sumando" políticas: se decide con un orden fijo, siempre el mismo.
+
+```mermaid
+flowchart TD
+    A["¿Hay algún Deny explícito<br/>en cualquier política aplicable?"] -->|Sí| Deny["❌ Denegado, sin excepciones"]
+    A -->|No| B["¿Hay algún Allow explícito?"]
+    B -->|Sí| Allow["✅ Permitido"]
+    B -->|No| DenyDef["❌ Denegado por defecto<br/>(nadie ha dicho que sí)"]
+```
+
+Un *Deny* explícito en cualquiera de las políticas implicadas gana siempre, aunque otra política diga *Allow* — y si ninguna política menciona una acción, esa acción queda denegada por defecto, nunca permitida "por si acaso".
 
 ---
 
@@ -100,6 +125,7 @@ El **registro de auditoría** (en AWS, CloudTrail) guarda un histórico de quié
 
     - Un rol se presta temporalmente (con credenciales que caducan); un usuario tiene credenciales fijas — el Learner Lab usa un rol preasignado, y tú no creas roles ni usuarios nuevos.
     - Una política se lee en cuatro campos: efecto (permite/deniega), acción (qué operación), recurso (sobre qué) y condición (bajo qué circunstancia).
+    - Cuando hay varias políticas en juego, gana siempre el orden fijo: un *Deny* explícito primero, luego un *Allow* explícito, y si ninguna dice nada, deniega por defecto.
     - El principio de mínimo privilegio limita el alcance de cualquier fallo o filtración; un comodín de más en una acción es el error más común que lo rompe.
     - Ningún secreto va nunca en texto plano en un fichero versionado — y si uno llega a estarlo, la solución es rotarlo, no solo borrarlo del código.
     - El registro de auditoría responde a quién ha hecho qué y cuándo — la pieza que completa el diagnóstico de una incidencia, más allá de las métricas y los registros.
