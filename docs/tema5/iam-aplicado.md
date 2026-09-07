@@ -2,6 +2,11 @@
 
 # 🧩 2. Identidad y gestión de accesos
 
+![Diapositivas](diapositivas/iam-aplicado.pdf){ type=application/pdf style="width:100%;min-height:80vh" }
+
+!!!info "Descarga de diapositivas"
+    [Descarga las diapositivas](diapositivas/iam-aplicado.pptx){target="_blank" rel="noopener"}
+
 ---
 
 Desde la primera sesión sabes que tu rol en el Learner Lab está preasignado, y que no puedes crear usuarios ni roles nuevos. Hoy no cambia esa regla — pero sí dejas de tratar IAM como una caja negra que "ya viene configurada" y empiezas a leerla, corregirla y usarla de verdad: aplicar un rol existente a una instancia para que acceda a otros servicios sin credenciales, y detectar por qué una política está mal escrita antes de que cause un problema real.
