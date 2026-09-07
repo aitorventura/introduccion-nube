@@ -1619,6 +1619,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#como-se-evalua-una-politica-quien-gana-cuando-hay-varias-en-juego" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧭 Cómo se evalúa una política: quién gana cuando hay varias en juego
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#principio-de-minimo-privilegio-y-mfa" class="md-nav__link">
     <span class="md-ellipsis">
       🔧 Principio de mínimo privilegio y MFA
@@ -2386,6 +2395,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#como-se-evalua-una-politica-quien-gana-cuando-hay-varias-en-juego" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧭 Cómo se evalúa una política: quién gana cuando hay varias en juego
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#principio-de-minimo-privilegio-y-mfa" class="md-nav__link">
     <span class="md-ellipsis">
       🔧 Principio de mínimo privilegio y MFA
@@ -2475,9 +2493,12 @@
 </tr>
 </tbody>
 </table>
-<div class="admonition tip">
-<p class="admonition-title">Por qué un rol y no un usuario, para una instancia</p>
-<p>Si una instancia necesitara las credenciales fijas de un usuario para acceder a S3, esas credenciales tendrían que vivir en algún sitio dentro de la instancia — exactamente el problema de "credenciales en el código" que ya evitaste en el Tema 3 con Secrets Manager. Un rol asignado a la instancia resuelve esto de raíz: AWS genera credenciales temporales automáticamente, sin que tú tengas que guardar ni rotar nada.</p>
+<p>Toda llamada a la API de AWS —tu código pidiendo a S3 que guarde una foto, por ejemplo— tiene que ir firmada con una credencial: un par de claves, una pública y una secreta, que le dicen a AWS <em>quién</em> está llamando antes de comprobar si tiene permiso. La pregunta es de dónde sale esa credencial, y ahí es donde un rol resuelve algo que un usuario no puede.</p>
+<p>Si una instancia necesitara las claves fijas de un usuario para acceder a S3, esas claves tendrían que vivir guardadas en algún sitio dentro de la instancia (una variable de entorno, un fichero de configuración) — exactamente el problema de "credenciales en el código" que ya evitaste en el Tema 3 con Secrets Manager: no caducan solas, y si alguien las consigue, tiene acceso indefinido hasta que tú te des cuenta y las revoques a mano.</p>
+<p>Un rol asignado a la instancia evita ese problema de raíz, sin que tú guardes ni rotes nada: AWS publica unas credenciales temporales —caducan solas al cabo de unas horas y se renuevan solas— en una dirección de red interna especial, <code>169.254.169.254</code> (el <strong>servicio de metadatos de la instancia</strong>, la misma dirección que ya usas en tus scripts para leer el <code>instance-id</code>). El SDK de AWS que usa tu aplicación ya sabe mirar ahí por defecto, así que tu código nunca necesita saber dónde están esas claves ni pedirlas explícitamente.</p>
+<div class="admonition example">
+<p class="admonition-title">Por qué S3Storage no tiene ninguna clave de acceso</p>
+<p>En la Actividad 5.2, la clase que guarda las fotos de Escaparate en S3 crea su cliente así: <code>S3Client.builder().build()</code>, sin pasarle ninguna credencial. Eso funciona porque el SDK, al no recibir ninguna clave explícita, pregunta solo al servicio de metadatos qué credenciales temporales tiene la instancia ahora mismo, y las usa. Si mañana esa instancia se termina y otra la sustituye, la nueva pregunta lo mismo y recibe sus propias credenciales — nadie ha tenido que copiar ni rotar ninguna clave a mano.</p>
 </div>
 <hr>
 <h2 id="anatomia-de-una-politica">🧩 Anatomía de una política<a class="headerlink" href="#anatomia-de-una-politica" title="Permanent link">¶</a></h2>
@@ -2491,10 +2512,10 @@
 <span class="normal"><a href="#__codelineno-0-7">7</a></span>
 <span class="normal"><a href="#__codelineno-0-8">8</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="p">{</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="w">  </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">  </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"s3:GetObject"</span><span class="p">,</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">  </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"arn:aws:s3:::inventario-*/*"</span><span class="p">,</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">  </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"s3:GetObject"</span><span class="p">,</span><span class="w"> </span><span class="s2">"s3:PutObject"</span><span class="p">],</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">  </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"arn:aws:s3:::escaparate-imagenes-&lt;tu-identificador&gt;/*"</span><span class="p">,</span>
 <a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="w">  </span><span class="nt">"Condition"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="w">    </span><span class="nt">"IpAddress"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"aws:SourceIp"</span><span class="p">:</span><span class="w"> </span><span class="s2">"203.0.113.0/24"</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="w">    </span><span class="nt">"Bool"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"aws:SecureTransport"</span><span class="p">:</span><span class="w"> </span><span class="s2">"true"</span><span class="w"> </span><span class="p">}</span>
 <a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">  </span><span class="p">}</span>
 <a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
@@ -2515,25 +2536,38 @@
 <tr>
 <td><code>Action</code></td>
 <td>¿Qué operación?</td>
-<td><code>s3:GetObject</code> (leer un objeto)</td>
+<td><code>s3:GetObject</code> y <code>s3:PutObject</code> (leer y escribir un objeto)</td>
 </tr>
 <tr>
 <td><code>Resource</code></td>
 <td>¿Sobre qué recurso concreto?</td>
-<td>Los objetos de los buckets que empiecen por <code>inventario-</code></td>
+<td>Los objetos dentro del bucket <code>escaparate-imagenes-&lt;tu-identificador&gt;</code></td>
 </tr>
 <tr>
 <td><code>Condition</code></td>
 <td>¿Bajo qué circunstancia adicional?</td>
-<td>Solo si la petición viene de un rango de IP concreto</td>
+<td>Solo si la petición viaja cifrada (HTTPS)</td>
 </tr>
 </tbody>
 </table>
 <div class="admonition example">
 <p class="admonition-title">Leer una política, frase por frase</p>
-<p>Este ejemplo completo se lee así: "Permite la acción de leer un objeto, sobre cualquier objeto dentro de un bucket cuyo nombre empiece por <code>inventario-</code>, pero solo si la petición viene de esa red concreta." Cuatro campos, una frase — cuando te enfrentes a una política más larga en la Actividad 5.2, sigue leyéndola exactamente así, campo a campo.</p>
+<p>Este ejemplo completo se lee así: "Permite leer y escribir objetos dentro del bucket de imágenes de Escaparate, pero solo si la conexión va cifrada." Cuatro campos, una frase — cuando te enfrentes a la política real de tu rol en la Actividad 5.2 (moviendo las imágenes de Escaparate a S3), sigue leyéndola exactamente así, campo a campo.</p>
 </div>
 <p>Leer una política te dice qué <em>debería</em> permitir sobre el papel, pero con varias líneas y comodines de por medio es fácil equivocarse. El <strong>simulador de políticas de IAM</strong> te deja elegir una política, una acción y un recurso concretos, y te responde directamente "permitido" o "denegado" — sin ejecutar nada de verdad contra tu cuenta. Es la forma de comprobar si tu lectura de una política era correcta antes de fiarte de ella.</p>
+<div class="admonition example">
+<p class="admonition-title">Probar el simulador con la política de arriba</p>
+<p>Si eligieras esta política, la acción <code>s3:GetObject</code> y como recurso un objeto dentro de <code>escaparate-imagenes-&lt;tu-identificador&gt;</code>, el simulador respondería <strong>Permitido</strong>. Si en cambio probaras <code>s3:DeleteObject</code> sobre ese mismo recurso, respondería <strong>Denegado</strong> — esta política nunca menciona esa acción, así que no la concede. Vas a hacer exactamente esta comprobación, con la política real de tu rol, en la Actividad 5.2.</p>
+</div>
+<hr>
+<h2 id="como-se-evalua-una-politica-quien-gana-cuando-hay-varias-en-juego">🧭 Cómo se evalúa una política: quién gana cuando hay varias en juego<a class="headerlink" href="#como-se-evalua-una-politica-quien-gana-cuando-hay-varias-en-juego" title="Permanent link">¶</a></h2>
+<p>Cuando una petición llega a AWS, casi nunca hay una sola política de por medio — pueden aplicar a la vez la del rol, la del propio recurso (como un bucket de S3) y, en una cuenta dentro de una organización, otras por encima que tú ni siquiera puedes ver. El resultado nunca se decide "sumando" políticas: se decide con un orden fijo, siempre el mismo.</p>
+<pre class="mermaid"><code>flowchart TD
+    A["¿Hay algún Deny explícito&lt;br/&gt;en cualquier política aplicable?"] --&gt;|Sí| Deny["❌ Denegado, sin excepciones"]
+    A --&gt;|No| B["¿Hay algún Allow explícito?"]
+    B --&gt;|Sí| Allow["✅ Permitido"]
+    B --&gt;|No| DenyDef["❌ Denegado por defecto&lt;br/&gt;(nadie ha dicho que sí)"]</code></pre>
+<p>Un <em>Deny</em> explícito en cualquiera de las políticas implicadas gana siempre, aunque otra política diga <em>Allow</em> — y si ninguna política menciona una acción, esa acción queda denegada por defecto, nunca permitida "por si acaso".</p>
 <hr>
 <h2 id="principio-de-minimo-privilegio-y-mfa">🔧 Principio de mínimo privilegio y MFA<a class="headerlink" href="#principio-de-minimo-privilegio-y-mfa" title="Permanent link">¶</a></h2>
 <p>El <strong>principio de mínimo privilegio</strong> dice que una identidad debe tener exactamente los permisos que necesita para su trabajo, ni uno más. No es una recomendación abstracta — tiene un coste medible cuando se ignora.</p>
@@ -2569,6 +2603,7 @@
 <ul>
 <li>Un rol se presta temporalmente (con credenciales que caducan); un usuario tiene credenciales fijas — el Learner Lab usa un rol preasignado, y tú no creas roles ni usuarios nuevos.</li>
 <li>Una política se lee en cuatro campos: efecto (permite/deniega), acción (qué operación), recurso (sobre qué) y condición (bajo qué circunstancia).</li>
+<li>Cuando hay varias políticas en juego, gana siempre el orden fijo: un <em>Deny</em> explícito primero, luego un <em>Allow</em> explícito, y si ninguna dice nada, deniega por defecto.</li>
 <li>El principio de mínimo privilegio limita el alcance de cualquier fallo o filtración; un comodín de más en una acción es el error más común que lo rompe.</li>
 <li>Ningún secreto va nunca en texto plano en un fichero versionado — y si uno llega a estarlo, la solución es rotarlo, no solo borrarlo del código.</li>
 <li>El registro de auditoría responde a quién ha hecho qué y cuándo — la pieza que completa el diagnóstico de una incidencia, más allá de las métricas y los registros.</li>
