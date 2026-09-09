@@ -20,15 +20,20 @@ Montar un servidor ya no significa comprar una máquina. Significa pedirla, usar
 
 ## 📘 Temas del módulo
 
+Los temas se van publicando a medida que avanza el curso. Los que todavía no están disponibles aparecen bloqueados en la tabla.
+
 | Tema | Qué cubre | RA |
 |------|-----------|-----|
 | 🧭 [Tema 1 — Introducción a la nube pública](tema1/index.md) | Modelos de servicio, infraestructura global, responsabilidad compartida, consola y CLI | RA1 · RA2 |
-| 🕸️ [Tema 2 — Redes virtuales y cómputo](tema2/index.md) | VPC, subredes, grupos de seguridad, instancias e imágenes propias | RA3 |
-| 💾 [Tema 3 — Almacenamiento, datos y primera arquitectura](tema3/index.md) | Bloque, objetos y ficheros compartidos, bases de datos gestionadas, arquitectura de tres capas | RA4 · RA3 |
-| ⚖️ [Tema 4 — Alta disponibilidad y entrega de contenido](tema4/index.md) | Balanceo, escalado automático, DNS gestionado, HTTPS y CDN | RA3 |
-| 🏛️ [Tema 5 — Gobierno de la nube](tema5/index.md) | Monitorización y diagnóstico, identidad y permisos, economía de la nube | RA2 · RA1 |
-| 🤖 [Tema 6 — Automatización y modelos de ejecución](tema6/index.md) | Infraestructura como código, serverless, contenedores gestionados | RA3 · RA4 |
-| 🏗️ [Tema 7 — Arquitectura bien diseñada](tema7/index.md) | Los seis pilares como lista de comprobación, auditoría y mejora | RA4 |
+| 🔒 Tema 2 — Redes virtuales y cómputo *(próximamente)* | VPC, subredes, grupos de seguridad, instancias e imágenes propias | RA3 |
+| 🔒 Tema 3 — Almacenamiento, datos y primera arquitectura *(próximamente)* | Bloque, objetos y ficheros compartidos, bases de datos gestionadas, arquitectura de tres capas | RA4 · RA3 |
+| 🔒 Tema 4 — Alta disponibilidad y entrega de contenido *(próximamente)* | Balanceo, escalado automático, DNS gestionado, HTTPS y CDN | RA3 |
+| 🔒 Tema 5 — Gobierno de la nube *(próximamente)* | Monitorización y diagnóstico, identidad y permisos, economía de la nube | RA2 · RA1 |
+| 🔒 Tema 6 — Automatización y modelos de ejecución *(próximamente)* | Infraestructura como código, serverless, contenedores gestionados | RA3 · RA4 |
+| 🔒 Tema 7 — Arquitectura bien diseñada *(próximamente)* | Los seis pilares como lista de comprobación, auditoría y mejora | RA4 |
+
+<!-- Al desbloquear un tema (ver mkdocs.yml): cambia su fila de "🔒 Tema N — título *(próximamente)*"
+     a "[emoji] [Tema N — título](temaN/index.md)", igual que la fila del Tema 1. -->
 
 ---
 
