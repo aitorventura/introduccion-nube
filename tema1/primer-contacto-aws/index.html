@@ -902,7 +902,14 @@
 </div>
 <details class="tip">
 <summary>Abrir respuesta</summary>
-<p>Los casos 2 y 5 son sobre infraestructura física — terreno de AWS. Los casos 1, 3, 4 y 6 son sobre configuración, código y credenciales — terreno tuyo, aunque ocurran "dentro" de la nube.</p>
+<ol>
+<li><strong>Tuya.</strong> El permiso del bucket es una configuración que decides tú, no algo que AWS active por defecto.</li>
+<li><strong>De AWS.</strong> Es infraestructura física — el centro de datos y su suministro eléctrico — que gestiona el proveedor.</li>
+<li><strong>Tuya.</strong> Aplicar los parches dentro de la aplicación que tú instalas y mantienes depende de ti, no de AWS.</li>
+<li><strong>Tuya.</strong> La credencial se filtra por cómo tú gestionas tu código y tus secretos, no por un fallo de AWS.</li>
+<li><strong>De AWS.</strong> El disco físico y su redundancia son responsabilidad del proveedor, no algo que tú controles.</li>
+<li><strong>Tuya.</strong> Elegir una contraseña débil es una decisión de configuración de tu cuenta, no un fallo de la infraestructura.</li>
+</ol>
 </details>
 <hr>
 <h2 id="consola-frente-a-cli">📊 Consola frente a CLI<a class="headerlink" href="#consola-frente-a-cli" title="Permanent link">¶</a></h2>
