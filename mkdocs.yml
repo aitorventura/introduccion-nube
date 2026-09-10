@@ -5,12 +5,12 @@
 #   3. mkdocs gh-deploy
 # Los temas listados en exclude_docs NO se generan en el sitio (ni siquiera por URL directa).
 exclude_docs: |
-  tema2/*
   tema3/*
   tema4/*
   tema5/*
   tema6/*
   tema7/*
+  cierre.md
 
 site_name: Introducción a la Nube Pública
 site_author: Alejandro Roig, Aitor Ventura y Ángel Vidal
@@ -46,17 +46,17 @@ nav:
       - Primer contacto profesional con AWS:
           - Primer contacto profesional con AWS: tema1/primer-contacto-aws.md
           - Actividad 1.1 - Tu primer despliegue en la nube: tema1/actividad_1_1.md
-  # - Tema 2 - Redes virtuales y servicios de cómputo:
-  #     - Tema 2 - Introducción: tema2/index.md
-  #     - Diseño de la red virtual:
-  #         - Diseño de la red virtual: tema2/vpc-diseno.md
-  #         - Actividad 2.1 - Tu propia VPC en dos zonas: tema2/actividad_2_1.md
-  #     - Seguridad de red:
-  #         - Seguridad de red: tema2/seguridad-red.md
-  #         - Actividad 2.2 - Diagnóstico de fallos de red por capas: tema2/actividad_2_2.md
-  #     - Máquinas virtuales:
-  #         - Máquinas virtuales: tema2/maquinas-virtuales.md
-  #         - Actividad 2.3 - De instancia a plantilla: tema2/actividad_2_3.md
+  - Tema 2 - Redes virtuales y servicios de cómputo:
+      - Tema 2 - Introducción: tema2/index.md
+      - Diseño de la red virtual:
+          - Diseño de la red virtual: tema2/vpc-diseno.md
+          - Actividad 2.1 - Tu propia VPC en dos zonas: tema2/actividad_2_1.md
+      - Seguridad de red:
+          - Seguridad de red: tema2/seguridad-red.md
+          - Actividad 2.2 - Diagnóstico de fallos de red por capas: tema2/actividad_2_2.md
+      - Máquinas virtuales:
+          - Máquinas virtuales: tema2/maquinas-virtuales.md
+          - Actividad 2.3 - De instancia a plantilla: tema2/actividad_2_3.md
   # - Tema 3 - Almacenamiento, datos y primera arquitectura:
   #     - Tema 3 - Introducción: tema3/index.md
   #     - Servicios de almacenamiento:
@@ -104,7 +104,7 @@ nav:
   #         - Well-Architected - los seis pilares: tema7/well-architected.md
   #         - Actividad 7.1 - Auditoría y mejora: tema7/actividad_7_1.md
   - Currículo: curriculum.md
-  - Cierre del módulo: cierre.md
+  # - Cierre del módulo: cierre.md
 
 markdown_extensions:
   - md_in_html
