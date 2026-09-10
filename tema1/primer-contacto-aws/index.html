@@ -895,7 +895,7 @@
 <li>Un centro de datos entero se cae por un corte eléctrico regional.</li>
 <li>Una aplicación no aplica un parche de seguridad conocido desde hace meses.</li>
 <li>Una credencial de acceso se filtra porque estaba escrita dentro del código subido a un repositorio público.</li>
-<li>Un disco físico del proveedor falla sin que existiera redundancia suficiente.</li>
+<li>Un disco físico del proveedor falla y el dato se pierde, aunque AWS garantiza por SLA que lo replica automáticamente dentro de la zona.</li>
 <li>Una cuenta se compromete porque su contraseña era <code>123456</code>.</li>
 </ol>
 </div>
@@ -906,7 +906,7 @@
 <li><strong>De AWS.</strong> Es infraestructura física — el centro de datos y su suministro eléctrico — que gestiona el proveedor.</li>
 <li><strong>Tuya.</strong> Aplicar los parches dentro de la aplicación que tú instalas y mantienes depende de ti, no de AWS.</li>
 <li><strong>Tuya.</strong> La credencial se filtra por cómo tú gestionas tu código y tus secretos, no por un fallo de AWS.</li>
-<li><strong>De AWS.</strong> El disco físico y su redundancia son responsabilidad del proveedor, no algo que tú controles.</li>
+<li><strong>De AWS.</strong> La replicación automática dentro de la zona es un compromiso de durabilidad que AWS asume por SLA, no algo que tú configures — distinto sería que la pérdida viniera de que tú no hubieras activado Multi-AZ o backups propios, eso sí sería tuyo.</li>
 <li><strong>Tuya.</strong> Elegir una contraseña débil es una decisión de configuración de tu cuenta, no un fallo de la infraestructura.</li>
 </ol>
 </details>
