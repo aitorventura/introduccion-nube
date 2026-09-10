@@ -147,7 +147,7 @@ La frontera no es fija: en una máquina virtual (IaaS) tú respondes del sistema
     5. Un disco físico del proveedor falla sin que existiera redundancia suficiente.
     6. Una cuenta se compromete porque su contraseña era `123456`.
 
-    Vas a repartir estos seis incidentes de verdad, con justificación, en la Parte B de la actividad de hoy.
+    En la Parte B de la actividad de hoy vas a aplicar el mismo criterio a otros seis incidentes — distintos a estos, para que no puedas copiar la respuesta de aquí abajo.
 
 ??? tip "Abrir respuesta"
     Los casos 2 y 5 son sobre infraestructura física — terreno de AWS. Los casos 1, 3, 4 y 6 son sobre configuración, código y credenciales — terreno tuyo, aunque ocurran "dentro" de la nube.
