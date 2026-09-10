@@ -147,8 +147,6 @@ La frontera no es fija: en una máquina virtual (IaaS) tú respondes del sistema
     5. Un disco físico del proveedor falla sin que existiera redundancia suficiente.
     6. Una cuenta se compromete porque su contraseña era `123456`.
 
-    En la Parte B de la actividad de hoy vas a aplicar el mismo criterio a otros seis incidentes — distintos a estos, para que no puedas copiar la respuesta de aquí abajo.
-
 ??? tip "Abrir respuesta"
     1. **Tuya.** El permiso del bucket es una configuración que decides tú, no algo que AWS active por defecto.
     2. **De AWS.** Es infraestructura física — el centro de datos y su suministro eléctrico — que gestiona el proveedor.
