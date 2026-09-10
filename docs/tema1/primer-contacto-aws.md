@@ -144,7 +144,7 @@ La frontera no es fija: en una máquina virtual (IaaS) tú respondes del sistema
     2. Un centro de datos entero se cae por un corte eléctrico regional.
     3. Una aplicación no aplica un parche de seguridad conocido desde hace meses.
     4. Una credencial de acceso se filtra porque estaba escrita dentro del código subido a un repositorio público.
-    5. Un disco físico del proveedor falla sin que existiera redundancia suficiente.
+    5. Un disco físico del proveedor falla y el dato se pierde, aunque AWS garantiza por SLA que lo replica automáticamente dentro de la zona.
     6. Una cuenta se compromete porque su contraseña era `123456`.
 
 ??? tip "Abrir respuesta"
@@ -152,7 +152,7 @@ La frontera no es fija: en una máquina virtual (IaaS) tú respondes del sistema
     2. **De AWS.** Es infraestructura física — el centro de datos y su suministro eléctrico — que gestiona el proveedor.
     3. **Tuya.** Aplicar los parches dentro de la aplicación que tú instalas y mantienes depende de ti, no de AWS.
     4. **Tuya.** La credencial se filtra por cómo tú gestionas tu código y tus secretos, no por un fallo de AWS.
-    5. **De AWS.** El disco físico y su redundancia son responsabilidad del proveedor, no algo que tú controles.
+    5. **De AWS.** La replicación automática dentro de la zona es un compromiso de durabilidad que AWS asume por SLA, no algo que tú configures — distinto sería que la pérdida viniera de que tú no hubieras activado Multi-AZ o backups propios, eso sí sería tuyo.
     6. **Tuya.** Elegir una contraseña débil es una decisión de configuración de tu cuenta, no un fallo de la infraestructura.
 
 ---
