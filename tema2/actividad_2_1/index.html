@@ -1,0 +1,1406 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="Alejandro Roig, Aitor Ventura y Ángel Vidal">
+      
+      
+      
+        <link rel="prev" href="../vpc-diseno/">
+      
+      
+        <link rel="next" href="../seguridad-red/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.18">
+    
+    
+      
+        <title>Actividad 2.1 - Tu propia VPC en dos zonas - Introducción a la Nube Pública</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.7e37652d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../css/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#actividad-21-tu-propia-vpc-en-dos-zonas" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href="../.." title="Introducción a la Nube Pública" class="md-header__button md-logo" aria-label="Introducción a la Nube Pública" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Introducción a la Nube Pública
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Actividad 2.1 - Tu propia VPC en dos zonas
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="amber"  aria-label="Modo oscuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Modo oscuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="amber"  aria-label="Modo Claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Modo Claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Introducción a la Nube Pública" class="md-nav__button md-logo" aria-label="Introducción a la Nube Pública" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Introducción a la Nube Pública
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Inicio
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Tema 1 - Introducción a la nube pública
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Tema 1 - Introducción a la nube pública
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tema1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tema 1 - Introducción
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Primer contacto profesional con AWS
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            Primer contacto profesional con AWS
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tema1/primer-contacto-aws/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Primer contacto profesional con AWS
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tema1/actividad_1_1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 1.1 - Tu primer despliegue en la nube
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Tema 2 - Redes virtuales y servicios de cómputo
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Tema 2 - Redes virtuales y servicios de cómputo
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tema 2 - Introducción
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Diseño de la red virtual
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            Diseño de la red virtual
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vpc-diseno/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Diseño de la red virtual
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Actividad 2.1 - Tu propia VPC en dos zonas
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 2.1 - Tu propia VPC en dos zonas
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#contexto" class="md-nav__link">
+    <span class="md-ellipsis">
+      Contexto
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#que-vas-a-practicar" class="md-nav__link">
+    <span class="md-ellipsis">
+      Qué vas a practicar
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#requisitos-previos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Requisitos previos
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parte-a-disenar-y-construir-la-vpc-guiada" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parte A — Diseñar y construir la VPC (guiada)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parte A — Diseñar y construir la VPC (guiada)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-1-entiende-el-reparto-antes-de-construir" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 1 — Entiende el reparto antes de construir
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-2-crea-la-vpc-y-las-subredes-desde-la-consola" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 2 — Crea la VPC y las subredes desde la consola
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-3-convierte-en-publicas-solo-las-subredes-que-deben-serlo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 3 — Convierte en públicas solo las subredes que deben serlo
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-4-demuestra-que-la-conectividad-es-la-que-dices-que-es" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 4 — Demuestra que la conectividad es la que dices que es
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parte-b-amplia-la-red-tu-mismo-sin-que-nadie-te-de-ya-los-numeros-reto" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parte B — Amplía la red tú mismo, sin que nadie te dé ya los números (reto)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#criterios-de-evaluacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Criterios de evaluación
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cierre" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Cierre
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Seguridad de red
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            Seguridad de red
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../seguridad-red/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Seguridad de red
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_2_2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 2.2 - Diagnóstico de fallos de red por capas
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Máquinas virtuales
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            Máquinas virtuales
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../maquinas-virtuales/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Máquinas virtuales
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_2_3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 2.3 - De instancia a plantilla
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../curriculum/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Currículo
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#contexto" class="md-nav__link">
+    <span class="md-ellipsis">
+      Contexto
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#que-vas-a-practicar" class="md-nav__link">
+    <span class="md-ellipsis">
+      Qué vas a practicar
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#requisitos-previos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Requisitos previos
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parte-a-disenar-y-construir-la-vpc-guiada" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parte A — Diseñar y construir la VPC (guiada)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parte A — Diseñar y construir la VPC (guiada)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-1-entiende-el-reparto-antes-de-construir" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 1 — Entiende el reparto antes de construir
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-2-crea-la-vpc-y-las-subredes-desde-la-consola" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 2 — Crea la VPC y las subredes desde la consola
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-3-convierte-en-publicas-solo-las-subredes-que-deben-serlo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 3 — Convierte en públicas solo las subredes que deben serlo
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-4-demuestra-que-la-conectividad-es-la-que-dices-que-es" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 4 — Demuestra que la conectividad es la que dices que es
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parte-b-amplia-la-red-tu-mismo-sin-que-nadie-te-de-ya-los-numeros-reto" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parte B — Amplía la red tú mismo, sin que nadie te dé ya los números (reto)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#criterios-de-evaluacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Criterios de evaluación
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cierre" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Cierre
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<div><h1 id="actividad-21-tu-propia-vpc-en-dos-zonas">🧪 Actividad 2.1: Tu propia VPC en dos zonas<a class="headerlink" href="#actividad-21-tu-propia-vpc-en-dos-zonas" title="Permanent link">¶</a></h1>
+<div class="admonition warning">
+<p class="admonition-title">Descarga la plantilla</p>
+<p>📄 <a href="../plantillas/Actividad_2_1_INU_Plantilla.docx" rel="noopener" target="_blank">Plantilla 2.1 — Tu propia VPC en dos zonas</a></p>
+</div>
+<h2 id="contexto">Contexto<a class="headerlink" href="#contexto" title="Permanent link">¶</a></h2>
+<p>Vas a diseñar la red que alojará una aplicación de reserva de pistas deportivas municipales — es solo el escenario de ambientación de la sesión, no hace falta que construyas esa aplicación. Necesitaría dos partes: una a la que cualquier vecino entre desde su navegador para reservar pista, y otra —con los datos de cada reserva— sin ningún motivo para ser alcanzable desde internet.</p>
+<p>Meter ambas en una única subred pública las expondría por igual, sin necesidad. Hoy diseñas y construyes la red que las separa: dos zonas de disponibilidad, cada una con su subred pública y su subred privada.</p>
+<h2 id="que-vas-a-practicar">Qué vas a practicar<a class="headerlink" href="#que-vas-a-practicar" title="Permanent link">¶</a></h2>
+<ul>
+<li>Entender cómo se reparte un rango CIDR <code>/16</code> en subredes de tamaño fijo, públicas y privadas, para dos zonas de disponibilidad.</li>
+<li>Construir una VPC en consola siguiendo exactamente el reparto indicado.</li>
+<li>Verificar qué conectividad existe de verdad, y comprobar que la que no debería existir, efectivamente no existe.</li>
+</ul>
+<h2 id="requisitos-previos">Requisitos previos<a class="headerlink" href="#requisitos-previos" title="Permanent link">¶</a></h2>
+<p>Los apuntes de esta sesión — <a href="../vpc-diseno/">«Diseño de la red virtual»</a>. No necesitas nada de sesiones anteriores: hoy construyes la red desde cero.</p>
+<div class="admonition warning">
+<p class="admonition-title">Cómo hacer las capturas</p>
+<p>En cada captura tiene que verse con claridad lo que se pide (direcciones IP, CIDR, nombres de subred, salida de los comandos...) — una captura recortada, borrosa o con la información clave fuera de encuadre no sirve como evidencia. Además, tiene que verse algo que identifique que los recursos son tuyos y que la práctica la has hecho tú: tu identificador en el nombre de los recursos (<code>pistas-vpc-&lt;tu-identificador&gt;</code>), o la IP y el ID de instancia concretos que hayas usado — no una captura genérica que podría ser de cualquier otro alumno.</p>
+</div>
+<hr>
+<h2 id="parte-a-disenar-y-construir-la-vpc-guiada">Parte A — Diseñar y construir la VPC (guiada)<a class="headerlink" href="#parte-a-disenar-y-construir-la-vpc-guiada" title="Permanent link">¶</a></h2>
+<h3 id="paso-1-entiende-el-reparto-antes-de-construir">Paso 1 — Entiende el reparto antes de construir<a class="headerlink" href="#paso-1-entiende-el-reparto-antes-de-construir" title="Permanent link">¶</a></h3>
+<p>Hoy no diseñas tu propio reparto de subredes desde cero — sigues uno ya decidido, el mismo para todo el grupo, para que sea más fácil detectar errores en clase y comparar resultados. Partiendo del rango <code>10.0.0.0/16</code> de la VPC, lo divides en cuatro subredes <code>/24</code> del mismo tamaño (256 direcciones cada una, de sobra para cualquier práctica de este módulo) — una pública y una privada en cada una de las dos zonas de disponibilidad, siguiendo el método FLSM (subredes de tamaño fijo):</p>
+<table>
+<thead>
+<tr>
+<th>Subred</th>
+<th>CIDR</th>
+<th>Zona</th>
+<th>Tipo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pistas-publica-a</td>
+<td><code>10.0.0.0/24</code></td>
+<td>A</td>
+<td>Pública</td>
+</tr>
+<tr>
+<td>pistas-privada-a</td>
+<td><code>10.0.1.0/24</code></td>
+<td>A</td>
+<td>Privada</td>
+</tr>
+<tr>
+<td>pistas-publica-b</td>
+<td><code>10.0.2.0/24</code></td>
+<td>B</td>
+<td>Pública</td>
+</tr>
+<tr>
+<td>pistas-privada-b</td>
+<td><code>10.0.3.0/24</code></td>
+<td>B</td>
+<td>Privada</td>
+</tr>
+</tbody>
+</table>
+<p>Fíjate en el patrón: cada subred ocupa un <code>/24</code> consecutivo, incrementando el tercer octeto, así que ninguna se solapa con otra y las cuatro caben sin problema dentro del <code>/16</code> de la VPC — es exactamente la comprobación que tendrías que hacer tú mismo si el reparto no viniera dado. Si quieres repasar en detalle cómo se llega a esta división, consulta esta guía del <a href="https://subnetmaster.es/guia/subredes/metodo-flsm/" rel="noopener" target="_blank">método FLSM paso a paso</a>.</p>
+<p><strong>Comprueba</strong>: que entiendes por qué estos cuatro rangos no se solapan y por qué caben dentro del <code>/16</code> de la VPC — lo necesitas para crearlos exactamente así en el Paso 2.</p>
+<h3 id="paso-2-crea-la-vpc-y-las-subredes-desde-la-consola">Paso 2 — Crea la VPC y las subredes desde la consola<a class="headerlink" href="#paso-2-crea-la-vpc-y-las-subredes-desde-la-consola" title="Permanent link">¶</a></h3>
+<p>Es tu primera VPC, así que constrúyela desde la consola, paso a paso:</p>
+<ol>
+<li>Busca "VPC" en el buscador de servicios y entra en el panel de VPC.</li>
+<li>Haz clic en <strong>Crear VPC</strong>.</li>
+<li>Elige la opción <strong>Solo VPC</strong> (no el asistente "VPC y más", para controlar tú cada pieza).</li>
+<li>En <strong>Bloque de dirección IPv4</strong>, escribe <code>10.0.0.0/16</code>.</li>
+<li>
+<p>Dale un nombre reconocible (por ejemplo <code>pistas-vpc-&lt;tu-identificador&gt;</code>) y crea la VPC.</p>
+<p><img alt="VPC creada con el rango 10.0.0.0/16" src="../img/actividad_2_1_paso2_a.png"></p>
+<div class="admonition tip">
+<p class="admonition-title">El resto de opciones del formulario se dejan tal cual</p>
+<p>Vas a ver varios campos que el enunciado no te pide tocar — no es un descuido, es que no aplican a esta actividad: <strong>Bloque de CIDR IPv6</strong> (este módulo trabaja solo en IPv4, no hace falta ningún bloque IPv6), <strong>Tenencia</strong> (Predeterminado — Dedicado reserva hardware físico en exclusiva para tu cuenta, con sobrecoste, y no lo necesitas aquí) y <strong>Control de cifrado de VPC</strong> (Ninguno — los otros dos modos tienen coste adicional, marcado con el propio <code>$</code> en el nombre del campo). Déjalos todos en su valor por defecto.</p>
+</div>
+</li>
+<li>
+<p>En el menú lateral, entra en <strong>Subredes</strong> → <strong>Crear subred</strong>.</p>
+</li>
+<li>Selecciona la VPC que acabas de crear.</li>
+<li>Añade la primera subred de tu tabla del Paso 1: en <strong>Nombre de la subred</strong> escribe <code>pistas-publica-a</code>, en <strong>Zona de disponibilidad</strong> elige la primera zona de la lista (por ejemplo <code>us-east-1a</code>), y en <strong>Bloque de CIDR de la subred IPv4</strong> escribe <code>10.0.0.0/24</code>. Haz clic en <strong>Agregar nueva subred</strong> y repite el mismo proceso con los datos de cada una de las otras tres filas de la tabla — mismos campos, solo cambia el nombre, la zona y el CIDR.</li>
+<li>Haz clic en <strong>Crear subred</strong>.</li>
+<li>Vuelve a <strong>Sus VPC</strong>, entra en el detalle de tu VPC (clic en su nombre) y abre la pestaña <strong>Mapa de recursos</strong> — ahí ves en una sola pantalla el nombre y CIDR de tu VPC junto a las cuatro subredes agrupadas por zona de disponibilidad.</li>
+</ol>
+<p><img alt="Las cuatro subredes creadas, con su CIDR y zona visibles" src="../img/actividad_2_1_paso2_b.png"></p>
+<p><strong>Comprueba</strong>: en el mapa de recursos de tu VPC, que ves las cuatro subredes agrupadas correctamente por zona de disponibilidad, sin ninguna de más ni de menos; y en el panel de <strong>Subredes</strong>, que cada una muestra el CIDR exacto de tu tabla.</p>
+<p><strong>Captura</strong>: el mapa de recursos de tu VPC (nombre y CIDR de la VPC, <code>10.0.0.0/16</code>, con las cuatro subredes agrupadas por zona), y el panel de <strong>Subredes</strong> mostrando el CIDR IPv4 de cada una.</p>
+<h3 id="paso-3-convierte-en-publicas-solo-las-subredes-que-deben-serlo">Paso 3 — Convierte en públicas solo las subredes que deben serlo<a class="headerlink" href="#paso-3-convierte-en-publicas-solo-las-subredes-que-deben-serlo" title="Permanent link">¶</a></h3>
+<p>Crea la pasarela de internet, asóciala a la VPC, y añade la ruta <code>0.0.0.0/0</code> solo en la tabla de rutas de las dos subredes públicas.</p>
+<ol>
+<li>En el menú lateral del panel de VPC, entra en <strong>Puertas de enlace de Internet</strong> → <strong>Crear puerta de enlace de internet</strong>.</li>
+<li>Dale un nombre (por ejemplo <code>pistas-igw-&lt;tu-identificador&gt;</code>) y créala.</li>
+<li>Con la puerta de enlace recién creada seleccionada, ve a <strong>Acciones</strong> → <strong>Adjuntar a una VPC</strong>, elige tu VPC y confirma.</li>
+<li>Vuelve al menú lateral y entra en <strong>Tablas de enrutamiento</strong> → <strong>Crear tabla de enrutamiento</strong>.</li>
+<li>Dale un nombre (por ejemplo <code>pistas-rt-publica-&lt;tu-identificador&gt;</code>), selecciona tu VPC, y créala.</li>
+<li>Entra en la tabla recién creada → pestaña <strong>Rutas</strong> → <strong>Editar rutas</strong> → <strong>Agregar ruta</strong>: en <strong>Destino</strong> escribe <code>0.0.0.0/0</code>, y en <strong>Destino de destino</strong> elige tu puerta de enlace de internet. Guarda los cambios.</li>
+<li>Pestaña <strong>Asociaciones de subred</strong> → <strong>Editar asociaciones de subred</strong> → marca únicamente tus dos subredes públicas (<code>pistas-publica-a</code> y <code>pistas-publica-b</code>) → guarda.</li>
+</ol>
+<p>La forma más clara de comprobarlo no es mirar las tablas sueltas, es mirar cada subred: entra en <strong>Subredes</strong>, haz clic en una de tus subredes públicas (por ejemplo <code>pistas-publica-a</code>) y mira el campo <strong>Tabla de enrutamiento</strong> en su panel de detalles — debe apuntar a la tabla que acabas de crear (<code>pistas-rt-publica-...</code>). Haz lo mismo con una privada (por ejemplo <code>pistas-privada-a</code>): su <strong>Tabla de enrutamiento</strong> debe ser la principal, distinta de la anterior.</p>
+<p><img alt="Detalle de una subred pública, con su Tabla de enrutamiento apuntando a la tabla que has creado" src="../img/actividad_2_1_paso3_a.png"></p>
+<p><img alt="Detalle de una subred privada, con su Tabla de enrutamiento apuntando a la principal" src="../img/actividad_2_1_paso3_b.png"></p>
+<p><strong>Comprueba</strong>: que el campo <strong>Tabla de enrutamiento</strong> de tus dos subredes públicas apunta a la tabla que has creado, y que el de tus dos subredes privadas apunta a la principal — dos tablas distintas, una por tipo.</p>
+<p><strong>Captura</strong>: el panel de detalles de una subred pública tuya, con su campo <strong>Tabla de enrutamiento</strong> visible, junto al de una subred privada tuya, con el suyo.</p>
+<h3 id="paso-4-demuestra-que-la-conectividad-es-la-que-dices-que-es">Paso 4 — Demuestra que la conectividad es la que dices que es<a class="headerlink" href="#paso-4-demuestra-que-la-conectividad-es-la-que-dices-que-es" title="Permanent link">¶</a></h3>
+<p>El diseño de los pasos anteriores queda sobre el papel hasta que lo pones a prueba de verdad.</p>
+<p>Para probarlo vas a lanzar dos instancias mínimas —una en tu subred pública, otra en la privada—, usándolas solo como herramienta de prueba: no hace falta que entiendas todavía cómo funcionan por dentro, eso lo ves con detalle en los apuntes de «Máquinas virtuales», más adelante en este tema.</p>
+<p>Para entrar en cada una y ejecutar comandos dentro, usas <strong>SSH</strong> (<em>Secure Shell</em>): un protocolo que abre una terminal remota sobre la máquina, como si estuvieras sentado delante de ella. Tu instancia privada no tiene IP pública, así que nadie de fuera de la VPC puede llegar a ella directamente por SSH — ni siquiera tú, desde la consola de AWS. La única forma de entrar es la que ya conoces de la teoría: saltar primero a un recurso que sí está dentro de la VPC —tu instancia pública— y, desde ahí, alcanzar la privada. Es el mismo patrón «recepción → sala de servidores» de los apuntes, aplicado a SSH.</p>
+<p>Antes de comprobar que la subred privada no sale a internet, predice por escrito qué mensaje de error o comportamiento exacto esperas ver.</p>
+<ol>
+<li>
+<p>Busca "EC2" → <strong>Lanzar instancia</strong>.</p>
+<ul>
+<li>Como AMI (<em>Amazon Machine Image</em>: la plantilla de disco con el sistema operativo y el software ya instalado, el punto de partida de la instancia), elige <strong>Amazon Linux 2023</strong>. Como tipo de instancia (la combinación de CPU y memoria que le asignas), <code>t3.micro</code>.</li>
+<li>En <strong>Configuración de red</strong>, elige tu VPC y la subred <code>pistas-publica-a</code>, con IP pública automática habilitada.</li>
+<li>Crea un grupo de seguridad nuevo con <strong>dos</strong> reglas de entrada SSH (puerto 22): una con origen <strong>Anywhere-IPv4</strong> (<code>0.0.0.0/0</code>) y otra con origen personalizado <code>10.0.0.0/16</code>.</li>
+<li>En <strong>Par de claves (inicio de sesión)</strong>, elige <strong>Continuar sin un par de claves (no recomendado)</strong> — no te hace falta ninguno, porque te vas a conectar con las claves temporales de EC2 Instance Connect, no con un par de claves fijo.</li>
+<li>En <strong>Configuración avanzada</strong>, busca el campo <strong>Perfil de instancia de IAM</strong> y selecciona <code>LabInstanceProfile</code> — lo necesitas más adelante en este mismo paso, para autorizar el salto hacia la privada.</li>
+<li>Lánzala.</li>
+</ul>
+<div class="admonition tip">
+<p class="admonition-title">¿Por qué dos reglas de SSH distintas?</p>
+<p><code>0.0.0.0/0</code> es la que te deja entrar a ti, desde el navegador de la consola, a la instancia pública — este método de conexión no viaja desde tu propio ordenador, sino desde la infraestructura de AWS, así que abrir el puerto a "cualquier IP" no expone la instancia a tu red local. <code>10.0.0.0/16</code> es la que necesitas después, para saltar desde la pública hacia la privada sin salir nunca de la VPC. La próxima sesión aprendes a acotar reglas como estas con precisión — hoy te sirve tal cual.</p>
+</div>
+</li>
+<li>
+<p>Repite el lanzamiento para una segunda instancia idéntica en <code>pistas-privada-a</code>, con el mismo grupo de seguridad, sin IP pública, sin par de claves y sin perfil de IAM (no los necesita).</p>
+</li>
+<li>
+<p>Selecciona la instancia pública en la consola de EC2 → <strong>Conectar</strong> → pestaña <strong>En el navegador web</strong> → <strong>Acceso a subredes públicas</strong> → <strong>Conectar</strong>. En la terminal que se abre, ejecuta:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a>curl<span class="w"> </span>-m<span class="w"> </span><span class="m">5</span><span class="w"> </span>-I<span class="w"> </span>https://example.com
+</code></pre></div></td></tr></table></div>
+<p>Debe devolver una respuesta empezando por <code>HTTP/2 200</code> — es la prueba de que la subred pública sale a internet.</p>
+</li>
+<li>
+<p>Sin cerrar esa terminal —sigues dentro de la instancia pública—, genera una clave temporal y autoriza con ella el salto hacia la instancia privada:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span>
+<span class="normal"><a href="#__codelineno-1-2">2</a></span>
+<span class="normal"><a href="#__codelineno-1-3">3</a></span>
+<span class="normal"><a href="#__codelineno-1-4">4</a></span>
+<span class="normal"><a href="#__codelineno-1-5">5</a></span>
+<span class="normal"><a href="#__codelineno-1-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a>ssh-keygen<span class="w"> </span>-t<span class="w"> </span>rsa<span class="w"> </span>-f<span class="w"> </span>~/.ssh/tempkey<span class="w"> </span>-N<span class="w"> </span><span class="s1">''</span><span class="w"> </span>-q
+<a id="__codelineno-1-2" name="__codelineno-1-2"></a>aws<span class="w"> </span>ec2-instance-connect<span class="w"> </span>send-ssh-public-key<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="w">  </span>--instance-id<span class="w"> </span>&lt;id-de-tu-instancia-privada&gt;<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="w">  </span>--instance-os-user<span class="w"> </span>ec2-user<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="w">  </span>--ssh-public-key<span class="w"> </span>file://~/.ssh/tempkey.pub<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6"></a><span class="w">  </span>--availability-zone<span class="w"> </span>&lt;zona-de-tu-instancia-privada&gt;
+</code></pre></div></td></tr></table></div>
+<p>Sustituye <code>&lt;id-de-tu-instancia-privada&gt;</code> por el ID real (pestaña <strong>Detalles</strong> de esa instancia) y <code>&lt;zona-de-tu-instancia-privada&gt;</code> por su zona de disponibilidad (<code>us-east-1a</code> si has seguido el reparto del Paso 1). Una respuesta con <code>"Success": true</code> confirma que la clave ha quedado autorizada durante los próximos 60 segundos — el mismo mecanismo que usa el botón de conexión del navegador, pero ejecutado a mano.</p>
+</li>
+<li>
+<p>Con esa clave recién autorizada, salta a la privada y repite la misma comprobación, esta vez desde dentro de ella:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
+<span class="normal"><a href="#__codelineno-2-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a>ssh<span class="w"> </span>-o<span class="w"> </span><span class="nv">StrictHostKeyChecking</span><span class="o">=</span>no<span class="w"> </span>-i<span class="w"> </span>~/.ssh/tempkey<span class="w"> </span>ec2-user@&lt;ip-privada-de-tu-instancia&gt;<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="w">  </span><span class="s2">"curl -m 5 -I https://example.com"</span>
+</code></pre></div></td></tr></table></div>
+<p>Sustituye <code>&lt;ip-privada-de-tu-instancia&gt;</code> por su dirección IPv4 privada (misma pestaña <strong>Detalles</strong>). El propio hecho de conseguir la conexión SSH ya demuestra que ambas instancias se hablan entre sí dentro de la VPC; el comando quedándose colgado hasta agotar el tiempo, sin ninguna respuesta <code>HTTP</code>, es la prueba de que, desde ahí dentro, no hay salida a internet. Compara con tu predicción.</p>
+</li>
+<li>
+<p>Para comprobarlo también con <code>ping</code> hace falta una regla más en el grupo de seguridad: <code>curl</code> y <code>ping</code> no usan el mismo protocolo, así que la regla SSH que ya tienes no le afecta. Ve a <strong>Security Groups</strong> → tu grupo de seguridad → <strong>Editar reglas de entrada</strong> → <strong>Agregar regla</strong>: tipo <strong>Todo ICMP - IPv4</strong>, origen personalizado <code>10.0.0.0/16</code> → <strong>Guardar reglas</strong>.</p>
+</li>
+<li>
+<p>De vuelta en la terminal de la instancia pública (sigues conectado ahí, el <code>ssh</code> del paso anterior era una orden puntual, no una sesión abierta), comprueba que ambas instancias se hablan entre sí en la misma red:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a>ping<span class="w"> </span>-c<span class="w"> </span><span class="m">3</span><span class="w"> </span>&lt;ip-privada-de-tu-instancia&gt;
+</code></pre></div></td></tr></table></div>
+<p>Debe responder — es la prueba, con evidencia distinta a la del salto SSH, de que ambas están en la misma red y pueden comunicarse aunque una no llegue a internet.</p>
+</li>
+</ol>
+<p><strong>Comprueba</strong>: que tu predicción coincide con el comportamiento real que observas, y que los tres comportamientos (pública con salida a internet, privada sin ella, ambas hablándose entre sí) quedan demostrados con evidencia, no solo afirmados.</p>
+<p><strong>Captura</strong>: tu predicción escrita de antemano, la salida del primer <code>curl</code> desde la instancia pública (con respuesta <code>HTTP 200</code>), la salida del segundo <code>curl</code>, ejecutado a través del salto SSH, desde dentro de la instancia privada (sin respuesta), y la salida del <code>ping</code> entre ambas.</p>
+<hr>
+<h2 id="parte-b-amplia-la-red-tu-mismo-sin-que-nadie-te-de-ya-los-numeros-reto">Parte B — Amplía la red tú mismo, sin que nadie te dé ya los números (reto)<a class="headerlink" href="#parte-b-amplia-la-red-tu-mismo-sin-que-nadie-te-de-ya-los-numeros-reto" title="Permanent link">¶</a></h2>
+<p>El reparto del Paso 1 solo llega hasta la zona B. El reto: añade una tercera zona de disponibilidad, calculando tú mismo el CIDR de una tercera subred pública y una tercera privada, siguiendo exactamente el mismo patrón que las cuatro primeras (mismo tamaño <code>/24</code>, mismo criterio de numeración incremental). Créalas en consola, añade la ruta hacia la pasarela solo en la nueva pública, y demuestra —con la misma evidencia real que en el Paso 4— que se comportan igual que las cuatro anteriores: la pública tiene salida a internet, la privada no.</p>
+<p>Cuando tengas la evidencia, documenta el diagrama de red completo (las seis subredes, la pasarela, lo que hayas usado para probar la conectividad) y explica por escrito, con tus propias palabras, cómo has calculado el CIDR de la zona nueva sin que nadie te lo diera, y por qué sigue sin solaparse con el resto.</p>
+<p><strong>Comprueba</strong>: que el CIDR que has calculado para la zona nueva no se solapa con ninguno de los cuatro anteriores, y que el diagrama documentado coincide exactamente con las seis subredes que existen en tu cuenta.</p>
+<p><strong>Captura</strong>: las dos subredes nuevas creadas, con su CIDR calculado visible; la evidencia de que se comportan igual que las cuatro originales; y el diagrama de red final con las seis subredes.</p>
+<hr>
+<h2 id="criterios-de-evaluacion">Criterios de evaluación<a class="headerlink" href="#criterios-de-evaluacion" title="Permanent link">¶</a></h2>
+<p><strong>Parte A — hasta 6 puntos</strong></p>
+<table>
+<thead>
+<tr>
+<th>Apartado</th>
+<th>Puntos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>VPC y cuatro subredes creadas siguiendo el reparto indicado</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Subredes públicas y privadas correctamente diferenciadas por tabla de rutas</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Conectividad demostrada con evidencia real (predicción + los tres comportamientos)</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Parte B — reto, hasta 4 puntos adicionales (máximo total: 10)</strong></p>
+<table>
+<thead>
+<tr>
+<th>Apartado</th>
+<th>Puntos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tercera zona calculada y añadida correctamente, sin solapes con las cuatro anteriores</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Conectividad de la zona nueva demostrada igual que en el Paso 4</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Diagrama de red completo (seis subredes) y explicación del cálculo</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="cierre">✅ Cierre<a class="headerlink" href="#cierre" title="Permanent link">¶</a></h2>
+<p>Ya tienes el terreno construido: una VPC con subredes públicas y privadas repartidas en dos zonas, con la separación garantizada por la tabla de rutas y no solo por convención. En la próxima sesión vas a poner grupos de seguridad y NACL sobre esta misma red, y vas a encontrarte —a propósito— con una versión rota de todo esto que tendrás que arreglar contrarreloj.</p>
+<div class="admonition danger">
+<p class="admonition-title">Antes de salir: borra las instancias, no la VPC</p>
+<p>Termina (elimina) las instancias EC2 que has lanzado solo para probar la conectividad en el Paso 4 y en la Parte B — no le sirven a nadie después de hoy y siguen consumiendo crédito de tu laboratorio mientras estén encendidas. <strong>No borres la VPC, las subredes, la pasarela de internet ni las tablas de rutas</strong>: las vas a seguir necesitando el resto del Tema 2 — hasta la Actividad 2.3, donde sí tocará borrar la red entera.</p>
+</div></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Pie" >
+        
+          
+          <a href="../vpc-diseno/" class="md-footer__link md-footer__link--prev" aria-label="Anterior: Diseño de la red virtual">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Anterior
+              </span>
+              <div class="md-ellipsis">
+                Diseño de la red virtual
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../seguridad-red/" class="md-footer__link md-footer__link--next" aria-label="Siguiente: Seguridad de red">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Siguiente
+              </span>
+              <div class="md-ellipsis">
+                Seguridad de red
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      
+<p style="margin: 0 auto; text-align: center; font-size: 0.7rem;">
+  © 2026 Alejandro Roig, Aitor Ventura y Ángel Vidal —
+  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">
+    Licencia CC BY-NC-SA 4.0
+  </a>
+</p>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.top", "navigation.tracking", "navigation.footer", "content.code.copy", "content.code.select"], "search": "../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.92b07e13.min.js"></script>
+      
+    
+  </body>
+</html>
