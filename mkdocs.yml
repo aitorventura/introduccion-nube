@@ -13,7 +13,7 @@ exclude_docs: |
   tema7/*
 
 site_name: Introducción a la Nube Pública
-site_author: Alejandro Roig y Aitor Ventura
+site_author: Alejandro Roig, Aitor Ventura y Ángel Vidal
 
 theme:
   name: material
