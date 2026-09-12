@@ -22,6 +22,18 @@ Cada servicio de AWS se factura con su propia unidad, y confundirlas lleva a est
 !!! warning "La transferencia de salida es la que más sorprende"
     La transferencia de **entrada** (subir datos a AWS) normalmente no cuesta nada; la de **salida** (que un dato salga de AWS hacia internet) sí, y es una de las líneas que más crece sin que te des cuenta, sobre todo si sirves imágenes pesadas sin optimizar. La CDN del Tema 4 no solo acerca contenido al usuario — también reduce esta partida, porque buena parte del tráfico se sirve desde el borde sin volver a salir del origen.
 
+Con esas cuatro unidades ya puedes poner un número a una arquitectura antes de construirla, sumando cada pieza por separado. Una instancia pequeña encendida todo el mes, una base de datos gestionada del mismo tamaño, unos pocos GB de imágenes y un poco de tráfico de salida da, de forma orientativa, algo así:
+
+| Partida | Estimación mensual orientativa |
+|---|---|
+| 1 instancia EC2 pequeña, 24/7 | ~7 € |
+| 1 réplica de base de datos gestionada, mismo tamaño | ~13 € |
+| 10 GB de imágenes en S3 | menos de 1 € |
+| 5 GB de transferencia de salida al mes | ~0,5 € |
+| **Total orientativo** | **~21 €/mes** |
+
+No memorices estas cifras — cambian con la región, el tamaño exacto y el tipo de instancia, y **la calculadora que vas a usar en la Actividad 5.3 te da el número real para tu caso concreto**, no uno aproximado como este. Lo que sí conviene retener es la idea: cada fila de esta tabla sale de una unidad de facturación distinta de la tabla de arriba, y sumarlas por separado —en vez de intentar adivinar "cuánto cuesta la aplicación" de un plumazo— es exactamente el método que vas a aplicar hoy sobre tu propia arquitectura.
+
 ---
 
 ## 🧩 Capa gratuita y sus límites
@@ -96,6 +108,19 @@ El **etiquetado** (*tagging*) —poner etiquetas como `proyecto: miapp` o `entor
 
 ---
 
+## 🧮 Antes de construir, o después de construir
+
+Todo lo anterior sirve para dos momentos distintos, y AWS tiene una herramienta para cada uno:
+
+| Herramienta | Cuándo se usa | Qué responde |
+|---|---|---|
+| **Calculadora de precios** ([calculator.aws](https://calculator.aws)) | Antes de construir | "¿Cuánto va a costar esta arquitectura si la levanto?" — una estimación, sin tocar tu cuenta |
+| **Cost Explorer / Budgets** | Después de construir | "¿Cuánto está costando de verdad lo que ya tengo desplegado?" — gasto real, ya facturado |
+
+Llevas desde la Actividad 1.1 con un presupuesto y una alerta activos en tu cuenta — eso es la mitad "después" de esta pareja. Hoy trabajas la mitad "antes": poner un número a una arquitectura *antes* de que exista, para decidir con datos si merece la pena construirla tal cual o cambiarle algo primero. Las seis R de arriba son precisamente el tipo de decisión que se toma con ese número en la mano, no después de ver la factura.
+
+---
+
 ## ✅ Ideas clave
 
 ??? tip "Abrir resumen"
@@ -105,5 +130,6 @@ El **etiquetado** (*tagging*) —poner etiquetas como `proyecto: miapp` o `entor
     - Los modelos de compra van de bajo demanda (flexible, caro) a reservas y planes de ahorro (compromiso, descuento) hasta Spot (muy barato, interrumpible).
     - Las 6 R de la migración van de mover tal cual (rehosting) a rediseñar por completo (refactoring) — la mejor no es siempre la más ambiciosa.
     - Apagar lo que no se usa, ajustar tamaños y mover datos fríos de clase son palancas más sencillas que cambiar de modelo de compra; el etiquetado es lo que hace visible dónde aplicarlas.
+    - La calculadora de precios estima **antes** de construir; Cost Explorer y los presupuestos (como el que activaste en la Actividad 1.1) miden el gasto real **después**.
 
 Con esto ya tienes las piezas para la Actividad 5.3 — Cuánto cuesta lo que has construido.
