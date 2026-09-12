@@ -7,6 +7,7 @@
 exclude_docs: |
   tema3/*
   tema4/*
+  tema5/*
   tema6/*
   tema7/*
   cierre.md
@@ -75,17 +76,17 @@ nav:
   #     - DNS, HTTPS y distribución de contenido:
   #         - DNS, HTTPS y distribución de contenido: tema4/dns-https-cdn.md
   #         - Actividad 4.2 - Dominio propio y caché en el borde: tema4/actividad_4_2.md
-  - Tema 5 - Gobierno de la nube:
-      - Tema 5 - Introducción: tema5/index.md
-      - Monitorización y operación:
-          - Monitorización y operación: tema5/monitorizacion-operacion.md
-          - Actividad 5.1 - Monitorización y diagnóstico con CloudWatch: tema5/actividad_5_1.md
-      - Identidad y gestión de accesos:
-          - Identidad y gestión de accesos: tema5/iam-aplicado.md
-          - Actividad 5.2 - Gestión de credenciales y políticas IAM: tema5/actividad_5_2.md
-      - Economía de la nube:
-          - Economía de la nube: tema5/economia-nube.md
-          - Actividad 5.3 - Cuánto cuesta lo que has construido: tema5/actividad_5_3.md
+  # - Tema 5 - Gobierno de la nube:
+  #     - Tema 5 - Introducción: tema5/index.md
+  #     - Monitorización y operación:
+  #         - Monitorización y operación: tema5/monitorizacion-operacion.md
+  #         - Actividad 5.1 - Monitorización y diagnóstico con CloudWatch: tema5/actividad_5_1.md
+  #     - Identidad y gestión de accesos:
+  #         - Identidad y gestión de accesos: tema5/iam-aplicado.md
+  #         - Actividad 5.2 - Gestión de credenciales y políticas IAM: tema5/actividad_5_2.md
+  #     - Economía de la nube:
+  #         - Economía de la nube: tema5/economia-nube.md
+  #         - Actividad 5.3 - Cuánto cuesta lo que has construido: tema5/actividad_5_3.md
   # - Tema 6 - Automatización y modelos de ejecución:
   #     - Tema 6 - Introducción: tema6/index.md
   #     - Infraestructura como código:
