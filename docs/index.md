@@ -28,7 +28,7 @@ Los temas se van publicando a medida que avanza el curso. Los que todavía no es
 | 🕸️ [Tema 2 — Redes virtuales y cómputo](tema2/index.md) | VPC, subredes, grupos de seguridad, instancias e imágenes propias | RA3 |
 | 🔒 Tema 3 — Almacenamiento, datos y primera arquitectura *(próximamente)* | Bloque, objetos y ficheros compartidos, bases de datos gestionadas, arquitectura de tres capas | RA4 · RA3 |
 | 🔒 Tema 4 — Alta disponibilidad y entrega de contenido *(próximamente)* | Balanceo, escalado automático, DNS gestionado, HTTPS y CDN | RA3 |
-| 🔒 Tema 5 — Gobierno de la nube *(próximamente)* | Monitorización y diagnóstico, identidad y permisos, economía de la nube | RA2 · RA1 |
+| 🏛️ [Tema 5 — Gobierno de la nube](tema5/index.md) | Monitorización y diagnóstico, identidad y permisos, economía de la nube | RA2 · RA1 |
 | 🔒 Tema 6 — Automatización y modelos de ejecución *(próximamente)* | Infraestructura como código, serverless, contenedores gestionados | RA3 · RA4 |
 | 🔒 Tema 7 — Arquitectura bien diseñada *(próximamente)* | Los seis pilares como lista de comprobación, auditoría y mejora | RA4 |
 
