@@ -113,7 +113,11 @@ Ya sabes poner un número real a lo que construyes antes de construirlo, no solo
 !!! danger "Antes de salir: qué hacer con lo de hoy"
     Esta es la última actividad del Tema 5 — el Tema 6 construye su propia infraestructura desde cero con código, así que no necesitas mantener nada de esto encendido mientras tanto.
 
+    A diferencia de los cierres anteriores, aquí no "pausas" nada — no hay ninguna actividad después que vaya a reactivar esto, así que se borra directamente:
+
     1. Si no lo has hecho ya en el reto: borra el sistema de ficheros EFS.
-    2. Baja el grupo de escalado a capacidad 0, borra el balanceador y el grupo de destino (`recrear-alb.sh` te lo vuelve a montar en un par de minutos si lo necesitas más adelante).
-    3. Detén o borra la RDS.
-    4. Los buckets S3 (frontend e imágenes) puedes dejarlos — su coste es mínimo y el Tema 6 puede seguir usándolos.
+    2. Borra el grupo de escalado automático, la plantilla de lanzamiento, el balanceador y el grupo de destino — no hace falta bajar antes la capacidad a 0, ni conservar nada "por si acaso" (`recrear-alb.sh` ya no te va a hacer falta).
+    3. Borra también tu AMI propia (la de la Actividad 4.1) y la instancia RDS — no las dejes solo detenidas.
+    4. Si todavía tienes el dashboard, las tres alarmas, la regla de EventBridge y los grupos de registros de CloudWatch Logs de la 5.1 (los borraste solo si no ibas a continuar "en las próximas horas" — probablemente los conservaste hasta hoy), bórralos ahora: ninguna actividad posterior los usa.
+    5. Espera a que la RDS termine de borrarse del todo (tarda varios minutos) y entonces destruye también la red: `terraform destroy -var="identificador=<tu-identificador>"` desde `recursos/tema3/red-base`. La VPC, las subredes, la tabla de rutas y el grupo de seguridad no cuestan nada por sí solos, así que esto no cambia tu factura — pero nada de lo que viene después los necesita, y la Actividad 6.1 arranca con su propia VPC de ejemplo, autocontenida en su propio módulo de Terraform. Si `terraform destroy` falla porque todavía queda algo dentro de la VPC, es la señal de que te has dejado algo de los pasos anteriores sin borrar.
+    6. Los buckets S3 (frontend e imágenes) puedes dejarlos — su coste es mínimo y la Actividad 6.2 reutiliza el de imágenes.
