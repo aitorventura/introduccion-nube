@@ -101,7 +101,7 @@ Y por consola: en el buscador de servicios de la parte superior, escribe "S3" y 
 
 **Comprueba**: que el número de cuenta y el resultado del listado de buckets coinciden entre CLI y consola.
 
-**Captura**: tu propio menú de identidad en la consola, con tu número de cuenta visible, y la salida de `aws sts get-caller-identity` en tu terminal.
+**Captura**: tu propio menú de identidad en la consola, con tu número de cuenta visible; la salida de `aws sts get-caller-identity` en tu terminal; y la salida de `aws s3 ls` en tu terminal junto con el listado de buckets (vacío) en la consola de S3.
 
 ### Paso 3 — Crea y configura el bucket desde la consola
 
