@@ -15,7 +15,8 @@ terraform {
 }
 
 provider "aws" {
-  region = "eu-west-1"
+  # El Learner Lab solo permite trabajar en us-east-1
+  region = "us-east-1"
 }
 
 data "aws_availability_zones" "disponibles" {
@@ -28,7 +29,7 @@ resource "aws_vpc" "principal" {
   enable_dns_hostnames = true
 
   tags = {
-    Name        = "vpc-actividad61-${var.environment}"
+    Name        = "vpc-actividad61-${var.identificador}-${var.environment}"
     Environment = var.environment
   }
 }
@@ -40,7 +41,7 @@ resource "aws_subnet" "publica" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name        = "subred-publica-${var.environment}"
+    Name        = "subred-publica-${var.identificador}-${var.environment}"
     Environment = var.environment
   }
 }
@@ -51,7 +52,7 @@ resource "aws_subnet" "privada" {
   availability_zone = data.aws_availability_zones.disponibles.names[1]
 
   tags = {
-    Name        = "subred-privada-${var.environment}"
+    Name        = "subred-privada-${var.identificador}-${var.environment}"
     Environment = var.environment
   }
 }
@@ -60,7 +61,7 @@ resource "aws_internet_gateway" "principal" {
   vpc_id = aws_vpc.principal.id
 
   tags = {
-    Name        = "igw-${var.environment}"
+    Name        = "igw-${var.identificador}-${var.environment}"
     Environment = var.environment
   }
 }
@@ -74,7 +75,7 @@ resource "aws_route_table" "publica" {
   }
 
   tags = {
-    Name        = "rt-publica-${var.environment}"
+    Name        = "rt-publica-${var.identificador}-${var.environment}"
     Environment = var.environment
   }
 }
