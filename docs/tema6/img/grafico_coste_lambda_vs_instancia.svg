@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 540" role="img" aria-labelledby="t d" font-family="Arial, Helvetica, sans-serif">
+<title id="t">Coste mensual de una función Lambda frente a una instancia t3.small</title>
+<desc id="d">Gráfico logarítmico: el coste de Lambda crece con las invocaciones y corta la línea fija de la instancia (15,18 dólares) en unos 8 millones de invocaciones al mes, o unos 5 millones con la pasarela de API.</desc>
+<rect width="900" height="540" rx="10" fill="#FFFFFF"/>
+<text x="95" y="36" font-size="22" font-weight="700" fill="#1A237E">Coste mensual: función Lambda frente a una instancia</text>
+<text x="95" y="60" font-size="14" fill="#757575">Función de 512 MB y 200 ms de media, sin capa gratuita · instancia t3.small · US East (N. Virginia)</text>
+<rect x="95" y="95" width="569.8" height="360" fill="#E8EAF6" opacity="0.55"/>
+<line x1="95.0" y1="95" x2="95.0" y2="455" stroke="#E0E0E0" stroke-width="1"/>
+<text x="95.0" y="477" font-size="13" text-anchor="middle" fill="#757575">1.000</text>
+<line x1="248.0" y1="95" x2="248.0" y2="455" stroke="#E0E0E0" stroke-width="1"/>
+<text x="248.0" y="477" font-size="13" text-anchor="middle" fill="#757575">10.000</text>
+<line x1="401.0" y1="95" x2="401.0" y2="455" stroke="#E0E0E0" stroke-width="1"/>
+<text x="401.0" y="477" font-size="13" text-anchor="middle" fill="#757575">100.000</text>
+<line x1="554.0" y1="95" x2="554.0" y2="455" stroke="#E0E0E0" stroke-width="1"/>
+<text x="554.0" y="477" font-size="13" text-anchor="middle" fill="#757575">1 M</text>
+<line x1="707.0" y1="95" x2="707.0" y2="455" stroke="#E0E0E0" stroke-width="1"/>
+<text x="707.0" y="477" font-size="13" text-anchor="middle" fill="#757575">10 M</text>
+<line x1="860.0" y1="95" x2="860.0" y2="455" stroke="#E0E0E0" stroke-width="1"/>
+<text x="860.0" y="477" font-size="13" text-anchor="middle" fill="#757575">100 M</text>
+<line x1="95" y1="455.0" x2="860" y2="455.0" stroke="#E0E0E0" stroke-width="1"/>
+<text x="85" y="459.0" font-size="13" text-anchor="end" fill="#757575">0,001 $</text>
+<line x1="95" y1="395.0" x2="860" y2="395.0" stroke="#E0E0E0" stroke-width="1"/>
+<text x="85" y="399.0" font-size="13" text-anchor="end" fill="#757575">0,01 $</text>
+<line x1="95" y1="335.0" x2="860" y2="335.0" stroke="#E0E0E0" stroke-width="1"/>
+<text x="85" y="339.0" font-size="13" text-anchor="end" fill="#757575">0,10 $</text>
+<line x1="95" y1="275.0" x2="860" y2="275.0" stroke="#E0E0E0" stroke-width="1"/>
+<text x="85" y="279.0" font-size="13" text-anchor="end" fill="#757575">1 $</text>
+<line x1="95" y1="215.0" x2="860" y2="215.0" stroke="#E0E0E0" stroke-width="1"/>
+<text x="85" y="219.0" font-size="13" text-anchor="end" fill="#757575">10 $</text>
+<line x1="95" y1="155.0" x2="860" y2="155.0" stroke="#E0E0E0" stroke-width="1"/>
+<text x="85" y="159.0" font-size="13" text-anchor="end" fill="#757575">100 $</text>
+<line x1="95" y1="95.0" x2="860" y2="95.0" stroke="#E0E0E0" stroke-width="1"/>
+<text x="85" y="99.0" font-size="13" text-anchor="end" fill="#757575">1.000 $</text>
+<text x="477.5" y="518" font-size="14" text-anchor="middle" fill="#212121">Invocaciones al mes (escala logarítmica)</text>
+<text transform="translate(24,275.0) rotate(-90)" font-size="14" text-anchor="middle" fill="#212121">Coste al mes (escala logarítmica)</text>
+<path d="M95.0,438.7 L860.0,138.7" stroke="#3949AB" stroke-width="3.5" fill="none"/>
+<path d="M95.0,427.6 L860.0,127.6" stroke="#1A237E" stroke-width="3" stroke-dasharray="9 6" fill="none"/>
+<line x1="95" y1="204.1" x2="860" y2="204.1" stroke="#FFA000" stroke-width="3.5"/>
+<text x="103" y="195.1" font-size="14" font-weight="700" fill="#B26A00">Instancia t3.small: 15,18 $ fijos, atienda lo que atienda</text>
+<text x="719.1" y="218.0" font-size="14" font-weight="700" fill="#3949AB">Lambda</text>
+<text x="300.4" y="333.0" font-size="14" font-weight="700" fill="#1A237E" transform="rotate(-19 300.4 333.0)">Lambda + pasarela HTTP</text>
+<circle cx="693.3" cy="204.1" r="7" fill="#FFFFFF" stroke="#212121" stroke-width="2.5"/>
+<circle cx="664.8" cy="204.1" r="7" fill="#FFFFFF" stroke="#212121" stroke-width="2.5"/>
+<text x="652.8" y="176.1" font-size="13" font-weight="700" text-anchor="end" fill="#212121" paint-order="stroke" stroke="#FFFFFF" stroke-width="5" stroke-linejoin="round">con pasarela: ≈ 5,3 M</text>
+<text x="705.3" y="234.1" font-size="13" font-weight="700" text-anchor="start" fill="#212121">solo Lambda: ≈ 8,1 M</text>
+<text x="705.3" y="252.1" font-size="12" text-anchor="start" fill="#757575">(unas 3 peticiones por segundo)</text>
+<circle cx="168.0" cy="410.1" r="6" fill="#3949AB" stroke="#FFFFFF" stroke-width="2"/>
+<text x="178.0" y="438.1" font-size="13" font-weight="700" text-anchor="start" fill="#3949AB" paint-order="stroke" stroke="#FFFFFF" stroke-width="5" stroke-linejoin="round">Bajo: 0,01 $</text>
+<circle cx="554.0" cy="258.7" r="6" fill="#3949AB" stroke="#FFFFFF" stroke-width="2"/>
+<text x="564.0" y="284.7" font-size="13" font-weight="700" text-anchor="start" fill="#3949AB" paint-order="stroke" stroke="#FFFFFF" stroke-width="5" stroke-linejoin="round">Medio: 1,87 $</text>
+<circle cx="804.2" cy="160.6" r="6" fill="#3949AB" stroke="#FFFFFF" stroke-width="2"/>
+<text x="794.2" y="182.6" font-size="13" font-weight="700" text-anchor="end" fill="#3949AB" paint-order="stroke" stroke="#FFFFFF" stroke-width="5" stroke-linejoin="round">Alto: 80,64 $</text>
+<text x="105" y="117" font-size="14" font-weight="700" fill="#1A237E">Sale más barata la función</text>
+<text x="850" y="117" font-size="14" font-weight="700" text-anchor="end" fill="#B26A00">Sale más barata la instancia</text>
+</svg>
