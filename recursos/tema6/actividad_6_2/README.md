@@ -5,6 +5,8 @@ no viene incluida en el entorno de ejecución de Lambda por defecto — hay que
 empaquetarla junto con el código antes de subir la función. Dos formas de
 hacerlo, de más simple a más avanzada:
 
+**Antes de empezar:** Pillow lleva partes compiladas para una versión concreta de Python. Empaquétala en CloudShell y elige para la función Lambda el entorno de ejecución de Python con **la misma versión** que muestra `python3 --version` en CloudShell (hoy, la 3.13). Con otra versión, la función falla al arrancar con un error de importación.
+
 ## Opción 1 — Todo en un único .zip (la más simple para este ejercicio)
 
 ```bash
