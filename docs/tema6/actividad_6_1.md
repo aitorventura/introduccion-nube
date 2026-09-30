@@ -25,6 +25,9 @@ Terraform instalado desde la Actividad 3.1 (comprueba con `terraform -version`; 
 
 No necesitas nada de lo que has construido en los Temas 3, 4 y 5: al cerrar la 5.3 has dejado la cuenta prácticamente vacía (solo quedan los buckets de S3) y el módulo de hoy trae su propia red.
 
+!!! warning "Cómo hacer las capturas"
+    En cada captura tiene que verse con claridad lo que se pide (salida de terminal, recursos en la consola...) — una captura recortada, borrosa o con la información clave fuera de encuadre no sirve como evidencia. Además, tiene que verse algo que identifique que los recursos son tuyos y que la práctica la has hecho tú: tu identificador en el nombre de los recursos (`vpc-actividad61-<tu-identificador>-dev`) — no una captura genérica que podría ser de cualquier otro alumno.
+
 !!! warning "A tu CloudShell le cabe 1 GB: hoy solo cabe un `terraform init`"
     El proveedor de AWS que descarga `terraform init` pesa unos **675 MB**, y tu CloudShell tiene 1 GB en total. Si el proveedor de la red del Tema 3 sigue en su carpeta, el `init` de hoy fallará con `no space left on device`. Como esa red ya está destruida, borrar ese proveedor no pierde nada —`terraform init` lo vuelve a descargar si algún día lo necesitas—:
 

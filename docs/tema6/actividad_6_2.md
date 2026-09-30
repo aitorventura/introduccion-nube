@@ -22,6 +22,9 @@ Desde que Escaparate guarda las fotos de producto en S3 (Actividad 5.2), el list
 
 El bucket de imágenes de Escaparate ya configurado en la Actividad 5.2 (`escaparate-imagenes-<tu-identificador>`, con las fotos de producto bajo el prefijo `escaparate/`). Si no has hecho esa actividad, crea un bucket nuevo con esa misma estructura de prefijo — el Paso 1 te indica cómo. El código base de la función, `lambda_function.py` (con su `requirements.txt` y su `README.md` de empaquetado) — descárgalo del enlace de arriba. Los apuntes de esta sesión — [«Serverless»](serverless.md).
 
+!!! warning "Cómo hacer las capturas"
+    En cada captura tiene que verse con claridad lo que se pide — una captura recortada, borrosa o con la información clave fuera de encuadre no sirve como evidencia. Además, tiene que verse algo que identifique que los recursos son tuyos y que la práctica la has hecho tú: tu identificador en el nombre de los recursos (`escaparate-miniaturas-<tu-identificador>`) — no una captura genérica que podría ser de cualquier otro alumno.
+
 !!! tip "Lambda no forma parte de Escaparate, y es intencionado"
     No vas a tocar ni una línea del backend Java de Escaparate. La función vive al lado, como una pieza satélite que observa el bucket — así se demuestra que serverless puede añadir capacidades a una aplicación ya existente sin meterse dentro de su código ni de su ciclo de despliegue.
 

@@ -28,6 +28,9 @@ Con varias réplicas a la vez aparece un problema nuevo que con una sola instanc
 
 La base de datos RDS de la Actividad 3.2 (el Paso 0 te indica cómo continuar, tanto si la has destruido como si solo la has detenido) y el bucket S3 del frontend de la Actividad 3.3 (sigue sirviendo el mismo catálogo, solo cambia a qué backend apunta). El `escaparate.war` de los recursos de la 3.2. Los apuntes de esta sesión — [«Balanceo de carga y escalado automático»](alta-disponibilidad-escalado.md).
 
+!!! warning "Cómo hacer las capturas"
+    En cada captura tiene que verse con claridad lo que se pide — una captura recortada, borrosa o con la información clave fuera de encuadre no sirve como evidencia. Además, tiene que verse algo que identifique que los recursos son tuyos y que la práctica la has hecho tú: tu identificador en el nombre de los recursos (`escaparate-alb-<tu-identificador>`) — no una captura genérica que podría ser de cualquier otro alumno.
+
 !!! info "No vas a programar nada de Escaparate"
     Como en toda la sesión anterior, hoy trabajas en infraestructura: cómo se lanza cada instancia, quién puede hablar con quién, y de dónde saca su configuración. El código no cambia.
 

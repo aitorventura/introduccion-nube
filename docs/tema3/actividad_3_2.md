@@ -16,7 +16,6 @@ Trae ya preparados varios endpoints pensados justo para eso:
 - `/api/instancia`, `/api/salud/vivo`, `/api/carga` — para sesiones posteriores, cuando haya varias instancias o un balanceador de por medio.
 
 ![Escaparate como aplicación fija que atraviesa el módulo, con la infraestructura de debajo cambiando tema a tema: RDS hoy, ALB/ASG/EFS en el Tema 4, S3/IAM en el Tema 5, ECR/ECS en el Tema 6](img/actividad_3_2_escaparate_intro.png)
-*🖼️ Infografía pendiente de generar — no la foto del catálogo (esa la pide el propio Paso 5 como evidencia del alumno), sino el esquema de qué cambia sesión a sesión*
 
 Escaparate ha vivido hasta ahora con su base de datos en un contenedor local, cómoda para desarrollar pero inservible en producción: si el contenedor desaparece, desaparecen los productos con él. Hoy la migras a una base de datos RDS gestionada de verdad — sin tocar ni una línea de su código, solo cambiando cómo se conecta — y, ya con ella en marcha, la pones a prueba: la haces fallar a propósito y mides cuánto tarda en recuperarse, y compruebas de primera mano qué otras familias de base de datos existirían si el catálogo de Escaparate no fuera tan relacional.
 
@@ -31,6 +30,9 @@ Escaparate ha vivido hasta ahora con su base de datos en un contenedor local, c�
 ## Requisitos previos
 
 La red del Tema 3, desplegada con Terraform (`recursos/tema3/red-base`) — si ya la destruiste al cerrar la Actividad 3.1, el Paso 1 te indica cómo volver a desplegarla, es la misma configuración de siempre. `escaparate.war` — un **WAR** (*Web Application Archive*) es el empaquetado tradicional de una aplicación Java web en un único fichero, con el código ya compilado y todas sus dependencias dentro: es lo que ejecutas en un servidor real, en vez de arrancar la aplicación desde el código fuente con Maven como habrás hecho en local hasta ahora — descárgalo del enlace de arriba, ya construido, junto con el esquema de la base de datos (`db/01-schema.sql`, `db/02-data.sql`). Los apuntes de esta sesión — [«Bases de datos gestionadas»](bases-datos-gestionadas.md).
+
+!!! warning "Cómo hacer las capturas"
+    En cada captura tiene que verse con claridad lo que se pide — una captura recortada, borrosa o con la información clave fuera de encuadre no sirve como evidencia. Además, tiene que verse algo que identifique que los recursos son tuyos y que la práctica la has hecho tú: tu identificador en el nombre de los recursos (`escaparate-db-<tu-identificador>`) — no una captura genérica que podría ser de cualquier otro alumno.
 
 !!! info "No vas a programar nada de Escaparate"
     Igual que en el resto de actividades que usan Escaparate, no vas a escribir ni una línea de su código. Hoy trabajas exclusivamente en la infraestructura: la base de datos, la red, y las variables de entorno que conectan una cosa con la otra.

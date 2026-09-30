@@ -24,6 +24,9 @@ Hasta ahora has lanzado instancias sueltas, a mano, repitiendo los mismos parám
 
 La VPC de dos zonas de la Actividad 2.1, con su subred pública ya creada — hoy lanzas una instancia nueva sobre ella, no reutilizas la de la Actividad 2.2. Los apuntes de esta sesión — [«Máquinas virtuales»](maquinas-virtuales.md).
 
+!!! warning "Cómo hacer las capturas"
+    En cada captura tiene que verse con claridad lo que se pide — una captura recortada, borrosa o con la información clave fuera de encuadre no sirve como evidencia. Además, tiene que verse algo que identifique que los recursos son tuyos y que la práctica la has hecho tú: tu identificador en el nombre de los recursos (`pistas-panel-<tu-identificador>`), o el ID concreto de tu AMI o tu instancia — no una captura genérica que podría ser de cualquier otro alumno.
+
 ---
 
 ## Parte A — De instancia manual a imagen propia (guiada)

@@ -3,10 +3,14 @@ Contador de Asistencia — versión 1
 Actividad 6.3 — Tu imagen, sin servidores
 """
 
+import socket
+
 from flask import Flask
 
 app = Flask(__name__)
 
+# Nombre de la máquina donde corre este contenedor: cambia en cada tarea
+TAREA = socket.gethostname()
 ASISTENTES = 128
 
 HTML = f"""
@@ -30,6 +34,7 @@ HTML = f"""
   <body>
     <h1>Asistentes registrados: {ASISTENTES}</h1>
     <p>Contador de Asistencia — versión 1</p>
+    <p>Responde la tarea: {TAREA}</p>
   </body>
 </html>
 """

@@ -19,6 +19,9 @@ Desde el Tema 2 has ido lanzando instancias, bases de datos, balanceadores y buc
 
 El balanceador, el grupo de escalado, la RDS y el bucket de imágenes en S3 de la 5.2 (si has pausado los recursos al cerrar esa actividad, repite el Paso 0 de la 5.1 para reactivarlos: mismo `recrear-alb.sh`, misma RDS, mismo ASG a capacidad 2). El bucket S3 del frontend de la 3.3. No hace falta desplegar nada nuevo — la actividad de hoy es de estimación, no de construcción. Acceso a la [calculadora de precios oficial de AWS](https://calculator.aws) y al panel **AWS Details** de tu Learner Lab (donde ves el crédito restante). Los apuntes de esta sesión — [«Economía de la nube»](economia-nube.md).
 
+!!! warning "Cómo hacer las capturas"
+    En cada captura tiene que verse con claridad lo que se pide (líneas de coste, crédito restante...) — una captura recortada, borrosa o con la información clave fuera de encuadre no sirve como evidencia. Además, tiene que verse algo que identifique que es tu propia estimación: tu identificador en el nombre de los recursos que aparezcan en la calculadora (`escaparate-db-<tu-identificador>`), o tu número de cuenta y tu crédito concreto en el panel AWS Details — no una captura genérica que podría ser de cualquier otro alumno.
+
 ---
 
 ## Parte A — Desglosa y calcula el coste real de tu arquitectura (guiada)

@@ -22,6 +22,9 @@ Sobre la VPC que construiste la sesión pasada vas a levantar hoy la primera pie
 
 La VPC de dos zonas de la Actividad 2.1, con sus subredes públicas y privadas ya creadas. Los apuntes de esta sesión — [«Seguridad de red»](seguridad-red.md).
 
+!!! warning "Cómo hacer las capturas"
+    En cada captura tiene que verse con claridad lo que se pide — una captura recortada, borrosa o con la información clave fuera de encuadre no sirve como evidencia. Además, tiene que verse algo que identifique que los recursos son tuyos y que la práctica la has hecho tú: tu identificador en el nombre de los recursos (`pistas-app-publica-<tu-identificador>`), o la IP y el ID de instancia concretos que hayas usado — no una captura genérica que podría ser de cualquier otro alumno.
+
 ---
 
 ## Parte A — Instancia pública y privada (guiada)

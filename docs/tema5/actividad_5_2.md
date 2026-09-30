@@ -25,6 +25,9 @@ Escaparate guarda las fotos de sus productos en EFS desde la Actividad 4.1 — u
 
 El balanceador, el grupo de escalado, la RDS y el agente de CloudWatch de la 5.1 (si has pausado los recursos al cerrar esa actividad, repite su Paso 0 antes de continuar: mismo script `recrear-alb.sh`, misma RDS, mismo ASG a capacidad 2). El bucket S3 del frontend de la 3.3. Los apuntes de esta sesión — [«Identidad y gestión de accesos»](iam-aplicado.md).
 
+!!! warning "Cómo hacer las capturas"
+    En cada captura tiene que verse con claridad lo que se pide — una captura recortada, borrosa o con la información clave fuera de encuadre no sirve como evidencia. Además, tiene que verse algo que identifique que los recursos son tuyos y que la práctica la has hecho tú: tu identificador en el nombre de los recursos (`escaparate-imagenes-<tu-identificador>`) — no una captura genérica que podría ser de cualquier otro alumno.
+
 ---
 
 ## Parte A — Migración a S3 y lectura de permisos reales (guiada)

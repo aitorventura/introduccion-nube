@@ -22,6 +22,9 @@
 
 Ninguno específico de INU — es la primera sesión del módulo. Necesitas: la invitación de tu profesor al curso de AWS Academy Learner Lab, recibida por correo antes de la sesión (revísalo con antelación, no el día de clase), y los ficheros estáticos del front de El Manillar (`index.html`, `style.css`, `script.js`, `config.js`) — descárgalos del enlace de arriba, no los programas tú. Repasa antes la sección "⚙️ Modelo de responsabilidad compartida" de los apuntes de hoy — la vas a necesitar en la Parte B.
 
+!!! warning "Cómo hacer las capturas"
+    En cada captura tiene que verse con claridad lo que se pide — una captura recortada, borrosa o con la información clave fuera de encuadre no sirve como evidencia. Además, tiene que verse algo que identifique que los recursos son tuyos y que la práctica la has hecho tú: tu identificador en el nombre de los recursos (`el-manillar-front-<tu-identificador>`), o tu usuario (`voclabs/user...`) visible en la esquina de la consola — no una captura genérica que podría ser de cualquier otro alumno.
+
 ---
 
 ## Parte A — Publicar el front de El Manillar (guiada)

@@ -26,6 +26,9 @@ No vas a tocar ni una línea del código de Escaparate — igual que en la 3.2, 
 
 La red, la instancia EC2 con Escaparate y la base de datos RDS de la **Actividad 3.2** — si las detuviste al cerrar esa sesión, el Paso 1 te indica cómo reanudarlas; si las destruiste del todo, tendrías que rehacer la 3.2 antes de continuar, porque hoy no se vuelve a crear nada de eso desde cero. El frontend desacoplado ya compilado (enlace de recursos arriba) — solo vas a editar un fichero de configuración, no a programar nada. Los apuntes de esta sesión — [«Primera arquitectura cloud completa»](arquitectura-completa.md).
 
+!!! warning "Cómo hacer las capturas"
+    En cada captura tiene que verse con claridad lo que se pide — una captura recortada, borrosa o con la información clave fuera de encuadre no sirve como evidencia. Además, tiene que verse algo que identifique que los recursos son tuyos y que la práctica la has hecho tú: tu identificador en el nombre de los recursos (`escaparate-front-<tu-identificador>`) — no una captura genérica que podría ser de cualquier otro alumno.
+
 !!! info "No vas a programar nada de Escaparate"
     Igual que en la 3.2, hoy trabajas en infraestructura y configuración: dónde vive cada pieza, quién puede hablar con quién, y qué variables las conectan. El código de Escaparate no cambia.
 

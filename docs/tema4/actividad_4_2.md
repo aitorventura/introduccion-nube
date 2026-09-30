@@ -31,6 +31,9 @@ Hay dos matices importantes que vas a comprobar tú mismo hoy, en vez de leerlos
 
 El balanceador y el grupo de escalado automático de la Actividad 4.1, activos y con sus instancias `healthy`. El bucket S3 del frontend de la Actividad 3.3 (`escaparate-front-<tu-identificador>`), con su contenido completo (`index.html`, `css/`, `js/`, `config.js`) — es el mismo bucket que sigues usando, no se toca hoy. Los apuntes de esta sesión — [«DNS, HTTPS y distribución de contenido»](dns-https-cdn.md).
 
+!!! warning "Cómo hacer las capturas"
+    En cada captura tiene que verse con claridad lo que se pide — una captura recortada, borrosa o con la información clave fuera de encuadre no sirve como evidencia. Además, tiene que verse algo que identifique que los recursos son tuyos y que la práctica la has hecho tú: tu identificador en el nombre de los recursos (`escaparate-<tu-identificador>.academy`) — no una captura genérica que podría ser de cualquier otro alumno.
+
 !!! info "Si has pausado algo al cerrar la 4.1"
     Si has dejado la RDS detenida o el grupo de Auto Scaling a capacidad 0 para ahorrar créditos, reactívalos antes de empezar: primero arranca la RDS y espera a que esté `available`, y solo entonces sube el ASG a mínima 2, deseada 2. Espera a que las dos instancias vuelvan a estar `healthy` en el grupo de destino antes de seguir — el registro Alias del Paso 2 necesita un balanceador con destinos sanos detrás para que la comprobación tenga sentido.
 

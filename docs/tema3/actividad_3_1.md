@@ -23,6 +23,9 @@ La plataforma de gestión de un festival de música tiene ahora mismo tres neces
 
 El Tema 2 ha terminado sin dejar ninguna red montada — al cerrar la Actividad 2.3 has borrado la VPC entera. Hoy no la reconstruyes a mano: el Paso 1 arranca desplegando una red idéntica para todo el mundo con **Terraform**, la herramienta de infraestructura como código que verás en detalle en el Tema 6. De momento la usas como una herramienta ya hecha — ejecutas dos comandos y en unos segundos tienes la VPC, las cuatro subredes y el grupo de seguridad listos, exactamente igual que los que ya conoces del Tema 2. Los apuntes de esta sesión — [«Servicios de almacenamiento»](almacenamiento.md).
 
+!!! warning "Cómo hacer las capturas"
+    En cada captura tiene que verse con claridad lo que se pide — una captura recortada, borrosa o con la información clave fuera de encuadre no sirve como evidencia. Además, tiene que verse algo que identifique que los recursos son tuyos y que la práctica la has hecho tú: tu identificador en el nombre de los recursos (`festival-fotos-<tu-identificador>`) — no una captura genérica que podría ser de cualquier otro alumno.
+
 !!! info "Recursos de apoyo"
     Dentro del zip que has descargado arriba tienes dos carpetas: `recursos/tema3/actividad_3_1/generar_fotos_ejemplo.sh`, un script que genera 5-6 ficheros de ejemplo con extensión `.jpg` (contenido aleatorio, no fotos reales) para que tengas algo que subir a S3 y a EFS sin buscar imágenes por tu cuenta; y `recursos/tema3/red-base/`, la configuración Terraform que despliega la red de esta sesión.
 

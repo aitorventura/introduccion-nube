@@ -26,6 +26,9 @@ Hoy le pones a Escaparate lo que le falta para operarse sin esa comodidad: métr
 
 El balanceador, el grupo de escalado y la RDS de la 4.1 (el Paso 0 te indica cómo reactivarlos si los has dejado pausados al cerrar la 4.2). El bucket S3 del frontend de la 3.3. Los apuntes de esta sesión — [«Monitorización y operación»](monitorizacion-operacion.md).
 
+!!! warning "Cómo hacer las capturas"
+    En cada captura tiene que verse con claridad lo que se pide — una captura recortada, borrosa o con la información clave fuera de encuadre no sirve como evidencia. Además, tiene que verse algo que identifique que los recursos son tuyos y que la práctica la has hecho tú: tu identificador en el nombre de los recursos (`escaparate-dashboard-<tu-identificador>`) — no una captura genérica que podría ser de cualquier otro alumno.
+
 !!! info "Hoy tampoco tocas el código de Escaparate"
     Todo lo de hoy es observabilidad por fuera — ni el backend ni el frontend cambian una sola línea. Lo único que cambia es la plantilla de lanzamiento, para añadir el agente de CloudWatch.
 
