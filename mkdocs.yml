@@ -5,7 +5,6 @@
 #   3. mkdocs gh-deploy
 # Los temas listados en exclude_docs NO se generan en el sitio (ni siquiera por URL directa).
 exclude_docs: |
-  tema3/*
   tema4/*
   tema5/*
   tema6/*
@@ -57,17 +56,17 @@ nav:
       - Máquinas virtuales:
           - Máquinas virtuales: tema2/maquinas-virtuales.md
           - Actividad 2.3 - De instancia a plantilla: tema2/actividad_2_3.md
-  # - Tema 3 - Almacenamiento, datos y primera arquitectura:
-  #     - Tema 3 - Introducción: tema3/index.md
-  #     - Servicios de almacenamiento:
-  #         - Servicios de almacenamiento: tema3/almacenamiento.md
-  #         - Actividad 3.1 - S3, EBS y EFS - tres soluciones de almacenamiento: tema3/actividad_3_1.md
-  #     - Bases de datos gestionadas:
-  #         - Bases de datos gestionadas: tema3/bases-datos-gestionadas.md
-  #         - Actividad 3.2 - Migración a base de datos gestionada con RDS: tema3/actividad_3_2.md
-  #     - Primera arquitectura completa:
-  #         - Primera arquitectura completa: tema3/arquitectura-completa.md
-  #         - Actividad 3.3 - Arquitectura de tres capas - front, aplicación y base de datos: tema3/actividad_3_3.md
+  - Tema 3 - Almacenamiento, datos y primera arquitectura:
+      - Tema 3 - Introducción: tema3/index.md
+      - Servicios de almacenamiento:
+          - Servicios de almacenamiento: tema3/almacenamiento.md
+          - Actividad 3.1 - S3, EBS y EFS - tres soluciones de almacenamiento: tema3/actividad_3_1.md
+      - Bases de datos gestionadas:
+          - Bases de datos gestionadas: tema3/bases-datos-gestionadas.md
+          - Actividad 3.2 - Migración a base de datos gestionada con RDS: tema3/actividad_3_2.md
+      - Primera arquitectura completa:
+          - Primera arquitectura completa: tema3/arquitectura-completa.md
+          - Actividad 3.3 - Arquitectura de tres capas - front, aplicación y base de datos: tema3/actividad_3_3.md
   # - Tema 4 - Alta disponibilidad y entrega de contenido:
   #     - Tema 4 - Introducción: tema4/index.md
   #     - Balanceo de carga y escalado automático:

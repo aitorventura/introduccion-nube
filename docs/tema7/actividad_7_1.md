@@ -35,7 +35,7 @@ La lista de componentes y el coste mensual que calculaste en la Actividad 5.3 (P
 
 Parte de tu lista de la Actividad 5.3 y complétala hasta tener una tabla con una fila por componente. Cada fila tiene que decir qué es, con qué configuración exacta, en qué zona de disponibilidad vive y quién puede llegar a él. Cubre al menos estas piezas: las instancias del grupo de escalado, el balanceador, la base de datos, los dos buckets de S3, la red (VPC, subredes públicas y privadas, grupos de seguridad), las alarmas y el dashboard de la 5.1, y los permisos con los que trabajaban tus instancias.
 
-Para la red y los grupos de seguridad, abre `recursos/tema3/red-base/main.tf` y descríbelo tal como está declarado: qué puertos abre cada regla de entrada y hacia qué orígenes. No lo hagas de memoria.
+Para la red y el grupo de seguridad base (el de SSH), abre `recursos/tema3/red-base/main.tf` y descríbelo tal como está declarado: qué puerto abre su regla de entrada y hacia qué origen. Los grupos de seguridad del balanceador y de las instancias, los que creaste en la Actividad 4.1, ya no existen para poder consultarlos ahí: usa tus propias capturas o notas de esa sesión, no los reconstruyas de memoria.
 
 | Componente | Configuración exacta | Zona(s) | Quién puede llegar a él |
 |---|---|---|---|
@@ -65,7 +65,7 @@ Si has borrado alguno de los dos buckets, audita el que quede. Si no queda ningu
 **Captura**: la salida de los cuatro comandos para cada bucket, junto a tus predicciones.
 
 !!! question "Reflexiona"
-    ¿Coincidían tus predicciones con lo que había? Para cada diferencia, di a qué pilar pertenece y si la consideras un problema o una decisión razonable. El bucket del frontend probablemente tenía el acceso público desactivado por una razón que ya conoces: antes de anotarlo como hallazgo de seguridad, comprueba que tiene sentido para lo que ese bucket sirve.
+    ¿Coincidían tus predicciones con lo que había? Para cada diferencia, di a qué pilar pertenece y si la consideras un problema o una decisión razonable. El bucket del frontend probablemente tenía el **bloqueo** de acceso público desactivado —es decir, el bucket sí es accesible desde fuera— por una razón que ya conoces: antes de anotarlo como hallazgo de seguridad, comprueba que tiene sentido para lo que ese bucket sirve.
 
 ### Paso 3 — Pasa los seis pilares por tu inventario
 

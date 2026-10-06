@@ -34,7 +34,10 @@ En sostenibilidad, AWS se encarga de la eficiencia de sus centros de datos; a ti
 
 ## 🔍 Cómo se ve un hallazgo: un ejemplo completo
 
-Un **hallazgo** es un problema concreto de una arquitectura, anotado con dos datos: qué **impacto** tiene si no se corrige y qué **esfuerzo** cuesta corregirlo. Para ver el método entero, una arquitectura inventada: la aplicación de préstamos de la biblioteca de un instituto. Corre en una sola instancia `t3.large` con IP pública, que ejecuta a la vez la aplicación y la base de datos PostgreSQL. La copia de seguridad es un fichero que alguien copia a mano a su portátil al final de cada mes. La contraseña de la base de datos está escrita en el fichero de configuración que se sube al repositorio. Y la única forma de enterarse de una caída es que un alumno avise al bibliotecario.
+Un **hallazgo** es un problema concreto de una arquitectura, anotado con dos datos: qué **impacto** tiene si no se corrige y qué **esfuerzo** cuesta corregirlo. Para ver el método entero, una arquitectura inventada:
+
+!!! example "El caso para ver el método completo: la aplicación de préstamos de una biblioteca de instituto"
+    Corre en una sola instancia `t3.large` con IP pública, que ejecuta a la vez la aplicación y la base de datos PostgreSQL. La copia de seguridad es un fichero que alguien copia a mano a su portátil al final de cada mes. La contraseña de la base de datos está escrita en el fichero de configuración que se sube al repositorio. Y la única forma de enterarse de una caída es que un alumno avise al bibliotecario.
 
 | Pilar | Hallazgo | Impacto | Esfuerzo |
 |---|---|---|---|
@@ -91,6 +94,8 @@ Con la biblioteca del ejemplo anterior, y con cifras inventadas solo para el cá
 
 La última fila es la que importa: añadir instancias no ha servido de nada mientras la base de datos siga siendo una sola pieza. El sistema es tan disponible como su eslabón más débil.
 
+![Balanceador e instancias en paralelo, con la base de datos como pieza única en serie: el eslabón débil que fija la disponibilidad total en 99,49%, unas 45 horas de caída al año](img/diagrama_disponibilidad_eslabon_debil.png)
+
 !!! warning "La redundancia no funciona tan bien como dice la fórmula"
     El cálculo en paralelo supone que las dos copias fallan de forma independiente y que el cambio de una a otra es instantáneo. En la práctica el cambio tarda (es tu RTO, en la sección siguiente) y hay fallos que afectan a las dos copias a la vez: un error de configuración, un despliegue defectuoso o la caída de una región entera. Por eso la fórmula da un techo, no una garantía.
 
@@ -122,6 +127,8 @@ El RTO y el RPO no los fija quien construye el sistema, los fija el negocio: es 
 | Luz piloto (*pilot light*) | Los datos replicados y activos; el resto de servicios existe pero apagado | Decenas de minutos | Bajo |
 | Espera templada (*warm standby*) | Una versión reducida del sistema completo, ya funcionando | Minutos | Medio |
 | Activo-activo (*multi-site*) | El sistema completo en dos sitios, atendiendo tráfico a la vez | Segundos o casi cero | El más alto, más del doble |
+
+![Las cuatro estrategias de recuperación ante desastres, de menos a más coste: copia y restauración, luz piloto, espera templada y activo-activo, con lo que mantienen encendido cada una y cómo mejoran el RPO y el RTO a cambio de más coste](img/diagrama_estrategias_recuperacion.png)
 
 Estas estrategias valen tanto para proteger frente a la caída de una zona como frente a la de una región entera. Multi-AZ, que ya conoces, es una forma de recuperación dentro de la misma región; una segunda región sería lo único que protegería frente a su caída. Tu Learner Lab tiene la región fija, así que esa estrategia no puedes desplegarla: la razonas sobre el papel.
 
@@ -169,7 +176,8 @@ La priorización cruza los dos datos del hallazgo:
 | **Impacto alto** | Se corrige primero | Se planifica |
 | **Impacto bajo** | Se corrige si sobra tiempo | Se descarta o se acepta |
 
-Un hallazgo no siempre se corrige. A veces se **acepta el riesgo**: se deja como está, pero por escrito, con qué riesgo es, por qué no se corrige y hasta cuándo. Es la respuesta correcta cuando corregirlo cuesta más que el daño posible, o cuando no depende de ti, como los permisos del rol de un laboratorio que no puedes modificar.
+!!! tip "Aceptar el riesgo, por escrito, también es una respuesta válida"
+    Un hallazgo no siempre se corrige. A veces se **acepta el riesgo**: se deja como está, pero por escrito, con qué riesgo es, por qué no se corrige y hasta cuándo. Es la respuesta correcta cuando corregirlo cuesta más que el daño posible, o cuando no depende de ti, como los permisos del rol de un laboratorio que no puedes modificar.
 
 AWS ofrece una herramienta gratuita, **AWS Well-Architected Tool**, que hace estas mismas preguntas en un cuestionario y devuelve una lista de riesgos. Hoy no la usas: haces la revisión a mano para ver qué hay dentro de ese cuestionario.
 
