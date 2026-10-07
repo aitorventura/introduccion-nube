@@ -1771,7 +1771,7 @@
 </code></pre></div></td></tr></table></div>
 <p>Y por consola: en el buscador de servicios de la parte superior, escribe "S3" y entra en el servicio. Comprueba que ves la misma lista (vacía) que te ha devuelto la CLI.</p>
 <p><strong>Comprueba</strong>: que el número de cuenta y el resultado del listado de buckets coinciden entre CLI y consola.</p>
-<p><strong>Captura</strong>: tu propio menú de identidad en la consola, con tu número de cuenta visible, y la salida de <code>aws sts get-caller-identity</code> en tu terminal.</p>
+<p><strong>Captura</strong>: tu propio menú de identidad en la consola, con tu número de cuenta visible; la salida de <code>aws sts get-caller-identity</code> en tu terminal; y la salida de <code>aws s3 ls</code> en tu terminal junto con el listado de buckets (vacío) en la consola de S3.</p>
 <h3 id="paso-3-crea-y-configura-el-bucket-desde-la-consola">Paso 3 — Crea y configura el bucket desde la consola<a class="headerlink" href="#paso-3-crea-y-configura-el-bucket-desde-la-consola" title="Permanent link">¶</a></h3>
 <p>Esta es la primera vez que tocas S3, así que hazlo desde la consola, paso a paso, sin saltarte ninguna pantalla. Esto es lo que vas a tener montado al terminar el paso:</p>
 <p><img alt="El Manillar — sitio estático publicado en S3" src="../img/diagrama_s3_estatico.png"></p>
