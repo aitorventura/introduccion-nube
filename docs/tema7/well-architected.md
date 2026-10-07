@@ -2,11 +2,14 @@
 
 # 🧩 1. Well-Architected: los seis pilares
 
-<!-- Diapositivas pendientes de añadir: aquí irán el embed del PDF y el aviso de descarga. -->
+![Well-Architected: los seis pilares](diapositivas/well-architected.pdf){ type=application/pdf style="width:100%;min-height:80vh" }
+
+!!!info "Descarga de diapositivas"
+    [Descarga las diapositivas](diapositivas/well-architected.pdf){target="_blank" rel="noopener"}
 
 ---
 
-Cada sesión del módulo ha resuelto un problema concreto de Escaparate: dónde vive, quién puede llegar a él, qué pasa cuando algo falla, cuánto cuesta, cómo se reconstruye. Las decisiones se han tomado de una en una y nadie ha mirado el conjunto. Hoy lo haces: revisas la arquitectura que dejaste al cerrar el Tema 5 con el marco que usan los equipos de arquitectura para decidir si un sistema está bien construido, no solo si funciona. No añades ningún servicio ni despliegas nada —la arquitectura ya no está encendida, la borraste al cerrar la Actividad 5.3—, pero conservas todo lo necesario para revisarla sobre el papel: tu lista de componentes, tus capturas y tus cifras de coste.
+Cada sesión del módulo ha resuelto un problema concreto de Escaparate: dónde vive, quién puede llegar a él, qué pasa cuando algo falla, cuánto cuesta, cómo se reconstruye. Las decisiones se han tomado de una en una y nadie ha mirado el conjunto. Hoy lo haces: revisas la arquitectura de Escaparate, tal como quedó al terminar la Actividad 5.2, con el marco que usan los equipos de arquitectura para decidir si un sistema está bien construido, no solo si funciona. No abres AWS ni despliegas nada: partes de una ficha con todos los componentes y trabajas sobre el papel, con la calculadora de precios como única herramienta.
 
 ---
 
@@ -29,6 +32,21 @@ En sostenibilidad, AWS se encarga de la eficiencia de sus centros de datos; a ti
 
 !!! tip "No es una lista de conceptos nuevos: es una forma de mirar cualquier arquitectura"
     Fíjate en la columna de la derecha: cada pilar corresponde a algo que ya has practicado, aunque nunca lo hayas visto reunido bajo estas seis preguntas. El marco no te pide aprender nada nuevo hoy, te pide mirar una arquitectura con las seis preguntas encima, una a una, sin saltarte ninguna.
+
+---
+
+## 🔎 Qué se comprueba en cada pilar, y cómo se suele corregir
+
+Las seis preguntas son muy generales. Para auditar de verdad, cada una se baja a comprobaciones concretas que se pueden contestar mirando la configuración de un sistema, y cada comprobación que falla tiene una mejora habitual. Casi todo esto ya lo has trabajado en sesiones anteriores; lo que no, se explica aquí.
+
+| Pilar | Qué se comprueba | Cómo se suele corregir | Dónde lo has visto |
+|---|---|---|---|
+| Excelencia operativa | ¿Cada alarma avisa a alguien? Una alarma que no notifica a nadie se dispara igual, pero nadie se entera. ¿Los registros caducan o se acumulan para siempre? | Añadir una notificación a la alarma (por ejemplo, un correo) y fijar una retención a los registros. | Temas 5 y 6 |
+| Seguridad | ¿Hay puertos de administración abiertos a todo internet? ¿Todo lo que viaja va cifrado? ¿Las piezas con datos están en subredes privadas? ¿Cada identidad tiene solo los permisos que necesita, y cada persona la suya? Si varias personas comparten un usuario, no se sabe quién ha hecho qué ni se puede retirar el acceso a una sola. | Limitar el SSH a una IP concreta o entrar por un bastión; poner HTTPS con un certificado; mover lo que no necesita internet a subredes privadas (con una pasarela NAT si tiene que salir); crear un rol con solo los permisos necesarios y un usuario por persona. | Temas 2, 3, 4 y 5 |
+| Fiabilidad | ¿Alguna pieza vive en una sola zona? ¿Las copias de seguridad están fuera de lo que puede fallar junto con el original (la misma máquina, la misma zona, la misma región)? ¿Algo se repone solo cuando falla? | Activar Multi-AZ; guardar las copias en otra máquina y, si el riesgo lo justifica, en otra región; poner un grupo de escalado que reponga lo que falle. | Temas 3, 4 y 7 |
+| Eficiencia del rendimiento | ¿La capacidad se ajusta a la carga? ¿El contenido que se repite se sirve desde una caché cercana al usuario? | Escalar según la carga que se mide; poner una red de distribución de contenido (CDN) delante del contenido que se repite. | Tema 4 |
+| Optimización de costes | ¿Hay algo encendido que ya no se usa? Un recurso olvidado sigue costando aunque nadie lo mire. ¿Alguna pieza es más grande de lo que la carga necesita? | Borrar lo que no se usa; ajustar el tamaño a lo que se mide; elegir el modelo de compra que encaje con la carga. | Tema 5 |
+| Sostenibilidad | ¿Hay capacidad encendida a todas horas que solo se usa una parte del día? | Reducir o apagar la capacidad cuando no hace falta, siempre que el servicio lo permita. | Temas 4 y 6 |
 
 ---
 
@@ -177,7 +195,7 @@ La priorización cruza los dos datos del hallazgo:
 | **Impacto bajo** | Se corrige si sobra tiempo | Se descarta o se acepta |
 
 !!! tip "Aceptar el riesgo, por escrito, también es una respuesta válida"
-    Un hallazgo no siempre se corrige. A veces se **acepta el riesgo**: se deja como está, pero por escrito, con qué riesgo es, por qué no se corrige y hasta cuándo. Es la respuesta correcta cuando corregirlo cuesta más que el daño posible, o cuando no depende de ti, como los permisos del rol de un laboratorio que no puedes modificar.
+    Un hallazgo no siempre se corrige. A veces se **acepta el riesgo**: se deja como está, pero por escrito, con qué riesgo es, por qué no se corrige y hasta cuándo. Es la respuesta correcta cuando corregirlo cuesta más que el daño posible, o cuando no depende de ti, como un servicio que gestiona otro equipo y que tú no puedes cambiar.
 
 AWS ofrece una herramienta gratuita, **AWS Well-Architected Tool**, que hace estas mismas preguntas en un cuestionario y devuelve una lista de riesgos. Hoy no la usas: haces la revisión a mano para ver qué hay dentro de ese cuestionario.
 

@@ -5,88 +5,97 @@
 
 ## Contexto
 
-A lo largo del módulo has construido Escaparate pieza a pieza: red, instancias, base de datos, balanceador, monitorización, permisos, presupuesto. Cada decisión tenía su sesión y su justificación, pero nunca has mirado el conjunto entero con las mismas preguntas. Hoy lo haces: auditas tu propia arquitectura con los seis pilares de Well-Architected, buscas dónde falla y decides qué merece la pena arreglar y qué no. Después haces lo mismo con la arquitectura de otra persona, que además trae un problema sin solución perfecta.
+A lo largo del módulo has construido Escaparate pieza a pieza: red, instancias, base de datos, balanceador, monitorización, permisos. Cada decisión tenía su sesión y su justificación, pero nadie ha mirado el conjunto entero con las mismas preguntas. Hoy lo haces: auditas la arquitectura de Escaparate con los seis pilares de Well-Architected, buscas dónde falla y decides qué merece la pena arreglar y qué no. Después haces lo mismo con la arquitectura de otra persona, que además trae un problema sin solución perfecta.
 
-Esta actividad no despliega nada nuevo. La arquitectura de Escaparate ya no está encendida (la borraste al cerrar la 5.3), pero conservas su lista de componentes, tus capturas y tus cifras de coste, y el código de la red sigue en `recursos/tema3/red-base/main.tf`. Con eso se audita.
+Esta actividad se hace entera sobre el papel. No abres AWS ni despliegas nada: el primer paso de cualquier auditoría, inventariar qué hay, ya viene hecho en una ficha, y tú te dedicas a lo que de verdad cuenta: encontrar los problemas, medir cuánto pesan y decidir qué se hace con ellos.
+
+!!! info "Audita y propón como en una cuenta real, sin las restricciones del Learner Lab"
+    La ficha describe lo que se pudo construir dentro del Learner Lab, que tiene límites: la región está fija, el rol de las instancias no se puede cambiar, no se pueden crear usuarios ni roles, CloudFront está bloqueado... Para esta actividad olvida esos límites: propón las mejoras como si trabajaras en una cuenta propia, donde puedes crear roles y usuarios, elegir la región que quieras y usar cualquier servicio. Por eso la ficha no incluye cosas que una cuenta real sí podría tener (datos copiados en otra región, una red de distribución de contenido, usuarios propios...): darte cuenta de lo que falta también forma parte de la auditoría. Eso sí, cada mejora sigue teniendo su coste y su esfuerzo, y eso es lo que decide qué se hace.
 
 ## Qué vas a practicar
 
-- Inventariar una arquitectura con la configuración real de cada pieza.
-- Revisar cada uno de los seis pilares y anotar los hallazgos con su impacto y su esfuerzo.
-- Calcular la disponibilidad de un sistema y encontrar su eslabón más débil.
-- Interpretar recomendaciones automáticas y decidir cuáles se aplican.
-- Priorizar mejoras con un presupuesto limitado y dejar por escrito el riesgo que se acepta.
+- Leer la ficha de una arquitectura y sospechar dónde están sus problemas antes de analizarla.
+- Revisar cada uno de los seis pilares y anotar los hallazgos con su impacto y su esfuerzo, sin dar por problema lo que es una decisión razonable.
+- Priorizar con la matriz de impacto y esfuerzo, y dejar por escrito el riesgo que se acepta.
+- Calcular la disponibilidad de un sistema, encontrar su eslabón más débil y razonar su RTO y su RPO.
+- Interpretar recomendaciones automáticas y decidir cuáles se aplican, con un presupuesto limitado.
+- Proponer mejoras como en una cuenta real, sin las restricciones del Learner Lab.
 
 ## Requisitos previos
 
-La lista de componentes y el coste mensual que calculaste en la Actividad 5.3 (Pasos 1 y 2), y tus capturas de las actividades anteriores si las conservas. Los apuntes de esta sesión — [«Well-Architected: los seis pilares»](well-architected.md). Acceso a la [calculadora de precios de AWS](https://calculator.aws) y a tu CloudShell (Tema 1).
+Los apuntes de esta sesión — [«Well-Architected: los seis pilares»](well-architected.md). Para la Parte B, acceso a la [calculadora de precios de AWS](https://calculator.aws), que es una página pública: no hace falta iniciar sesión ni tener el Learner Lab encendido.
+
+!!! tip "No necesitas abrir AWS"
+    Ni la consola, ni CloudShell, ni nada encendido. Todo el material está en esta página y la plantilla es donde escribes tus respuestas.
 
 !!! warning "Cómo hacer las capturas"
-    En cada captura tiene que verse con claridad lo que se pide (salida de comandos, líneas de la calculadora...) — una captura recortada, borrosa o con la información clave fuera de encuadre no sirve como evidencia. Además, tiene que verse algo que identifique que es tuyo: tu identificador en el nombre de los recursos (`escaparate-imagenes-<tu-identificador>`) — no una captura genérica que podría ser de cualquier otro alumno.
-
-!!! tip "No necesitas nada encendido"
-    Ni instancias, ni base de datos, ni balanceador. Los únicos recursos reales que vas a tocar son los dos buckets de S3, que siguen existiendo y no cuestan prácticamente nada.
+    Esta actividad apenas lleva capturas: casi todo lo que entregas es texto y tablas en la plantilla. La excepción es la estimación de la Parte B: en esa captura tiene que verse con claridad cada servicio con su coste, y tienes que haber puesto tu identificador como nombre de la estimación (se cambia arriba, donde pone «My Estimate»), para que no sea una captura genérica que podría ser de cualquier otro alumno.
 
 ---
 
-## Parte A — Audita tu propia arquitectura (guiada)
+## La arquitectura de Escaparate: la ficha
 
-### Paso 1 — Haz el inventario de lo que tenías
+Es Escaparate tal como queda al terminar la Actividad 5.2, con todo encendido. Imagina que nadie ha limpiado nada por el camino: incluye **todo lo que se crea en las actividades hasta la 5.2, se esté usando o no**. Audítalo todo, también lo que parezca inofensivo. Alguna fila te avisa de que algo ya no se usa, pero no todo lo que sigue ahí sobra: decidir qué se borra y qué no es parte del trabajo. Si la tuya difiere en algún detalle, esta ficha manda: es la misma para todo el grupo.
 
-Parte de tu lista de la Actividad 5.3 y complétala hasta tener una tabla con una fila por componente. Cada fila tiene que decir qué es, con qué configuración exacta, en qué zona de disponibilidad vive y quién puede llegar a él. Cubre al menos estas piezas: las instancias del grupo de escalado, el balanceador, la base de datos, los dos buckets de S3, la red (VPC, subredes públicas y privadas, grupos de seguridad), las alarmas y el dashboard de la 5.1, y los permisos con los que trabajaban tus instancias.
-
-Para la red y el grupo de seguridad base (el de SSH), abre `recursos/tema3/red-base/main.tf` y descríbelo tal como está declarado: qué puerto abre su regla de entrada y hacia qué origen. Los grupos de seguridad del balanceador y de las instancias, los que creaste en la Actividad 4.1, ya no existen para poder consultarlos ahí: usa tus propias capturas o notas de esa sesión, no los reconstruyas de memoria.
+![Escaparate al terminar la Actividad 5.2: la VPC con sus dos zonas, el balanceador, las instancias, la base de datos y el EFS; a la derecha los servicios regionales (S3, Secrets Manager, AMI, instantánea y LabRole) y abajo la observabilidad](img/actividad_7_1_arquitectura.png)
 
 | Componente | Configuración exacta | Zona(s) | Quién puede llegar a él |
 |---|---|---|---|
-| … | … | … | … |
+| **Red** | VPC `10.0.0.0/16` con cuatro subredes: dos públicas (`10.0.0.0/24` y `10.0.2.0/24`) y dos privadas (`10.0.1.0/24` y `10.0.3.0/24`). Pasarela de internet, **sin pasarela NAT**. | `us-east-1a` y `us-east-1b` | Las públicas tienen ruta a internet; las privadas no tienen ruta de salida. |
+| **Grupo de seguridad base** | Entrada: SSH (22) desde `0.0.0.0/0`, y todo el tráfico entre instancias del mismo grupo. Salida: libre. | Toda la VPC | Cualquier IP de internet, por SSH. |
+| **Balanceador** | Application Load Balancer con acceso a internet, una sola escucha **HTTP** en el 80 (sin HTTPS), en las dos subredes públicas. Su grupo de seguridad: entrada 80 desde `0.0.0.0/0`, salida solo al 8080 de las instancias. | 1a y 1b | Cualquier IP de internet, por HTTP. |
+| **Instancias de la aplicación** | Grupo de escalado de `t3.small`: mínimo 2, deseado 2, máximo 4, escala por CPU media al 50 %. Se lanzan **en las subredes públicas, con IP pública**, desde una AMI propia, con el grupo base y un segundo grupo (8080 solo desde el balanceador). Rol `LabRole`. Agente de CloudWatch instalado. | 1a y 1b | El 8080, solo el balanceador. El 22, cualquier IP (por el grupo base). |
+| **Base de datos** | RDS PostgreSQL `db.t3.micro`, almacenamiento mínimo, **una sola instancia (sin Multi-AZ)**, en las subredes privadas, sin acceso público. Contraseña gestionada por Secrets Manager. Copias automáticas con 7 días de retención. | Una de las dos zonas | El 5432, solo las instancias del grupo base. |
+| **Frontend** | Bucket S3 con alojamiento de sitio web estático y lectura pública mediante política de bucket. Solo HTTP. El backend tiene CORS limitado al origen de este bucket. | Regional | Cualquiera, por HTTP. |
+| **Bucket de imágenes** | Bucket S3 donde se guardan las imágenes de producto desde la 5.2. Acceso público bloqueado, sin versionado, con el cifrado por defecto y sin reglas de ciclo de vida. | Regional | Solo el rol de las instancias. |
+| **Sistema de ficheros EFS** | Creado en la 4.1 para compartir las imágenes de producto entre las instancias, con un punto de montaje en cada subred privada. Desde la 5.2 las imágenes van a S3 y **ya no se usa**, pero sigue existiendo. | 1a y 1b | Las instancias del grupo base, por el 2049. |
+| **AMI y plantilla de lanzamiento** | La AMI propia con Escaparate instalado, creada en la 4.1, y la plantilla de lanzamiento que usa el grupo de escalado. | Regional | — |
+| **Copia manual de la base de datos** | Una instantánea (*snapshot*) manual de la base de datos, hecha en la 3.2 para practicar. **No se ha vuelto a usar**, pero sigue existiendo. | Regional | — |
+| **Observabilidad** | Dashboard con tres bloques (borde, aplicación, datos) y tres alarmas: CPU media del grupo por encima del 80 %, espacio libre de la RDS por debajo de 2 GiB y más de 5 errores 5xx del balanceador en un minuto. **Ninguna alarma tiene acción de aviso.** Grupo de registros de la aplicación sin retención configurada (no caduca nunca). Una regla de EventBridge que guarda en otro grupo de registros los eventos de las instancias, hecha en la 5.1 para una prueba: **nadie consulta esos eventos**. | Regional | Quien abra la consola. |
+| **Regiones y copias** | Todo vive en una sola región (`us-east-1`). Las copias automáticas de la base de datos están en esa misma región, y el bucket de imágenes no tiene versionado ni réplica en otra. | Una región | — |
+| **Entrega de contenido** | Sin red de distribución de contenido: el navegador descarga el frontend y las imágenes directamente de S3 y del balanceador, esté donde esté el visitante. | — | Cualquiera. |
+| **Dominio y HTTPS** | Ninguno: se entra por el nombre DNS genérico del balanceador y por la URL del bucket. No hay certificado. | — | — |
+| **Permisos** | Las instancias usan `LabRole`, el rol preasignado del Learner Lab, que según el simulador de la 5.2 permite muchas más acciones de las que Escaparate necesita. | — | Todo lo que corra en las instancias. |
 
-**Comprueba**: que ninguna fila dice solo «una instancia» o «una base de datos». Tiene que decir, por ejemplo, qué tipo de instancia, cuántas réplicas, si la base de datos era Multi-AZ o no, y con qué regla se abría cada puerto.
+---
 
-**Captura**: tu tabla de inventario completa.
+## Parte A — Audita Escaparate (guiada)
 
-### Paso 2 — Audita los dos buckets que siguen vivos
+### Paso 1 — Apunta tus sospechas antes de analizar nada
 
-Es lo único de tu arquitectura que puedes examinar en directo. Antes de ejecutar nada, apunta qué esperas encontrar en cada uno de los dos buckets (el del frontend y el de imágenes) en cuatro cosas: si el acceso público está bloqueado, si tiene versionado activado, si cifra los objetos en reposo y si tiene alguna regla que borre o mueva objetos antiguos. Después lo compruebas desde CloudShell, cambiando el nombre por el de cada bucket:
+Lee la ficha entera una vez. Sin abrir los apuntes, escribe los **tres problemas que crees que más pesan** y el pilar al que pertenece cada uno. No hace falta acertar: esto sirve para que en el Paso 3 puedas comprobar qué has visto a simple vista y qué se te ha escapado.
 
-```bash
-aws s3api get-public-access-block --bucket escaparate-imagenes-<tu-identificador>
-aws s3api get-bucket-versioning --bucket escaparate-imagenes-<tu-identificador>
-aws s3api get-bucket-encryption --bucket escaparate-imagenes-<tu-identificador>
-aws s3api get-bucket-lifecycle-configuration --bucket escaparate-imagenes-<tu-identificador>
-```
+**Comprueba**: que tienes tres sospechas escritas, cada una con su pilar, antes de seguir con el Paso 2.
 
-Dos avisos antes de que creas que algo ha fallado. Si un bucket no tiene configurada una de estas cosas, el comando no devuelve un valor vacío sino un error del tipo `NoSuchLifecycleConfiguration`: ese error es la respuesta («no hay regla»). Y `get-bucket-versioning` devuelve una salida vacía si el versionado no se ha activado nunca.
+### Paso 2 — Pasa los seis pilares por la ficha
 
-Si has borrado alguno de los dos buckets, audita el que quede. Si no queda ninguno, crea uno con las opciones por defecto y audítalo.
+Recorre los seis pilares, uno a uno, con la ficha delante. Para cada hallazgo apunta el pilar, qué pasa exactamente, **en qué fila de la ficha lo has visto**, su impacto (alto, medio o bajo) y el esfuerzo de corregirlo (alto, medio o bajo).
 
-**Comprueba**: que has anotado tus predicciones antes de ejecutar los comandos y que tienes la salida (o el error) de los cuatro comandos para cada bucket.
+Necesitas al menos seis hallazgos, repartidos entre al menos cuatro pilares. Si un pilar no tiene hallazgos, apúntalo como «sin hallazgos» y escribe qué has comprobado para llegar a esa conclusión. Ojo con dos tentaciones: copiar hallazgos genéricos que valdrían para cualquier arquitectura (tienen que apoyarse en algo concreto de la ficha) e inventar un problema para rellenar un pilar.
 
-**Captura**: la salida de los cuatro comandos para cada bucket, junto a tus predicciones.
+| Pilar | Hallazgo | Fila de la ficha | Impacto | Esfuerzo |
+|---|---|---|---|---|
+| … | … | … | … | … |
 
-!!! question "Reflexiona"
-    ¿Coincidían tus predicciones con lo que había? Para cada diferencia, di a qué pilar pertenece y si la consideras un problema o una decisión razonable. El bucket del frontend probablemente tenía el **bloqueo** de acceso público desactivado —es decir, el bucket sí es accesible desde fuera— por una razón que ya conoces: antes de anotarlo como hallazgo de seguridad, comprueba que tiene sentido para lo que ese bucket sirve.
-
-### Paso 3 — Pasa los seis pilares por tu inventario
-
-Recorre los seis pilares, uno a uno, con tu tabla del Paso 1 y lo que has visto en el Paso 2 delante. Para cada hallazgo, apunta el pilar, qué pasa exactamente, su impacto (alto, medio o bajo) y su esfuerzo de corregirlo (alto, medio o bajo).
-
-Necesitas al menos cinco hallazgos que salgan de **tu** arquitectura, repartidos entre al menos cuatro pilares. Si un pilar no tiene hallazgos, apúntalo como «sin hallazgos» y escribe qué has comprobado para llegar a esa conclusión. Ojo con dos tentaciones: copiar hallazgos genéricos que valdrían para cualquier arquitectura (tienen que referirse a algo concreto de la tuya) e inventar un problema para rellenar un pilar.
-
-| Pilar | Hallazgo | Impacto | Esfuerzo |
-|---|---|---|---|
-| … | … | … | … |
-
-**Comprueba**: que cada hallazgo se refiere a un componente de tu inventario y que los seis pilares aparecen, con hallazgos o con «sin hallazgos» y su comprobación.
-
-**Captura**: tu tabla de hallazgos.
+**Comprueba**: que cada hallazgo cita una fila de la ficha y que los seis pilares aparecen, con hallazgos o con «sin hallazgos» y su comprobación.
 
 !!! question "Reflexiona"
-    Elige uno de tus hallazgos de impacto alto y describe cómo lo corregirías. Después indica qué otro pilar empeora con esa corrección y cuánto: en coste, en complejidad de operación o en otra cosa. Si crees que no empeora ninguno, revísalo.
+    Indica al menos una cosa de la ficha que a primera vista parece un problema y que has decidido **no** anotar como hallazgo, y explica por qué. Antes de descartarla, comprueba que de verdad tiene sentido para lo que esa pieza hace.
+
+### Paso 3 — Contrasta, prioriza y acepta un riesgo
+
+1. **Contrasta con el Paso 1**: ¿qué sospechas se han confirmado, cuáles no y qué hallazgos importantes no habías visto?
+2. **Prioriza**: con la matriz de impacto y esfuerzo de los apuntes, elige tus tres hallazgos más urgentes, en orden, y para cada uno di qué cambiarías.
+3. **Acepta un riesgo por escrito**: elige uno de tus hallazgos que decidirías no corregir, y deja escrito qué riesgo es, por qué no se corrige y hasta cuándo. Como aquí no hay restricciones del Learner Lab, «el laboratorio no me deja» no vale como motivo: el motivo tiene que ser que corregirlo cuesta más que el daño posible.
+
+**Comprueba**: que tus tres prioridades salen de la matriz (no solo de la intuición) y que el riesgo aceptado tiene las tres partes: qué riesgo, por qué y hasta cuándo.
+
+!!! question "Reflexiona"
+    Toma tu hallazgo número uno y describe cómo lo corregirías. Después indica qué otro pilar empeora con esa corrección y cuánto: en coste, en complejidad de operación o en otra cosa. Si crees que no empeora ninguno, revísalo.
 
 ### Paso 4 — Calcula el eslabón más débil
 
-Tu arquitectura tenía tres piezas en serie que hacían falta para servir una petición: el balanceador, las instancias y la base de datos. Usa estas disponibilidades, que son inventadas y solo sirven para el cálculo:
+Para servir una petición hacen falta tres piezas en serie: el balanceador, las instancias y la base de datos. Usa estas disponibilidades, que son inventadas y solo sirven para el cálculo:
 
 | Pieza | Disponibilidad |
 |---|---|
@@ -95,26 +104,28 @@ Tu arquitectura tenía tres piezas en serie que hacían falta para servir una pe
 | Base de datos en una sola zona | 99,5 % |
 | Base de datos Multi-AZ | 99,95 % |
 
-Antes de calcular nada, contesta por escrito: para mejorar la disponibilidad total de tu arquitectura, ¿qué compensaría más, pasar de 2 a 4 instancias o pasar la base de datos a Multi-AZ? Después calcula la disponibilidad total con tu configuración real de base de datos (la del Paso 1), con 2 instancias, y con cada una de las dos mejoras. Pasa cada resultado a horas de caída al año.
+Antes de calcular nada, contesta por escrito: para mejorar la disponibilidad total de la ficha, ¿qué compensaría más, pasar de 2 a 4 instancias o pasar la base de datos a Multi-AZ? Después calcula la disponibilidad total de la configuración de la ficha (2 instancias, base de datos en una zona), y la de cada una de las dos mejoras. Pasa cada resultado a horas de caída al año.
 
-**Comprueba**: que tus tres cálculos usan tus cifras de partida, que has convertido cada resultado a horas al año y que puedes decir cuál de las dos mejoras ha movido más el resultado.
-
-**Captura**: tus cálculos, con el resultado en horas de caída al año.
+**Comprueba**: que tus tres cálculos usan las cifras de la tabla, que has convertido cada resultado a horas al año y que puedes decir cuál de las dos mejoras ha movido más el resultado.
 
 !!! question "Reflexiona"
-    Con tu configuración real, si la base de datos hubiera caído hoy a las 10:00, ¿qué habría pasado exactamente? Estima cuánto tiempo habría estado el sistema sin responder (tu RTO real) y cuántos datos recientes habrías podido perder (tu RPO real). ¿Cuál de esas dos cifras te habría preocupado más, si Escaparate fuera la tienda de otra persona?
+    Si la base de datos de la ficha hubiera caído hoy a las 10:00, ¿qué habría pasado exactamente? Fíjate en cómo está configurada (una sola instancia, con copias automáticas de 7 días) y estima cuánto tiempo habría estado el sistema sin responder (el RTO real) y cuántos datos recientes se habrían podido perder (el RPO real). ¿Cuál de las dos cifras te preocuparía más si Escaparate fuera la tienda de otra persona?
 
 ---
 
 ## Parte B — Audita la arquitectura de otra persona (reto)
 
-Una clínica veterinaria de barrio, con seis personas trabajando, te pide que revises cómo ha desplegado su aplicación de citas e historiales clínicos. Esto es lo que ha descrito su responsable:
+Una clínica veterinaria de barrio, con seis personas trabajando, te pide que revises cómo ha desplegado su aplicación de citas e historiales clínicos. Esta es la ficha que ha enviado su responsable:
 
-- La aplicación y su base de datos PostgreSQL corren juntas en una sola instancia `m5.2xlarge` (8 vCPU y 32 GB de RAM), encendida las 24 horas, con IP pública.
-- Los historiales y las radiografías se guardan en el disco de esa misma instancia (500 GB). Cada noche a las 02:00 un script copia los datos a un segundo disco conectado a la misma instancia.
-- Para entrar a administrar la instancia se usa SSH, abierto a todo internet, y las seis personas comparten el mismo usuario y la misma contraseña.
-- La web solo funciona por HTTP. No hay ninguna alarma ni panel: se enteran de que algo ha fallado cuando un cliente llama para avisar.
-- Requisitos que ha puesto el responsable: no se pueden perder más de 60 minutos de datos, la aplicación no puede estar caída más de 15 minutos durante el horario de consulta (lunes a sábado, de 9 a 20) y el presupuesto máximo es de 100 USD al mes. Las urgencias se atienden por teléfono, sin la aplicación.
+| Componente | Configuración | Quién puede llegar a él |
+|---|---|---|
+| **Servidor** | Una sola instancia `m5.2xlarge` (8 vCPU y 32 GB de RAM), encendida las 24 horas, con IP pública. En ella corren juntas la aplicación y su base de datos PostgreSQL. | Cualquier IP de internet. |
+| **Almacenamiento** | Los historiales y las radiografías están en el disco de esa misma instancia (500 GB). Cada noche a las 02:00 un script copia los datos a un segundo disco conectado a la misma instancia. | Quien entre en la instancia. |
+| **Administración** | Se entra por SSH, abierto a todo internet. Las seis personas comparten el mismo usuario y la misma contraseña. | Cualquier IP de internet. |
+| **Acceso web** | La web solo funciona por HTTP. | Cualquier IP de internet. |
+| **Vigilancia** | No hay ninguna alarma ni panel: se enteran de que algo ha fallado cuando un cliente llama para avisar. | — |
+
+Requisitos que ha puesto el responsable: no se pueden perder más de 60 minutos de datos, la aplicación no puede estar caída más de 15 minutos durante el horario de consulta (lunes a sábado, de 9 a 20) y el presupuesto máximo es de 100 USD al mes. Las urgencias se atienden por teléfono, sin la aplicación.
 
 Además, ha puesto encima de la mesa las dos recomendaciones automáticas que ha recibido en la consola, sin saber qué hacer con ellas:
 
@@ -126,43 +137,44 @@ Además, ha puesto encima de la mesa las dos recomendaciones automáticas que ha
 
 Un dato más que el responsable ha aportado al preguntarle: la memoria de la instancia está usada de media al 78 %, porque PostgreSQL guarda en ella los datos que consulta con más frecuencia.
 
-Haz la auditoría completa. Necesitas un inventario de lo que hay, una tabla de hallazgos priorizada por impacto y esfuerzo (con al menos seis hallazgos, de al menos cinco pilares distintos), y una decisión razonada, para cada una de las dos recomendaciones, de si se aplica tal cual, se aplica modificada o se descarta. Si descartas una, di por qué; si la modificas, di cómo y con qué precio. Con eso, propón un plan de mejora ordenado y estima su coste mensual con la calculadora de precios: el plan tiene que caber en el presupuesto, o explicar exactamente qué se queda fuera y por qué.
+Haz la auditoría completa. Necesitas una tabla de hallazgos priorizada por impacto y esfuerzo (con al menos seis hallazgos, de al menos cinco pilares distintos), y una decisión razonada, para cada una de las dos recomendaciones, de si se aplica tal cual, se aplica modificada o se descarta. Si descartas una, di por qué; si la modificas, di cómo y con qué precio. Con eso, propón un plan de mejora ordenado y estima su coste mensual con la calculadora de precios. Plantéalo como en una cuenta real, sin las restricciones del Learner Lab (puedes crear usuarios y roles, elegir región y usar cualquier servicio): el plan tiene que caber en el presupuesto, o explicar exactamente qué se queda fuera y por qué.
 
 Los tres requisitos del responsable no caben del todo a la vez. No hay una única respuesta correcta, pero sí una obligación: elige qué requisito se cumple entero, cuál se cumple a medias y cuál se relaja, y deja por escrito el riesgo que se acepta y cómo lo explicarías al responsable de la clínica, que no sabe de arquitectura. Fíjate en que las dos recomendaciones no son independientes entre sí, y en cómo se relacionan con el script de copia nocturna.
 
-**Comprueba**: que tus hallazgos se apoyan en datos del enunciado (no en generalidades), que has usado el dato de la memoria para juzgar la recomendación de Compute Optimizer y que el coste de tu plan sale de la calculadora, no de una estimación a ojo.
+**Comprueba**: que tus hallazgos se apoyan en datos de la ficha (no en generalidades), que has usado el dato de la memoria para juzgar la recomendación de Compute Optimizer y que el coste de tu plan sale de la calculadora, no de una estimación a ojo.
 
-**Captura**: la calculadora con la estimación de tu plan de mejora; tu tabla de hallazgos priorizada; tus decisiones sobre las dos recomendaciones; la explicación del riesgo que aceptas.
+**Captura**: la calculadora con la estimación de tu plan de mejora, con tu identificador como nombre de la estimación. El resto (tabla de hallazgos, decisiones sobre las recomendaciones, requisitos priorizados y riesgo aceptado) lo escribes en la plantilla.
 
 ---
 
 ## Criterios de evaluación
 
-**Parte A — hasta 6 puntos**
+**Parte A — hasta 5 puntos**
 
 | Apartado | Puntos |
 |---|---|
-| Inventario con configuración real y concreta de cada componente | 1 |
-| Auditoría de los buckets con predicciones previas y comparación con la salida real | 1 |
-| Tabla de hallazgos propia (al menos 5, en al menos 4 pilares), con impacto y esfuerzo, y los pilares sin hallazgos comprobados | 2 |
-| Cálculo de disponibilidad correcto, comparando las dos mejoras, y RTO y RPO razonados | 2 |
+| Sospechas previas escritas antes de analizar y contrastadas después con los hallazgos | 1 |
+| Tabla de hallazgos apoyada en la ficha (al menos 6, en al menos 4 pilares), con impacto y esfuerzo, con los pilares sin hallazgos comprobados y sin dar por problema lo que no lo es | 2 |
+| Priorización con la matriz, efecto secundario de la corrección principal y riesgo aceptado por escrito | 1 |
+| Cálculo de disponibilidad correcto, comparando las dos mejoras, y RTO y RPO razonados | 1 |
 
-**Parte B — reto, hasta 4 puntos adicionales (máximo total: 10)**
+**Parte B — reto, hasta 5 puntos adicionales (máximo total: 10)**
 
 | Apartado | Puntos |
 |---|---|
-| Inventario y tabla de hallazgos priorizada, apoyada en los datos del enunciado | 1 |
+| Tabla de hallazgos priorizada, apoyada en los datos de la ficha de la clínica | 1 |
 | Decisión razonada sobre las dos recomendaciones, usando el dato de la memoria y su relación con la copia nocturna | 1 |
-| Plan de mejora con coste real de la calculadora, requisitos priorizados y riesgo aceptado por escrito | 2 |
+| Plan de mejora con el coste real de la calculadora | 2 |
+| Requisitos que no caben a la vez priorizados, y riesgo aceptado por escrito y explicado al responsable | 1 |
 
 ---
 
 ## ✅ Cierre
 
-Has recorrido una arquitectura completa con un método, en lugar de fiarte de tu intuición sobre qué mirar, y has comprobado que casi cada mejora cuesta algo en otro pilar. Es la última actividad del módulo: lo que te llevas es una forma de revisar cualquier arquitectura, propia o ajena, y de explicar por escrito qué se arregla, qué se deja y por qué.
+Has recorrido dos arquitecturas con un método, en lugar de fiarte de tu intuición sobre qué mirar, y has comprobado que casi cada mejora cuesta algo en otro pilar. Es la última actividad del módulo: lo que te llevas es una forma de revisar cualquier arquitectura, propia o ajena, y de explicar por escrito qué se arregla, qué se deja y por qué.
 
-!!! danger "Antes de salir: comprueba que la cuenta ha quedado vacía"
-    Esta es la última sesión del módulo y ya nada de lo anterior se va a reutilizar. Comprueba desde CloudShell que no queda nada con coste por hora, sobre todo lo que hayas creado en el Tema 6 (instancia de comparación de la 6.2, servicio y balanceador de la 6.3):
+!!! danger "Antes de salir del módulo: comprueba que la cuenta ha quedado vacía"
+    La actividad de hoy no ha usado el Learner Lab, pero esta es la última sesión del módulo y ya nada de lo anterior se va a reutilizar. Si todavía tienes recursos con coste por hora de las sesiones anteriores, sobre todo del Tema 6 (instancia de comparación de la 6.2, servicio y balanceador de la 6.3), compruébalo desde CloudShell:
 
     ```bash
     aws ec2 describe-instances --filters Name=instance-state-name,Values=running --query "Reservations[].Instances[].InstanceId"
