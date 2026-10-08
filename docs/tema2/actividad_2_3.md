@@ -99,7 +99,6 @@ aws ec2 run-instances \
 Fíjate en `--associate-public-ip-address`: tu subred pública no asigna IP pública por defecto (lo has tenido que marcar a mano en el asistente de consola en actividades anteriores), así que por CLI hay que pedirla explícitamente — sin este flag, la instancia lanzaría sin IP pública y no podrías llegar a ella. No hace falta ningún perfil de IAM esta vez: a diferencia de la 2.2, aquí no saltas a ninguna instancia privada, solo te conectas a esta misma por Instance Connect.
 
 ![Salida en CloudShell de los comandos de creación del grupo de seguridad y del run-instances, con los IDs devueltos](img/actividad_2_3_paso1.png)
-*🖼️ Captura de referencia del profesor — guardar como `img/actividad_2_3_paso1.png`*
 
 **Comprueba**: que el panel responde en el puerto 80 sin que te hayas conectado nunca por SSH a instalarlo a mano, y que ningún otro puerto además del 80 y el 22 está abierto.
 
@@ -116,7 +115,6 @@ Con la instancia del Paso 1 ya funcionando y estable, captúrala como AMI propia
 5. Ve al menú lateral, a **AMIs** (dentro de Imágenes), y espera a que el estado pase de `pending` a `available` — tarda unos minutos.
 
 ![El diálogo Crear imagen relleno, antes de confirmar](img/actividad_2_3_paso2.png)
-*🖼️ Captura de referencia del profesor — guardar como `img/actividad_2_3_paso2.png`*
 
 **Comprueba**: que la imagen aparece como disponible (`available`) al cabo de unos minutos, y que su nombre y descripción tienen sentido.
 
@@ -137,7 +135,6 @@ Con la imagen ya disponible, empaquétala en una plantilla de lanzamiento básic
 9. Crea la plantilla.
 
 ![La pestaña Mis AMIs seleccionada al elegir la imagen, con tu AMI propia marcada — no la pestaña de AMIs públicas](img/actividad_2_3_paso3.png)
-*🖼️ Captura de referencia del profesor — guardar como `img/actividad_2_3_paso3.png`*
 
 **Comprueba**: que la plantilla aparece creada, con tu AMI propia y el resto de parámetros (tipo, red, grupo de seguridad) visibles en su resumen.
 
@@ -154,7 +151,6 @@ Dos instancias idénticas, sin nada todavía que reparta tráfico entre ellas ni
 3. Lanza, y cronometra de verdad desde que pulsas lanzar hasta que cada instancia responde con el panel en el navegador.
 
 ![El diálogo Lanzar instancia desde plantilla, con Número de instancias puesto a 2](img/actividad_2_3_paso4.png)
-*🖼️ Captura de referencia del profesor — guardar como `img/actividad_2_3_paso4.png`*
 
 **Comprueba**: que las dos instancias responden con el panel de reservas sin ninguna configuración adicional, exactamente igual que la instancia original del Paso 1, y que tu predicción de tiempo se ajusta (o no) a lo que has cronometrado de verdad.
 
