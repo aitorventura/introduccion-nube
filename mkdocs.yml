@@ -5,7 +5,6 @@
 #   3. mkdocs gh-deploy
 # Los temas listados en exclude_docs NO se generan en el sitio (ni siquiera por URL directa).
 exclude_docs: |
-  tema4/*
   tema5/*
   tema6/*
   tema7/*
@@ -67,14 +66,14 @@ nav:
       - Primera arquitectura completa:
           - Primera arquitectura completa: tema3/arquitectura-completa.md
           - Actividad 3.3 - Arquitectura de tres capas - front, aplicación y base de datos: tema3/actividad_3_3.md
-  # - Tema 4 - Alta disponibilidad y entrega de contenido:
-  #     - Tema 4 - Introducción: tema4/index.md
-  #     - Balanceo de carga y escalado automático:
-  #         - Balanceo de carga y escalado automático: tema4/alta-disponibilidad-escalado.md
-  #         - Actividad 4.1 - Balanceador de carga y Auto Scaling Group: tema4/actividad_4_1.md
-  #     - DNS, HTTPS y distribución de contenido:
-  #         - DNS, HTTPS y distribución de contenido: tema4/dns-https-cdn.md
-  #         - Actividad 4.2 - Dominio propio y caché en el borde: tema4/actividad_4_2.md
+  - Tema 4 - Alta disponibilidad y entrega de contenido:
+      - Tema 4 - Introducción: tema4/index.md
+      - Balanceo de carga y escalado automático:
+          - Balanceo de carga y escalado automático: tema4/alta-disponibilidad-escalado.md
+          - Actividad 4.1 - Balanceador de carga y Auto Scaling Group: tema4/actividad_4_1.md
+      - DNS, HTTPS y distribución de contenido:
+          - DNS, HTTPS y distribución de contenido: tema4/dns-https-cdn.md
+          - Actividad 4.2 - Dominio propio y caché en el borde: tema4/actividad_4_2.md
   # - Tema 5 - Gobierno de la nube:
   #     - Tema 5 - Introducción: tema5/index.md
   #     - Monitorización y operación:
