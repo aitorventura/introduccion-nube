@@ -52,7 +52,15 @@ Redespliega la red de Terraform si la has destruido al cerrar la 3.3 (mismo coma
 
 Con la base de datos RDS, lo que hagas depende de qué dejaste al cerrar la 3.3:
 
-- **Si solo la detuviste** (no la destruiste): arráncala desde la consola (**Acciones → Comenzar**) y sigue con el mismo endpoint y el mismo modo de credenciales que ya tenía. Si en su día hiciste el reto de la réplica de lectura de la 3.2, esta RDS seguirá en modo autoadministrado — tenlo presente para el reto de escalado vertical de esta misma actividad, más adelante.
+- **Si solo la detuviste** (no la destruiste): arráncala desde la consola (**Acciones → Comenzar**) y sigue con el mismo endpoint y el mismo modo de credenciales que ya tenía. Si en su día hiciste el reto de la réplica de lectura de la 3.2, esta RDS está en modo autoadministrado: la réplica obliga a quitar Secrets Manager, y borrar la réplica después no lo devuelve. Tenlo en cuenta en el Paso 5, porque el script de datos de usuario tal como viene no funcionaría con ella. Para saber en qué modo está la tuya:
+
+    ```bash
+    aws rds describe-db-instances \
+      --db-instance-identifier escaparate-db-<tu-identificador> \
+      --query "DBInstances[0].MasterUserSecret.SecretArn" --output text
+    ```
+
+    Si te devuelve un ARN (`arn:aws:secretsmanager:...`), está gestionada por Secrets Manager. Si devuelve `None`, es autoadministrada.
 - **Si la destruiste del todo**: recréala repitiendo el Paso 2 de la Actividad 3.2 tal cual — mismo identificador `escaparate-db-<tu-identificador>`, mismas opciones. Al nacer de nuevo, vuelve a tener credenciales gestionadas por Secrets Manager, como la primera vez.
 
 Cuando esté `available`, carga el esquema y los datos de ejemplo (Paso 5 de la 3.2, con `01-schema.sql` y `02-data.sql` de los recursos de aquella actividad).
@@ -158,6 +166,31 @@ Abre `recursos/tema4/actividad_4_1/arranque-instancia.sh` de los recursos de hoy
 
 !!! warning "A diferencia de la Actividad 2.3, hoy sí hace falta user data aunque uses tu propia AMI"
     En la 2.3 la AMI ya llevaba todo listo y no hacía falta ningún dato de usuario. Hoy es distinto: la AMI lleva Java, `amazon-efs-utils` y el propio `escaparate.war` ya instalados, pero el endpoint de la base de datos y su contraseña no pueden quedar grabados en la imagen —son secretos, y una imagen la puede lanzar cualquiera con acceso a ella—. Por eso hoy combinas AMI (lo que no cambia entre instancias) con datos de usuario (lo que sí debe decidirse en el momento del arranque, no antes).
+
+!!! danger "Si tu RDS es autoadministrada (reto de la réplica de la 3.2), este script falla sin avisar"
+    El script lee la contraseña de Secrets Manager. Con una RDS autoadministrada no existe ese secreto: `DB_SECRET_ARN` vale `None` y `get-secret-value` da error, pero `set -e` no aborta el script (el fallo ocurre dentro de un `export X=$(...)`, que oculta el código de error). Escaparate arranca con la contraseña **vacía**, no puede conectarse a la base de datos, `/api/salud/listo` nunca da 200 y el grupo de escalado, al ver que la comprobación de salud falla, termina la instancia y lanza otra, en bucle. Lo notarás porque los destinos salen en rojo (`unhealthy`) y nunca llegan a `healthy`, por mucho que esperes.
+
+    Si en el Paso 0 te salió `None`, antes de pegar el script en la plantilla **borra** estas líneas:
+
+    ```bash
+    DB_SECRET_ARN=$(aws rds describe-db-instances \
+      --db-instance-identifier "escaparate-db-${IDENTIFICADOR}" \
+      --query "DBInstances[0].MasterUserSecret.SecretArn" --output text)
+
+    export DB_PASSWORD=$(aws secretsmanager get-secret-value \
+      --secret-id "$DB_SECRET_ARN" \
+      --query "SecretString" --output text | python3 -c "import sys,json; print(json.load(sys.stdin)['password'])")
+    ```
+
+    y en su lugar escribe tu contraseña directamente, entre comillas simples:
+
+    ```bash
+    export DB_PASSWORD='<tu-contraseña>'
+    ```
+
+    La contraseña **no ha cambiado** al pasar a autoadministrada: es la misma que ya usaste en las Actividades 3.2 y 3.3. Si no la recuerdas, restablécela: en la consola de RDS, tu instancia → **Modificar** → **Administración de credenciales** → define una contraseña nueva → **Continuar** → **Aplicar inmediatamente**. Espera a que la instancia vuelva a `available` y usa esa contraseña nueva en el script.
+
+    Si ya has creado la plantilla con el script sin corregir, no hace falta rehacerla: **Plantillas de lanzamiento → Acciones → Modificar plantilla (crear una nueva versión)**, corrige los datos de usuario, y después en tu grupo de escalado (**Editar**) elige esa versión nueva de la plantilla. Las instancias que ya estaban lanzadas no cambian; el grupo usará la versión nueva en las que lance a partir de ahora.
 
 **Comprueba**: que la plantilla tiene tu AMI propia, los dos grupos de seguridad, el perfil `LabInstanceProfile` y el script de datos de usuario con tus tres valores ya sustituidos (no los marcadores de ejemplo).
 
@@ -279,7 +312,7 @@ Da de alta un producto nuevo con foto desde el catálogo. El propio frontend tra
     ```
 
     !!! tip "Si tienes credenciales autoadministradas (reto de la 3.2)"
-        Sustituye las tres líneas de `DB_SECRET_ARN` y `get-secret-value` por `export DB_PASSWORD='<tu-contraseña>'` directamente, entre comillas simples — mismo caso que ya viste en la 3.3.
+        Sustituye las tres líneas de `DB_SECRET_ARN` y `get-secret-value` por `export DB_PASSWORD='<tu-contraseña>'` directamente, entre comillas simples — mismo caso que el del Paso 5 y el que ya viste en la 3.3.
 
     Con el script guardado:
 
